@@ -163,7 +163,7 @@ telescope.setup {
       theme = "dropdown",
       previewer = false,
       -- find_command = { "find", "-type", "f" },
-      find_command = {"fd"},
+      find_command = {"fdfind"},
     },
 
     -- Default configuration for builtin pickers goes here:
@@ -204,7 +204,7 @@ telescope.setup {
   },
 }
 
--- telescope.load_extension("frecency")
+--telescope.load_extension("frecency")
 telescope.load_extension('fzf')
 telescope.load_extension("ui-select")
 telescope.load_extension('dap')
