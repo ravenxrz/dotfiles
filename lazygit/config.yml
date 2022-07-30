@@ -56,6 +56,7 @@ git:
     # one of always, never, when-maximised
     # this determines whether the git graph is rendered in the commits panel
     showGraph: 'when-maximised'
+    showWholeGraph: true
   skipHookPrefix: WIP
   autoFetch: true
   autoRefresh: true
