@@ -145,10 +145,8 @@ alias peek='tee >(cat 1>&2)'
 # clean window output
 alias clc="clear"
 
-# proxy config for wsl
-hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
-alias setss='export all_proxy="socks5://${hostip}:7890";'
-alias unsetss='unset all_proxy'
+# lazygit
+alias lazygit="lazygit -ucd ~/.config/lazygit/"
 
 #  windows exec aliases
 # https://stackoverflow.com/questions/7131670/make-a-bash-alias-that-takes-a-parameter
