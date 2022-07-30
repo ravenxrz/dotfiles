@@ -84,7 +84,10 @@ return packer.startup(function(use)
   use "kyazdani42/nvim-web-devicons" -- icons
 
   -- Telescope
-  use "nvim-telescope/telescope-live-grep-args.nvim"
+  use { 
+    "nvim-telescope/telescope-live-grep-args.nvim",
+    commit="9f62ecc6f6282e65adedaa3a0f18daea05664e64"
+  }
   use {
     "nvim-telescope/telescope.nvim",
     tag = "nvim-0.6",
@@ -221,6 +224,7 @@ return packer.startup(function(use)
   -- use "navarasu/onedark.nvim"
   use({
     "catppuccin/nvim",
+    commit="6df82e66a50cfefcc0e8af05bfc3411dc2d7a368"
   })
   use {
     "projekt0n/github-nvim-theme",
