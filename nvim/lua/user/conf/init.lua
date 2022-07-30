@@ -31,6 +31,7 @@ M.setup = function()
     "toggleterm",
     "nvim-spectre",
     "vim-ultest",
+    "tmux"
   }
 
   local helper_set = {}
