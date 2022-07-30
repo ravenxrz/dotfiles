@@ -12,16 +12,12 @@ end
 --   debounce_text_changes = 150,
 -- }
 
-local opts = {
+-- local clangd_opts = require("user.lsp.settings.clangd")
+-- opts = vim.tbl_deep_extend("force", clangd_opts, opts)
+lspconfig.clangd.setup {
   on_attach = require("user.lsp.handlers").on_attach,
   capabilities = require("user.lsp.handlers").capabilities,
   flags = {
     debounce_text_changes = 150,
   }
-}
-
-local clangd_opts = require("user.lsp.settings.clangd")
-opts = vim.tbl_deep_extend("force", clangd_opts, opts)
-lspconfig.clangd.setup{
-  opts
 }
