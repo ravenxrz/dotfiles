@@ -273,6 +273,7 @@ return packer.startup(function(use)
   }
 
   -- tools
+  use "wincent/vim-clipper"
   -- use "cdelledonne/vim-cmake"
   use "aserowy/tmux.nvim"   -- NOTE: 可能造成卡顿
   use "ravenxrz/neovim-cmake"
