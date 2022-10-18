@@ -8,7 +8,7 @@
 
 1. clone本仓库，并在 `~/.config` 目录下建立nvim的软链接
   ```shell
-  git clone https://github.com/ravenxrz/dotfiles.git ~/.config/dotfiles
+  git clone https://github.com/Davonter/dotfiles.git ~/.config/dotfiles
   ln -s ~/.config/dotfiles/nvim ~/.config
   ```
 
@@ -25,12 +25,6 @@
 - glow        -- markdown预览依赖
 - lazygit     -- git操作
 - rg          -- telescope 依赖
-
-
-# 交流
-
-**QQ交流群:728502470**
-
 
 # FAQ
 
