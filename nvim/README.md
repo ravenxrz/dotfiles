@@ -4,7 +4,7 @@
 
 >建议：除了arch系linux，其余linux发行版在[此处](https://github.com/neovim/neovim/releases)下载可执行文件。 通过类似 `apt` 的方式安装往往都是旧版本。
 
-使用方法：
+### 如何安装：
 
 1. clone本仓库，并在 `~/.config` 目录下建立nvim的软链接
   ```shell
@@ -17,6 +17,15 @@
 3.通过`LspInstallInfo`命令安装对应lsp svr, 接着选中对应语言的server，如cpp为clangd， 按i执行安装
 
 4.通过`DIInstall xxx`命令安装对应语言的 `debugger`, 除此外，需要在 `~/.dotfiles/nvim/lua/user/dap/`目录下新建对应语言的配置文件（已配置好c/cpp,go,python), 同时更新 `dap-config.lua` 文件下的 `config_debuggers()` 函数。
+
+### 如何卸载:
+
+```
+rm -rf ~/.config/nvim
+rm -rf ~/.local/share/nvim 
+rm -rf ~/.cache/nvim 
+```
+
 
 # 额外说明
 
