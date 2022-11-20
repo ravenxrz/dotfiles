@@ -20,8 +20,8 @@ lvim.colorscheme = "vscode"
 lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
-lvim.keys.normal_mode["E"] = ":BufferLineCycleNext<CR>"
-lvim.keys.normal_mode["R"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["E"] = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["R"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["H"] = "^"
 lvim.keys.normal_mode["L"] = "$"
 lvim.keys.normal_mode["Q"] = "q"
@@ -29,9 +29,14 @@ lvim.keys.normal_mode["<leader>h"] = ":nohl<cr>"
 lvim.keys.normal_mode["<leader>s"] = ":ClangdSwitchSourceHeader<cr>"
 lvim.keys.normal_mode["<leader>o"] = ":SymbolsOutline<cr>"
 lvim.keys.normal_mode["<leader>q"] = ":bd<cr>"
+lvim.keys.normal_mode["q"] = "<Nop>"
+
+lvim.keys.visual_mode["p"] = "_dP"
+
 -- lsp
 lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
-lvim.keys.visual_mode["<leader>rf"] = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
+lvim.keys.visual_mode["<leader>lf"] = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
+lvim.keys.normal_mode["<leader>ln"] = "<ESC><cmd>lua vim.lsp.buf.rename()<CR>"
 -- telescope
 lvim.keys.normal_mode["<leader>F"] = ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>"
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
@@ -212,18 +217,11 @@ lvim.plugins = {
       )
     end
   },
-  { -- outline
-    "simrat39/symbols-outline.nvim",
+  { -- only works on https://github.com/universal-ctags/ctags
+    "liuchengxu/vista.vim",
     config = function()
-      require('symbols-outline').setup({
-        position = 'left',
-        width = 20,
-        show_guides = true,
-      })
+      vim.cmd([[ let g:vista_sidebar_position = 'vertical topleft' ]])
     end
-  },
-  {
-    "liuchengxu/vista.vim"
   },
   { -- telescope instant searching
     "nvim-telescope/telescope-live-grep-args.nvim"
@@ -258,7 +256,6 @@ lvim.plugins = {
           switch = "S",
           focus = "f"
         },
-
       })
     end
   },
@@ -268,11 +265,22 @@ lvim.plugins = {
   { -- vim-sneak
     "justinmk/vim-sneak"
   },
-  {
-    "Pocco81/AutoSave.nvim"
-  },
-  {
+  { -- resize window
     "simeji/winresizer"
+  },
+  { -- vim clip on server
+    "wincent/vim-clipper",
+    config = function()
+      vim.cmd([[
+      let g:ClipperAddress="127.0.0.1"
+      let g:ClipperPort=8377
+      let g:ClipperAuto=1
+      call clipper#set_invocation('netcat -c 127.0.0.1 8377')
+    ]] )
+    end
+  },
+  { -- log file content highlighting
+    "mtdl9/vim-log-highlighting"
   }
 }
 
@@ -289,8 +297,8 @@ vim.api.nvim_create_autocmd("FileType", {
     require("nvim-treesitter.highlight").attach(0, "bash")
   end,
 })
--- remove wasted padding of symbols-outline window
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "Outline",
-  command = "setlocal signcolumn=no"
-})
+-- -- remove wasted padding of symbols-outline window
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "Outline",
+--   command = "setlocal signcolumn=no"
+-- })
