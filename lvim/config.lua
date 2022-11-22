@@ -18,10 +18,10 @@ lvim.colorscheme = "gruvbox"
 -- lvim.use_icons = false
 
 --  options
-vim.opt["foldcolumn"] = '3'
 vim.opt["foldlevel"] = 99
-vim.opt["foldlevelstart"] = 99
-vim.opt["foldenable"] = true
+vim.opt["foldmethod"] = "expr"
+vim.opt["foldexpr"] = "nvim_treesitter#foldexpr()"
+
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -42,9 +42,6 @@ lvim.keys.visual_mode["p"] = "P"
 lvim.keys.visual_mode["H"] = "^"
 lvim.keys.visual_mode["L"] = "$"
 
--- fold
-lvim.keys.normal_mode['zR'] = ":require('ufo').openAllFolds"
-lvim.keys.normal_mode['zM'] = ":require('ufo').closeAllFolds"
 
 -- lsp
 lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
@@ -54,6 +51,10 @@ lvim.keys.normal_mode["<leader>ln"] = "<ESC><cmd>lua vim.lsp.buf.rename()<CR>"
 lvim.keys.normal_mode["<leader>F"] = ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>"
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
 lvim.keys.normal_mode["<leader>S"] = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
+-- hop
+lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode["<space>k"] = "<cmd>HopLine<cr>"
 
 
 -- unmap a default keymapping
@@ -281,8 +282,13 @@ lvim.plugins = {
   { -- vscode theme
     "Mofiqul/vscode.nvim"
   },
-  { -- vim-sneak
-    "justinmk/vim-sneak"
+  { -- hop
+    "phaazon/hop.nvim",
+    branch = 'v2', -- optional but strongly recommended
+    config = function()
+      -- you can configure Hop the way you like here; see :h hop-config
+      require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+    end
   },
   { -- resize window
     "simeji/winresizer"
@@ -307,26 +313,16 @@ lvim.plugins = {
   {
     'kevinhwang91/promise-async'
   },
-  { -- fold
-    'kevinhwang91/nvim-ufo',
-    config = function()
-      require('ufo').setup({
-        provider_selector = function(bufnr, filetype, buftype)
-          return { 'treesitter', 'indent' }
-        end
-      })
-    end
-  }
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "zsh",
-  callback = function()
-    -- let treesitter use bash highlight for zsh files as well
-    require("nvim-treesitter.highlight").attach(0, "bash")
-  end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "zsh",
+--   callback = function()
+--     -- let treesitter use bash highlight for zsh files as well
+--     require("nvim-treesitter.highlight").attach(0, "bash")
+--   end,
+-- })
 -- -- remove wasted padding of symbols-outline window
 -- vim.api.nvim_create_autocmd("FileType", {
 --   pattern = "Outline",
