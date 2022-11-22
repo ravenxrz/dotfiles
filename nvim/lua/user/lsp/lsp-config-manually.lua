@@ -21,3 +21,11 @@ lspconfig.clangd.setup {
     debounce_text_changes = 150,
   }
 }
+
+lspconfig.pyright.setup {
+  on_attach = require("user.lsp.handlers").on_attach,
+  capabilities = require("user.lsp.handlers").capabilities,
+  flags = {
+    debounce_text_changes = 150,
+  },
+}

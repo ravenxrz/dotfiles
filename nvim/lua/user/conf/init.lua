@@ -15,7 +15,7 @@ M.setup = function()
     "auto-session",
     "vim-illuminate",
     "vista",
-    "aerial",
+    -- "aerial",
     "nvim-gps",
     "tabout",
     "hlargs",
@@ -31,7 +31,9 @@ M.setup = function()
     "toggleterm",
     "nvim-spectre",
     "vim-ultest",
-    "tmux"
+    "tmux",
+    "symbols-outline",
+    "gitsigns.lua"
   }
 
   local helper_set = {}

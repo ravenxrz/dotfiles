@@ -31,6 +31,7 @@
     ~/.vimrc:
     ~/.config/lazygit: lazygit
     ~/.config/nvim: nvim
+    ~/.config/lvim: lvim
     ~/.config/zellij: zellij
     ~/.config/alacritty: alacritty 
     ~/.vimrc_local:

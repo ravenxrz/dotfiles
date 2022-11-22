@@ -155,6 +155,7 @@ chrome() {
   chrome.exe file://wsl.localhost/Ubuntu-20.04`pwd`/$1
 }
 
-alias opencwd="explorer.exe ."
-alias img="Honeyview.exe"
-alias typora="Typora.exe"
+# alias opencwd="explorer.exe ."
+# alias img="Honeyview.exe"
+# alias typora="Typora.exe"
+alias vim="lvim"

@@ -204,7 +204,7 @@ return packer.startup(function(use)
   -- use { "leoluz/nvim-dap-go", module = "dap-go" } -- debug golang
   use { "jbyuki/one-small-step-for-vimkind", module = "osv" } -- debug any Lua code running in a Neovim instance
   use {
-    "sakhnik/nvim-gdb",
+    "ravenxrz/nvim-gdb",
     run = "./install.sh"
   }
 
@@ -230,6 +230,7 @@ return packer.startup(function(use)
     "projekt0n/github-nvim-theme",
     tag = "v0.0.4",
   }
+  use 'Mofiqul/vscode.nvim'
 
   -- use "folke/tokyonight.nvim"
   use {
@@ -256,7 +257,7 @@ return packer.startup(function(use)
   use "folke/todo-comments.nvim" -- todo comments
   -- use "liuchengxu/vista.vim"     -- outline
   use "simrat39/symbols-outline.nvim" -- outline
-  -- use "stevearc/aerial.nvim"
+  use "stevearc/aerial.nvim"
   use "norcalli/nvim-colorizer.lua" -- show color
   use "folke/trouble.nvim"
   use "j-hui/fidget.nvim" -- show lsp progress

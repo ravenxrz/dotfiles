@@ -12,9 +12,16 @@ an executable
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = false
 -- lvim.colorscheme = "lunar"
-lvim.colorscheme = "vscode"
+-- themes: https://vimcolorschemes.com/
+lvim.colorscheme = "gruvbox"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
+
+--  options
+vim.opt["foldcolumn"] = '3'
+vim.opt["foldlevel"] = 99
+vim.opt["foldlevelstart"] = 99
+vim.opt["foldenable"] = true
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -26,12 +33,18 @@ lvim.keys.normal_mode["H"] = "^"
 lvim.keys.normal_mode["L"] = "$"
 lvim.keys.normal_mode["Q"] = "q"
 lvim.keys.normal_mode["<leader>h"] = ":nohl<cr>"
-lvim.keys.normal_mode["<leader>s"] = ":ClangdSwitchSourceHeader<cr>"
-lvim.keys.normal_mode["<leader>o"] = ":SymbolsOutline<cr>"
+lvim.keys.normal_mode["<leader>j"] = ":ClangdSwitchSourceHeader<cr>"
+lvim.keys.normal_mode["<leader>o"] = ":Vista!!<cr>"
 lvim.keys.normal_mode["<leader>q"] = ":bd<cr>"
 lvim.keys.normal_mode["q"] = "<Nop>"
 
-lvim.keys.visual_mode["p"] = "_dP"
+lvim.keys.visual_mode["p"] = "P"
+lvim.keys.visual_mode["H"] = "^"
+lvim.keys.visual_mode["L"] = "$"
+
+-- fold
+lvim.keys.normal_mode['zR'] = ":require('ufo').openAllFolds"
+lvim.keys.normal_mode['zM'] = ":require('ufo').closeAllFolds"
 
 -- lsp
 lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
@@ -144,7 +157,13 @@ lvim.lsp.installer.setup.automatic_installation = false
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
--- require("lvim.lsp.manager").setup("pyright", opts)
+-- require("lvim.lsp.manager").setup("clangd", {
+--   cmd = {
+--     "clangd",
+--     -- 启用这项时，补全函数时，将会给参数提供占位符，键入后按 Tab 可以切换到下一占位符
+--     "--function-arg-placeholders=false"
+--   }
+-- })
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
@@ -281,15 +300,26 @@ lvim.plugins = {
   },
   { -- log file content highlighting
     "mtdl9/vim-log-highlighting"
+  },
+  {
+    "morhetz/gruvbox"
+  },
+  {
+    'kevinhwang91/promise-async'
+  },
+  { -- fold
+    'kevinhwang91/nvim-ufo',
+    config = function()
+      require('ufo').setup({
+        provider_selector = function(bufnr, filetype, buftype)
+          return { 'treesitter', 'indent' }
+        end
+      })
+    end
   }
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
--- vim.api.nvim_create_autocmd("BufEnter", {
---   pattern = { "*.json", "*.jsonc" },
---   -- enable wrap mode for json files only
---   command = "setlocal wrap",
--- })
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "zsh",
   callback = function()

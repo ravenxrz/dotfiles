@@ -19,15 +19,15 @@ dapui.setup({
     {
       elements = {
         'scopes',
-        'watches',
       },
       size = 40,
       position = 'left',
     },
     {
       elements = {
-        'stacks',
+        -- 'stacks',
         'breakpoints',
+        'watches',
       },
       size = 40,
       position = 'right',

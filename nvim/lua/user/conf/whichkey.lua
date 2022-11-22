@@ -116,7 +116,7 @@ local mappings = {
   },
 
   ["o"] = {
-    "<cmd>SymbolsOutline<CR>", "Outline"
+    "<cmd>AerialToggle<CR>", "Outline"
   },
   ["v"] = {
     "<cmd>lua require('telescope').extensions.neoclip.default(require('telescope.themes').get_ivy())<cr>",
@@ -232,7 +232,6 @@ local mappings = {
       "<cmd>Telescope lsp_workspace_diagnostics<cr>",
       "Workspace Diagnostics",
     },
-    f = { "<cmd>Format<cr>", "Format" },
     i = { "<cmd>LspInfo<cr>", "Info" },
     I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
     j = {
