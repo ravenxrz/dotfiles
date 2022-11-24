@@ -147,18 +147,36 @@ lvim.lsp.installer.setup.ensure_installed = {
 
 -- ---@usage disable automatic installation of servers
 lvim.lsp.installer.setup.automatic_installation = false
+-- disable diagnostics which is super annoying in my case
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
--- require("lvim.lsp.manager").setup("clangd", {
---   cmd = {
---     "clangd",
---     -- 启用这项时，补全函数时，将会给参数提供占位符，键入后按 Tab 可以切换到下一占位符
---     "--function-arg-placeholders=false"
---   }
--- })
+require("lvim.lsp.manager").setup("clangd", {
+  cmd = {
+     -- 启用 Clang-Tidy 以提供「静态检查」
+    -- "--clang-tidy",
+    "--compile-commands-dir=build",
+    -- 建议风格：打包(重载函数只会给出一个建议）；反可以设置为detailed
+    "--completion-style=bundled",
+    "--enable-config",
+    -- 默认格式化风格: 谷歌开源项目代码指南（可用的有 LLVM, Google, Chromium, Mozilla, Webkit, Microsoft, GNU 等）
+    "--fallback-style=Google",
+    -- 启用这项时，补全函数时，将会给参数提供占位符，键入后按 Tab 可以切换到下一占位符，乃至函数末
+    -- 我选择禁用
+    "--function-arg-placeholders=false",
+    -- pch优化的位置(memory 或 disk，选择memory会增加内存开销，但会提升性能)
+    "--pch-storage=memory",
+    -- 输出的 JSON 文件更美观
+    "--pretty",
+    -- 建议排序模型
+    "--ranking-model=heuristics",
+    -- 同时开启的任务数量
+    "-j=12"
+  },
+})
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
@@ -191,18 +209,18 @@ end
 -- -- set additional linters
 -- local linters = require "lvim.lsp.null-ls.linters"
 -- linters.setup {
---   { command = "flake8", filetypes = { "python" } },
+--   -- { command = "flake8", filetypes = { "python" } },
+--   -- {
+--   --   -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+--   --   command = "shellcheck",
+--   --   ---@usage arguments to pass to the formatter
+--   --   -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+--   --   extra_args = { "--severity", "warning" },
+--   -- },
 --   {
---     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "shellcheck",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--severity", "warning" },
---   },
---   {
---     command = "codespell",
+--     command = "cpplint",
 --     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "javascript", "python" },
+--     filetypes = { "c", "cpp" },
 --   },
 -- }
 
