@@ -22,6 +22,8 @@ vim.opt["foldlevel"] = 99
 vim.opt["foldmethod"] = "expr"
 vim.opt["foldexpr"] = "nvim_treesitter#foldexpr()"
 
+-- lvim.builtin.gitsigns
+
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -107,6 +109,7 @@ lvim.builtin.nvimtree.setup.view.adaptive_size = true
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 lvim.builtin.cmp.cmdline.enable = true
 lvim.builtin.gitsigns.opts.current_line_blame = true
+lvim.builtin.gitsigns.opts.current_line_blame_opts.virt_text_pos = "right_align"
 lvim.builtin.gitsigns.opts.current_line_blame_opts.delay = 200
 
 
@@ -154,29 +157,9 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
-require("lvim.lsp.manager").setup("clangd", {
-  cmd = {
-     -- 启用 Clang-Tidy 以提供「静态检查」
-    -- "--clang-tidy",
-    "--compile-commands-dir=build",
-    -- 建议风格：打包(重载函数只会给出一个建议）；反可以设置为detailed
-    "--completion-style=bundled",
-    "--enable-config",
-    -- 默认格式化风格: 谷歌开源项目代码指南（可用的有 LLVM, Google, Chromium, Mozilla, Webkit, Microsoft, GNU 等）
-    "--fallback-style=Google",
-    -- 启用这项时，补全函数时，将会给参数提供占位符，键入后按 Tab 可以切换到下一占位符，乃至函数末
-    -- 我选择禁用
-    "--function-arg-placeholders=false",
-    -- pch优化的位置(memory 或 disk，选择memory会增加内存开销，但会提升性能)
-    "--pch-storage=memory",
-    -- 输出的 JSON 文件更美观
-    "--pretty",
-    -- 建议排序模型
-    "--ranking-model=heuristics",
-    -- 同时开启的任务数量
-    "-j=12"
-  },
-})
+-- require("lvim.lsp.manager").setup("clangd", {
+
+-- })
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
@@ -318,14 +301,14 @@ lvim.plugins = {
   { -- theme
     "morhetz/gruvbox"
   },
-  { -- auto save
-    "pocco81/auto-save.nvim"
-  },
   {
     "folke/todo-comments.nvim",
     config = function()
-      require("todo-comments").setu {}
+      require("todo-comments").setup {}
     end
+  },
+  { -- auto save
+    "pocco81/auto-save.nvim"
   },
   {
     -- show function signature when typing
@@ -380,6 +363,121 @@ lvim.plugins = {
         timer_interval = 200, -- default timer check interval set to lower value if you want to reduce latency
         toggle_key = nil -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
       })
+    end
+  },
+  {
+    "p00f/clangd_extensions.nvim",
+    config = function()
+      require("clangd_extensions").setup {
+        server = {
+          cmd = {
+            "clangd",
+            "--inlay-hints=true",
+            -- 启用 Clang-Tidy 以提供「静态检查」
+            -- "--clang-tidy",
+            "--compile-commands-dir=build",
+            -- 建议风格：打包(重载函数只会给出一个建议）；反可以设置为detailed
+            "--completion-style=bundled",
+            "--enable-config",
+            -- 默认格式化风格: 谷歌开源项目代码指南（可用的有 LLVM, Google, Chromium, Mozilla, Webkit, Microsoft, GNU 等）
+            "--fallback-style=Google",
+            -- 启用这项时，补全函数时，将会给参数提供占位符，键入后按 Tab 可以切换到下一占位符，乃至函数末
+            -- 我选择禁用
+            "--function-arg-placeholders=false",
+            -- pch优化的位置(memory 或 disk，选择memory会增加内存开销，但会提升性能)
+            "--pch-storage=memory",
+            -- 输出的 JSON 文件更美观
+            "--pretty",
+            -- 建议排序模型
+            "--ranking-model=heuristics",
+            -- 同时开启的任务数量
+            "-j=12"
+          },
+        },
+        extensions = {
+          -- defaults:
+          -- Automatically set inlay hints (type hints)
+          autoSetHints = true,
+          -- These apply to the default ClangdSetInlayHints command
+          inlay_hints = {
+            -- Only show inlay hints for the current line
+            only_current_line = false,
+            -- Event which triggers a refersh of the inlay hints.
+            -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+            -- not that this may cause  higher CPU usage.
+            -- This option is only respected when only_current_line and
+            -- autoSetHints both are true.
+            only_current_line_autocmd = "CursorHold",
+            -- whether to show parameter hints with the inlay hints or not
+            show_parameter_hints = true,
+            -- prefix for parameter hints
+            parameter_hints_prefix = "<- ",
+            -- prefix for all the other hints (type, chaining)
+            other_hints_prefix = "=> ",
+            -- whether to align to the length of the longest line in the file
+            max_len_align = false,
+            -- padding from the left if max_len_align is true
+            max_len_align_padding = 1,
+            -- whether to align to the extreme right or not
+            right_align = false,
+            -- padding from the right if right_align is true
+            right_align_padding = 7,
+            -- The color of the hints
+            highlight = "Comment",
+            -- The highlight group priority for extmark
+            priority = 100,
+          },
+          ast = {
+            -- These are unicode, should be available in any font
+            role_icons = {
+              type = "🄣",
+              declaration = "🄓",
+              expression = "🄔",
+              statement = ";",
+              specifier = "🄢",
+              ["template argument"] = "🆃",
+            },
+            kind_icons = {
+              Compound = "🄲",
+              Recovery = "🅁",
+              TranslationUnit = "🅄",
+              PackExpansion = "🄿",
+              TemplateTypeParm = "🅃",
+              TemplateTemplateParm = "🅃",
+              TemplateParamObject = "🅃",
+            },
+            --[[ These require codicons (https://github.com/microsoft/vscode-codicons)
+            role_icons = {
+                type = "",
+                declaration = "",
+                expression = "",
+                specifier = "",
+                statement = "",
+                ["template argument"] = "",
+            },
+
+            kind_icons = {
+                Compound = "",
+                Recovery = "",
+                TranslationUnit = "",
+                PackExpansion = "",
+                TemplateTypeParm = "",
+                TemplateTemplateParm = "",
+                TemplateParamObject = "",
+            }, ]]
+
+            highlights = {
+              detail = "Comment",
+            },
+          },
+          memory_usage = {
+            border = "none",
+          },
+          symbol_info = {
+            border = "none",
+          },
+        },
+      }
     end
   }
 }
