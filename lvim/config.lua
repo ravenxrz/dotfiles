@@ -9,7 +9,7 @@ an executable
 
 -- general
 lvim.log.level = "warn"
-lvim.format_on_save.enabled = true -- lvim.colorscheme = "lunar"
+lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
 -- themes: https://vimcolorschemes.com/
 lvim.colorscheme = "gruvbox"
 -- to disable icons and use a minimalist setup, uncomment the following
@@ -35,10 +35,16 @@ lvim.keys.normal_mode["<leader>j"] = ":ClangdSwitchSourceHeader<cr>"
 lvim.keys.normal_mode["<leader>o"] = ":Vista!!<cr>"
 lvim.keys.normal_mode["<leader>q"] = ":bd<cr>"
 lvim.keys.normal_mode["q"] = "<Nop>"
+lvim.keys.normal_mode["n"] = "nzzzv"
+lvim.keys.normal_mode["N"] = "Nzzzv"
+lvim.keys.normal_mode["J"] = "mzJ`z"
+-- lvim.keys.normal_mode["j"] = "jzz"
+-- lvim.keys.normal_mode["k"] = "kzz"
 
 lvim.keys.visual_mode["p"] = "P"
 lvim.keys.visual_mode["H"] = "^"
 lvim.keys.visual_mode["L"] = "$"
+
 
 
 -- lsp
@@ -50,9 +56,8 @@ lvim.keys.normal_mode["<leader>F"] = ":lua require('telescope').extensions.live_
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
 lvim.keys.normal_mode["<leader>S"] = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
 -- hop
-lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["<space>k"] = "<cmd>HopLine<cr>"
+lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>" lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode["<space>s"] = "<cmd>HopChar2<cr>"
 
 
 -- unmap a default keymapping
@@ -165,9 +170,10 @@ require("lvim.lsp.manager").setup("pyright", {
     python = {
       analysis = {
         autoSearchPaths = true,
-        diagnosticMode = "workspace",
+        diagnosticMode = "openFilesOnly",
         useLibraryCodeForTypes = true,
-        typeCheckingMode = "off"
+        typeCheckingMode = "off",
+        autoImportCompletions = true
       }
     }
   },
@@ -313,6 +319,9 @@ lvim.plugins = {
   },
   { -- log file content highlighting
     "mtdl9/vim-log-highlighting"
+  },
+  {
+    "tpope/vim-surround"
   },
   { -- theme
     "morhetz/gruvbox"
