@@ -32,6 +32,7 @@ lvim.keys.normal_mode["L"] = "$"
 lvim.keys.normal_mode["Q"] = "q"
 lvim.keys.normal_mode["<leader>h"] = ":nohl<cr>"
 lvim.keys.normal_mode["<leader>j"] = ":ClangdSwitchSourceHeader<cr>"
+lvim.keys.normal_mode["<leader>H"] = ":ClangdTypeHierarchy<cr>"
 lvim.keys.normal_mode["<leader>o"] = ":Vista!!<cr>"
 lvim.keys.normal_mode["<leader>q"] = ":bd<cr>"
 lvim.keys.normal_mode["q"] = "<Nop>"
@@ -164,9 +165,11 @@ lvim.builtin.treesitter.highlight.enable = true
 -- generic LSP settings
 
 -- -- make sure server will always be installed even if the server is in skipped_servers list
--- lvim.lsp.installer.setup.ensure_installed = {
---   "clangd",
--- }
+lvim.lsp.installer.setup.ensure_installed = {
+  "clangd",
+  "pyright"
+}
+
 -- -- change UI setting of `LspInstallInfo`
 -- -- see <https://github.com/williamboman/nvim-lsp-installer#default-configuration>
 -- lvim.lsp.installer.setup.ui.check_outdated_servers_on_open = false
@@ -178,6 +181,7 @@ lvim.builtin.treesitter.highlight.enable = true
 
 -- ---@usage disable automatic installation of servers
 lvim.lsp.installer.setup.automatic_installation = false
+
 -- disable diagnostics which is super annoying in my case
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 
@@ -185,6 +189,9 @@ lvim.lsp.installer.setup.automatic_installation = false
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "clangd" })
 -- local opts = {} -- check the lspconfig documentation for a list of all possible options
+--
+---@diagnostic disable-next-line: missing-parameter
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright", "clangd" })
 require("lvim.lsp.manager").setup("pyright", {
   settings = {
     python = {
@@ -198,6 +205,8 @@ require("lvim.lsp.manager").setup("pyright", {
     }
   },
 })
+
+
 
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
@@ -359,9 +368,57 @@ lvim.plugins = {
     "p00f/clangd_extensions.nvim",
     after = "mason-lspconfig.nvim", -- make sure to load after mason-lspconfig
     config = function()
-      require("clangd_extensions").setup {
-        server = require "lvim.lsp".get_common_opts()
+      local provider = "clangd"
+      local clangd_flags = {
+        -- 在后台自动分析文件（基于complie_commands)
+        "--background-index",
+        "--background-index-priority=low",
+        "--completion-style=detailed",
+        -- 同时开启的任务数量
+        "--all-scopes-completion=true",
+        "-j=12",
+        -- 告诉clangd用那个clang进行编译，路径参考which clang++的路径
+        "--query-driver=/usr/bin/clang++,/usr/bin/g++",
+        "--clang-tidy",
+        -- 全局补全（会自动补充头文件）
+        "--all-scopes-completion",
+        -- 更详细的补全内容
+        "--completion-style=detailed",
+        "--function-arg-placeholders=false",
+        -- 补充头文件的形式
+        "--header-insertion=never",
+        -- pch优化的位置
+        "--pch-storage=memory",
+        "--malloc-trim"
       }
+
+      local custom_on_attach = function(client, bufnr)
+        require("lvim.lsp").common_on_attach(client, bufnr)
+        require("clangd_extensions.inlay_hints").setup_autocmd()
+        require("clangd_extensions.inlay_hints").set_inlay_hints()
+      end
+
+
+      local custom_on_init = function(client, bufnr)
+        require("lvim.lsp").common_on_init(client, bufnr)
+        require("clangd_extensions.config").setup {}
+        require("clangd_extensions.ast").init()
+        vim.cmd [[
+              command ClangdToggleInlayHints lua require('clangd_extensions.inlay_hints').toggle_inlay_hints()
+              command -range ClangdAST lua require('clangd_extensions.ast').display_ast(<line1>, <line2>)
+              command ClangdTypeHierarchy lua require('clangd_extensions.type_hierarchy').show_hierarchy()
+              command ClangdSymbolInfo lua require('clangd_extensions.symbol_info').show_symbol_info()
+              command -nargs=? -complete=customlist,s:memuse_compl ClangdMemoryUsage lua require('clangd_extensions.memory_usage').show_memory_usage('<args>' == 'expand_preamble')
+              ]]
+      end
+
+      local opts = {
+        cmd = { provider, unpack(clangd_flags) },
+        on_attach = custom_on_attach,
+        on_init = custom_on_init,
+      }
+
+      require("lvim.lsp.manager").setup("clangd", opts)
     end
   },
   {
