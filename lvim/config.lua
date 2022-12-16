@@ -128,6 +128,9 @@ lvim.builtin.nvimtree.setup.view.adaptive_size = true
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 -- cmp
 lvim.builtin.cmp.cmdline.enable = true
+table.insert(lvim.builtin.cmp.sources, {
+  name = 'nvim_lsp_signature_help'
+});
 -- gitsigns
 lvim.builtin.gitsigns.opts.current_line_blame = false
 lvim.builtin.gitsigns.opts.current_line_blame_opts.virt_text_pos = "right_align"
@@ -465,6 +468,9 @@ lvim.plugins = {
       })
       require('telescope').load_extension('neoclip')
     end,
+  },
+  {
+    "hrsh7th/cmp-nvim-lsp-signature-help",
   }
 }
 
