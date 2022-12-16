@@ -52,12 +52,26 @@ lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
 lvim.keys.visual_mode["<leader>lf"] = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
 lvim.keys.normal_mode["<leader>ln"] = "<ESC><cmd>lua vim.lsp.buf.rename()<CR>"
 -- telescope
-lvim.keys.normal_mode["<leader>F"] = ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>"
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
-lvim.keys.normal_mode["<leader>S"] = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
+
+-- orverwirte old 's'
+lvim.builtin.which_key.mappings.s = {
+  name = "Search",
+  s = { ":lua require('telescope.builtin').lsp_document_symbols()<cr>", "Document Symbol" },
+  S = { ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>", "Workspace Symbol" },
+  f = { "<cmd>Telescope live_grep<cr>", "Text" },
+  F = { ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>",
+    "Live Text" },
+  m = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
+  r = { "<cmd>Telescope registers<cr>", "Registers" },
+  k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
+  C = { "<cmd>Telescope commands<cr>", "Commands" },
+}
+
 -- hop
-lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>" lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["<space>s"] = "<cmd>HopChar2<cr>"
+lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode["<space>k"] = "<cmd>HopChar2<cr>"
 
 
 -- unmap a default keymapping
@@ -144,9 +158,9 @@ lvim.builtin.treesitter.highlight.enable = true
 -- generic LSP settings
 
 -- -- make sure server will always be installed even if the server is in skipped_servers list
-lvim.lsp.installer.setup.ensure_installed = {
-  "clangd",
-}
+-- lvim.lsp.installer.setup.ensure_installed = {
+--   "clangd",
+-- }
 -- -- change UI setting of `LspInstallInfo`
 -- -- see <https://github.com/williamboman/nvim-lsp-installer#default-configuration>
 -- lvim.lsp.installer.setup.ui.check_outdated_servers_on_open = false
@@ -341,6 +355,81 @@ lvim.plugins = {
     config = function()
       require("clangd_extensions").setup {
         server = require "lvim.lsp".get_common_opts()
+      }
+    end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    commit = "c81382328ad47c154261d1528d7c921acad5eae5",
+    config = function()
+      require 'nvim-treesitter.configs'.setup {
+        textobjects = {
+          select = {
+            enable = true,
+
+            -- Automatically jump forward to textobj, similar to targets.vim
+            lookahead = true,
+            keymaps = {
+              -- You can use the capture groups defined in textobjects.scm
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              -- You can optionally set descriptions to the mappings (used in the desc parameter of
+              -- nvim_buf_set_keymap) which plugins like which-key display
+              ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+            },
+            -- You can choose the select mode (default is charwise 'v')
+            --
+            -- Can also be a function which gets passed a table with the keys
+            -- * query_string: eg '@function.inner'
+            -- * method: eg 'v' or 'o'
+            -- and should return the mode ('v', 'V', or '<c-v>') or a table
+            -- mapping query_strings to modes.
+            selection_modes = {
+              ['@parameter.outer'] = 'v', -- charwise
+              ['@function.outer'] = 'V', -- linewise
+              ['@class.outer'] = '<c-v>', -- blockwise
+            },
+            -- If you set this to `true` (default is `false`) then any textobject is
+            -- extended to include preceding or succeeding whitespace. Succeeding
+            -- whitespace has priority in order to act similarly to eg the built-in
+            -- `ap`.
+            --
+            -- Can also be a function which gets passed a table with the keys
+            -- * query_string: eg '@function.inner'
+            -- * selection_mode: eg 'v'
+            -- and should return true of false
+            include_surrounding_whitespace = true,
+          },
+          move = {
+            enable = true,
+            set_jumps = false, -- whether to set jumps in the jumplist
+            goto_next_start = {
+              ["]]"] = "@function.outer",
+              -- ["]["] = "@function.outer",
+            },
+            goto_next_end = {
+              ["]["] = "@function.outer",
+              -- ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+              ["[["] = "@function.outer",
+              -- ["[]"] = "@function.outer",
+            },
+            goto_previous_end = {
+              ["[]"] = "@function.outer",
+              -- ["[]"] = "@class.outer",
+            },
+          },
+          lsp_interop = {
+            enable = true,
+            border = 'none',
+            peek_definition_code = {
+              ["<leader>pf"] = "@function.outer",
+              ["<leader>pF"] = "@class.outer",
+            },
+          },
+        },
       }
     end
   }

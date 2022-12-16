@@ -1,5 +1,6 @@
 gui:
   # stuff relating to the UI
+  showIcons: true
   scrollHeight: 2 # how many lines you scroll by
   scrollPastBottom: true # enable scrolling past the bottom
   sidePanelWidth: 0.3333 # number from 0 to 1
@@ -55,7 +56,7 @@ git:
     order: 'topo-order'
     # one of always, never, when-maximised
     # this determines whether the git graph is rendered in the commits panel
-    showGraph: 'when-maximised'
+    showGraph: 'always'
     showWholeGraph: true
   skipHookPrefix: WIP
   autoFetch: true
