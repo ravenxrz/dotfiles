@@ -56,12 +56,14 @@ lvim.keys.normal_mode["<leader>ln"] = "<ESC><cmd>lua vim.lsp.buf.rename()<CR>"
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
 
 -- orverwirte old 's'
+
+-- TODO: search in files
 lvim.builtin.which_key.mappings.s = {
   name = "Search",
   s = { ":lua require('telescope.builtin').lsp_document_symbols()<cr>", "Document Symbol" },
   S = { ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>", "Workspace Symbol" },
-  f = { "<cmd>Telescope live_grep<cr>", "Text" },
-  F = { ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>",
+  w = { "<cmd>lua require('telescope.builtin').grep_string()<cr>", "Search Cursor Word" },
+  f = { ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>",
     "Live Text" },
   m = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
   r = { "<cmd>Telescope registers<cr>", "Registers" },
