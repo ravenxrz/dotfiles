@@ -5,8 +5,12 @@ filled in as strings with either
 a global executable or a path to
 an executable
 ]]
--- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
+local home = os.getenv("HOME")
+package.path = home .. "/.dotfiles/lvim/?.lua"
+
+
+-- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
@@ -56,25 +60,21 @@ lvim.keys.normal_mode["<leader>ln"] = "<ESC><cmd>lua vim.lsp.buf.rename()<CR>"
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
 
 -- orverwirte old 's'
-
--- TODO: search in files
-lvim.builtin.which_key.mappings.s = {
-  name = "Search",
-  s = { ":lua require('telescope.builtin').lsp_document_symbols()<cr>", "Document Symbol" },
-  S = { ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>", "Workspace Symbol" },
-  w = { "<cmd>lua require('telescope.builtin').grep_string()<cr>", "Search Cursor Word" },
-  f = { ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>",
-    "Live Text" },
-  m = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-  r = { "<cmd>Telescope registers<cr>", "Registers" },
-  k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-  C = { "<cmd>Telescope commands<cr>", "Commands" },
-}
+lvim.builtin.which_key.mappings.f = nil
+lvim.builtin.which_key.mappings.s = nil
+lvim.keys.normal_mode["<leader>s"]   = ":lua require('telescope.builtin').lsp_document_symbols()<cr>"
+lvim.keys.normal_mode["<leader>S"] = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
+lvim.keys.normal_mode["<leader>ff"]   = ":lua require('lvim.core.telescope.custom-finders').find_project_files()<cr>"
+lvim.keys.normal_mode["<leader>fe"]   = ":lua require('my_funcs').live_grep_raw({default_text =''})<cr>"
+lvim.keys.visual_mode["<leader>fw"]   = "<Esc>:lua require('my_funcs').live_grep_raw({}, 'v')<cr>"
+lvim.keys.normal_mode["<leader>fw"]   = ":lua require('my_funcs').live_grep_raw({default_text = vim.fn.expand('<cword>')})<cr>"
+lvim.keys.normal_mode["<leader>fd"]   = ":lua require('my_funcs').live_grep_raw({default_text =  '-g' .. vim.fn.fnamemodify(vim.fn.expand('%'), ':.:h') .. '/*'})<cr>"
+lvim.keys.normal_mode["<leader>k"]   = "<cmd>Telescope keymaps<cr>"
 
 -- hop
 lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
 lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["<leader>k"] = "<cmd>HopChar2<cr>"
+-- lvim.keys.normal_mode["<leader>k"] = "<cmd>HopChar2<cr>"
 
 -- yank history
 lvim.keys.normal_mode["<leader>yh"] = "<cmd>Telescope neoclip<cr>"
@@ -149,15 +149,10 @@ lvim.builtin.bufferline.highlights.buffer_selected = {
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
   "c",
-  "javascript",
+  "cpp",
   "json",
   "lua",
   "python",
-  "typescript",
-  "tsx",
-  "css",
-  "rust",
-  "java",
   "yaml",
 }
 
