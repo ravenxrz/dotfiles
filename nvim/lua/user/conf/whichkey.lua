@@ -107,16 +107,16 @@ local mappings = {
     -- "<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>",
     "Find Symobls",
   },
-  ["p"] = { "<cmd>Telescope projects<cr>", "Projects" },
+  -- ["p"] = { "<cmd>Telescope projects<cr>", "Projects" },
 
-  ["P"] = { "<cmd>SessionManager load_session<cr>", "Projects" },
+  ["p"] = { "<cmd>SessionManager load_session<cr>", "Projects" },
 
   ["t"] = {
     "<cmd>UltestSummary<CR>", "Unit Test"
   },
 
   ["o"] = {
-    "<cmd>SymbolsOutline<CR>", "Outline"
+    "<cmd>AerialToggle<CR>", "Outline"
   },
   ["v"] = {
     "<cmd>lua require('telescope').extensions.neoclip.default(require('telescope.themes').get_ivy())<cr>",
@@ -133,6 +133,7 @@ local mappings = {
     r = {"<cmd>CMake build_and_run<CR>", "Run"},
     d = {"<cmd>CMake build_and_debug<CR>", "DebugTarget"},
     c = {"<cmd>CMake cancel<CR>", "Cancel"},
+    C = {"<cmd>CMake create_project<CR>", "New Project"},
     s = {"<cmd>CMake set_target_args<CR>", "SetArg"},
   },
 
@@ -231,7 +232,6 @@ local mappings = {
       "<cmd>Telescope lsp_workspace_diagnostics<cr>",
       "Workspace Diagnostics",
     },
-    f = { "<cmd>Format<cr>", "Format" },
     i = { "<cmd>LspInfo<cr>", "Info" },
     I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
     j = {

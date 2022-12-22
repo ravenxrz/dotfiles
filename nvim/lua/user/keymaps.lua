@@ -118,8 +118,9 @@ keymap("v", "p", '"_dP', opts)
 -- keymap("n", "ma", "<cmd>Telescope vim_bookmarks current_file<cr>", opts)
 -- keymap("n", "mA", "<cmd>Telescope vim_bookmarks all<cr>", opts)
 
-
-keymap("n", "<A-o>", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
+-- mac user
+keymap("n", "<leader>s", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
+keymap("n", "<leader>o", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 keymap("n", "<leader>u", "<cmd>Trouble lsp_references<cr>", opts)
 
 -- calltree
@@ -151,15 +152,16 @@ keymap("n", "<leader>rd", "<cmd>UltestDebugNearest<cr>", opts)
 -- comment
 keymap("n", "gcf", "<cmd>Dox<cr>", opts)
 
+-- clipper
 -- sniprun
-keymap("n", "<leader>rf", ":%SnipRun<cr>", opts)
-keymap("v", "<leader>rs", ":%SnipRun<cr>", opts)
+-- keymap("n", "<leader>rf", ":%SnipRun<cr>", opts)
+-- keymap("v", "<leader>rs", ":%SnipRun<cr>", opts)
 
 -- spell check
-vim.cmd(
-[[
-  nnoremap <leader>s :call search('\w\>', 'c')<CR>a<C-X><C-S>
-]])
+-- vim.cmd(
+-- [[
+--   nnoremap <leader>s :call search('\w\>', 'c')<CR>a<C-X><C-S>
+-- ]])
 
 -- gtags
 -- find functions calling this function

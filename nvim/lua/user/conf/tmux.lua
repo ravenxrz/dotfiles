@@ -8,7 +8,7 @@ tmux.setup({
   copy_sync = {
     -- enables copy sync and overwrites all register actions to
     -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
-    enable = true,
+    enable = false,
     -- ignore specific tmux buffers e.g. buffer0 = true to ignore the
     -- first buffer or named_buffer_name = true to ignore a named tmux
     -- buffer with name named_buffer_name :)

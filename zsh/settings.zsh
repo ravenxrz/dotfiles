@@ -26,7 +26,7 @@ setopt extendedhistory
 KEYTIMEOUT=1 # corresponds to 10ms
 
 # Use vim as the editor
-export EDITOR=nvim
+export EDITOR=vim
 
 # Use vim style line editing in zsh
 bindkey -v

@@ -38,6 +38,7 @@ local function config_dapui()
   local debug_open = function()
     dapui.open()
     vim.api.nvim_command("DapVirtualTextEnable")
+    vim.api.nvim_command("NvimTreeClose")
   end
   local debug_close = function()
     dap.repl.close()
@@ -64,8 +65,8 @@ local function config_debuggers()
   local dap = require "dap"
   -- TODO: wait dap-ui for fixing temrinal layout
   -- the "30" of "30vsplit: doesn't work
-  dap.defaults.fallback.terminal_win_cmd = '30vsplit new' -- this will be overrided by dapui
-  dap.set_log_level("DEBUG")
+  -- dap.defaults.fallback.terminal_win_cmd = '30vsplit new' -- this will be overrided by dapui
+  -- dap.set_log_level("DEBUG")
 
   -- load from json file
   require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'cpp' } })

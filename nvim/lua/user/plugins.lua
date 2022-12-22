@@ -84,7 +84,10 @@ return packer.startup(function(use)
   use "kyazdani42/nvim-web-devicons" -- icons
 
   -- Telescope
-  use "nvim-telescope/telescope-live-grep-args.nvim"
+  use { 
+    "nvim-telescope/telescope-live-grep-args.nvim",
+    commit="9f62ecc6f6282e65adedaa3a0f18daea05664e64"
+  }
   use {
     "nvim-telescope/telescope.nvim",
     tag = "nvim-0.6",
@@ -201,7 +204,7 @@ return packer.startup(function(use)
   -- use { "leoluz/nvim-dap-go", module = "dap-go" } -- debug golang
   use { "jbyuki/one-small-step-for-vimkind", module = "osv" } -- debug any Lua code running in a Neovim instance
   use {
-    "sakhnik/nvim-gdb",
+    "ravenxrz/nvim-gdb",
     run = "./install.sh"
   }
 
@@ -221,11 +224,13 @@ return packer.startup(function(use)
   -- use "navarasu/onedark.nvim"
   use({
     "catppuccin/nvim",
+    commit="6df82e66a50cfefcc0e8af05bfc3411dc2d7a368"
   })
   use {
     "projekt0n/github-nvim-theme",
     tag = "v0.0.4",
   }
+  use 'Mofiqul/vscode.nvim'
 
   -- use "folke/tokyonight.nvim"
   use {
@@ -252,7 +257,7 @@ return packer.startup(function(use)
   use "folke/todo-comments.nvim" -- todo comments
   -- use "liuchengxu/vista.vim"     -- outline
   use "simrat39/symbols-outline.nvim" -- outline
-  -- use "stevearc/aerial.nvim"
+  use "stevearc/aerial.nvim"
   use "norcalli/nvim-colorizer.lua" -- show color
   use "folke/trouble.nvim"
   use "j-hui/fidget.nvim" -- show lsp progress
@@ -269,6 +274,7 @@ return packer.startup(function(use)
   }
 
   -- tools
+  use "wincent/vim-clipper"
   -- use "cdelledonne/vim-cmake"
   use "aserowy/tmux.nvim"   -- NOTE: 可能造成卡顿
   use "ravenxrz/neovim-cmake"
@@ -284,12 +290,12 @@ return packer.startup(function(use)
   use "ravenxrz/vim-local-history"
   -- use "henriquehbr/nvim-startup.lua"
   -- use "AckslD/nvim-neoclip.lua"
-  use "vim-test/vim-test"
-  use {
-    "rcarriga/vim-ultest",
-    run = ":UpdateRemotePlugins"
-  }
-  use { 'michaelb/sniprun', run = 'bash ./install.sh' }
+  -- use "vim-test/vim-test"
+  -- use {
+  --   "rcarriga/vim-ultest",
+  --   run = ":UpdateRemotePlugins"
+  -- }
+  -- use { 'michaelb/sniprun', run = 'bash ./install.sh' }
   -- use "ravenxrz/DoxygenToolkit.vim"
   use "Pocco81/AutoSave.nvim"
   use "djoshea/vim-autoread"

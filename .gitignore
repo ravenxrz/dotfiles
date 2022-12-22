@@ -6,3 +6,10 @@ clash/cache.db
 debugger/
 
 lazygit/state.yml
+
+bin/linux/clangd_14.0.3
+bin/linux/clangd
+bin/linux/clangd-linux-14.0.3.zip
+bin/linux/tmux
+bin/linux/tmux
+bin/linux/tmux

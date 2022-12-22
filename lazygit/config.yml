@@ -1,11 +1,12 @@
 gui:
   # stuff relating to the UI
+  showIcons: true
   scrollHeight: 2 # how many lines you scroll by
   scrollPastBottom: true # enable scrolling past the bottom
   sidePanelWidth: 0.3333 # number from 0 to 1
   expandFocusedSidePanel: false
   mainPanelSplitMode: 'flexible' # one of 'horizontal' | 'flexible' | 'vertical'
-  language: 'auto' # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
+  language: 'en' # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
   theme:
     lightTheme: false # For terminals with a light background
     activeBorderColor:
@@ -55,7 +56,8 @@ git:
     order: 'topo-order'
     # one of always, never, when-maximised
     # this determines whether the git graph is rendered in the commits panel
-    showGraph: 'when-maximised'
+    showGraph: 'always'
+    showWholeGraph: true
   skipHookPrefix: WIP
   autoFetch: true
   autoRefresh: true
@@ -67,7 +69,7 @@ git:
   diffContextSize: 3 # how many lines of context are shown around a change in diffs
 os:
   editCommand: '' # see 'Configuring File Editing' section
-  editCommandTemplate: '{{editor}} {{filename}}'
+  editCommandTemplate: 'lvim {{filename}}'
   openCommand: ''
 refresher:
   refreshInterval: 10 # File/submodule refresh interval in seconds. Auto-refresh can be disabled via option 'git.autoRefresh'.
@@ -85,9 +87,9 @@ promptToReturnFromSubprocess: true # display confirmation when subprocess termin
 keybinding:
   universal:
     quit: 'Q'
-    ; quit-alt1: '<c-c>' # alternative/alias of quit
-    return: 'q' # return to previous menu, will quit if there's nowhere to return
-    quitWithoutChangingDirectory: 'Q'
+    quit-alt1: '<c-Q>' # alternative/alias of quit
+    return: '<c-c>' # return to previous menu, will quit if there's nowhere to return
+    # quitWithoutChangingDirectory: 'Q'
     togglePanel: '<tab>' # goto the next panel
     prevItem: '<up>' # go one line up
     nextItem: '<down>' # go one line down
@@ -135,7 +137,7 @@ keybinding:
     prevScreenMode: '_'
     undo: 'z'
     redo: '<c-z>'
-    filteringMenu: '<c-s>'
+    filteringMenu: '<c-f>'
     diffingMenu: 'W'
     diffingMenu-alt: '<c-e>' # deprecated
     copyToClipboard: '<c-o>'

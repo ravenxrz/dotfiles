@@ -27,9 +27,9 @@ vim.cmd([[
   \ }
 ]])
 
--- vim.cmd([[
---   nnoremap <silent> <expr> <leader>dd ":GdbStart gdb -q " . input("debugee file path: ") . "\<ESC>"
--- ]])
+vim.cmd([[
+  nnoremap <silent> <expr> <leader>dd ":GdbStart gdb -q " . input("debugee file path: ") . "\<ESC>"
+]])
 
 _G.GdbSessionInit = function()
   -- restore breakpoints if possible
@@ -37,13 +37,15 @@ _G.GdbSessionInit = function()
   if utils.exists('.bps.txt') then
     vim.defer_fn(function()
       vim.api.nvim_command(":Gdb source .bps.txt")
-    end, 300)
+    end, 12000)
   end
 
   -- create bt & info locals window
-  vim.api.nvim_command(":belowright GdbCreateWatch thread apply all bt")
-  vim.api.nvim_command(":wincmd h")
+  -- vim.api.nvim_command(":belowright GdbCreateWatch thread apply all bt")
+  -- vim.api.nvim_command(":wincmd h")
   vim.api.nvim_command(":belowright GdbCreateWatch info locals")
+  vim.api.nvim_command(":set wrap")
+
 
   -- move cursor back to gdb terminal
   vim.api.nvim_command(":wincmd k")
@@ -53,6 +55,7 @@ _G.StartGdbSession = function()
   -- start gdb sessoin
   local exec_file = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
   vim.api.nvim_command(":GdbStart gdb -q " .. exec_file)
+  vim.api.nvim_command("NvimTreeClose")
 end
 
 _G.CreateWatch = function()
@@ -60,20 +63,19 @@ _G.CreateWatch = function()
   vim.api.nvim_command(":GdbCreateWatch " .. watch_arg)
 end
 
-_G.CloseWatchBuffers = function()
-  vim.defer_fn(function()
-    vim.api.nvim_command(":bd! thread info")
-  end, 10)
-end
-
-vim.api.nvim_set_keymap("n", "<leader>dr", "<cmd>GdbStart gdbr<cr>", {})
-vim.api.nvim_set_keymap("n", "<leader>dd", "<cmd>lua StartGdbSession()<cr>", {})
-vim.api.nvim_set_keymap("n", "<leader>dc", "<cmd>lua CreateWatch()<cr>", {})
-vim.api.nvim_set_keymap("n", "<leader>dbt", "<cmd>GdbLopenBacktrace<cr>", {})
-vim.api.nvim_set_keymap("n", "<leader>dbp", "<cmd>GdbLopenBreakpoints<cr>", {})
+-- _G.CloseWatchBuffers = function()
+--   vim.defer_fn(function()
+--     vim.api.nvim_command(":bd! thread info")
+--   end, 10)
+-- end
+--
+-- vim.api.nvim_set_keymap("n", "<leader>dr", "<cmd>GdbStart gdbr<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>dd", "<cmd>lua StartGdbSession()<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>dc", "<cmd>lua CreateWatch()<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>dbt", "<cmd>GdbLopenBacktrace<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>dbp", "<cmd>GdbLopenBreakpoints<cr>", {})
 
 
 vim.cmd([[
   autocmd User NvimGdbStart :lua GdbSessionInit()
-  autocmd User NvimGdbCleanup :lua CloseWatchBuffers()
 ]])

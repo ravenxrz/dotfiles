@@ -5,7 +5,6 @@
 -- -i ignore case
 -- -s 大小写敏感
 -- -w match word
--- -e 正则表达式匹配
 -- -v 反转匹配
 -- -g 通配符文件或文件夹，可以用!来取反
 -- -F fixed-string 原意字符串，类似python的 r'xxx'
@@ -208,7 +207,7 @@ telescope.setup {
 }
 
 -- telescope.load_extension("frecency")
-telescope.load_extension('fzf')
+-- telescope.load_extension('fzf')
 telescope.load_extension("ui-select")
 telescope.load_extension('dap')
 -- telescope.load_extension('vim_bookmarks')

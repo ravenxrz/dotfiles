@@ -16,8 +16,7 @@ syntax enable
 syntax on
 " 模式搜索实时预览,增量搜索
 set incsearch
-" 设置搜索高亮
-set hlsearch
+" 设置搜索高亮 set hlsearch
 " 忽略大小写 (该命令配合smartcase使用较好，否则不要开启)
 set ignorecase
 " 模式查找时智能忽略大小写
@@ -84,8 +83,8 @@ map <C-l> <C-W>l
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap J mzJ`z
-nnoremap j jzz
-nnoremap k kzz
+" nnoremap j jzz
+" nnoremap k kzz
 
 " Moving text
 vnoremap J :m '>+1<CR>gv=gv
@@ -107,10 +106,6 @@ nnoremap <Leader>f :action ReformatCode<CR>
 nnoremap <Leader>n :action NewFile<CR>
 " 找到usage
 nnoremap <Leader>u :action FindUsages<CR>
-" find operation
-nnoremap ?  :action Find<CR>
-" 调用idea的replace操作
-nnoremap <Leader>; :action Replace<CR>
 " go to class
 nnoremap <Leader>gc :action GotoClass<CR>
 " go to action
@@ -121,6 +116,15 @@ nnoremap <Leader>r :action SaveAll<CR>:action RunClass<CR>
 nnoremap <Leader>fp :action ShowFilePath<CR>
 " 隐藏激活窗口
 nnoremap <Leader>h :action HideActiveWindow<CR>
+
+" 查看函数调用链
+nnoremap <Leader>in :action CallHierarchy<CR>
+nnoremap <Leader>s :action SendLocation<CR>
+" 查询文件
+nnoremap <Space>f :action GotoFile<CR>
+" 查询Symbol
+nnoremap <Space>S :action GotoSymbol<CR>
+
 
 " 中英文自动切换
 set keep-english-in-normal
@@ -138,3 +142,4 @@ set easymotion
 " open terminal window   ---------- alt + F12
 
 
+set ideajoin
