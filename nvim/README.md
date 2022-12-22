@@ -1,5 +1,7 @@
 ## Neovim 配置
 
+**本人已改用 [lunarvim](https://www.lunarvim.org/), 以下配置可能已过期。**
+
 个人neovim配置仓库，视频演示可查看[此处](https://www.bilibili.com/video/BV1WY411P736?spm_id_from=333.999.0.0)
 
 
