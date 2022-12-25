@@ -9,7 +9,6 @@ an executable
 local home = os.getenv("HOME")
 package.path = home .. "/.dotfiles/lvim/?.lua"
 
-
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 -- general
 lvim.log.level = "warn"
@@ -50,8 +49,6 @@ lvim.keys.visual_mode["p"] = "P"
 lvim.keys.visual_mode["H"] = "^"
 lvim.keys.visual_mode["L"] = "$"
 
-
-
 -- lsp
 lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
 lvim.keys.visual_mode["<leader>lf"] = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
@@ -60,16 +57,16 @@ lvim.keys.normal_mode["<leader>ln"] = "<ESC><cmd>lua vim.lsp.buf.rename()<CR>"
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
 
 -- orverwirte old 's'
-lvim.builtin.which_key.mappings.f = nil
-lvim.builtin.which_key.mappings.s = nil
-lvim.keys.normal_mode["<leader>s"]   = ":lua require('telescope.builtin').lsp_document_symbols()<cr>"
-lvim.keys.normal_mode["<leader>S"] = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
-lvim.keys.normal_mode["<leader>ff"]   = ":lua require('lvim.core.telescope.custom-finders').find_project_files()<cr>"
-lvim.keys.normal_mode["<leader>fe"]   = ":lua require('my_funcs').live_grep_raw({default_text =''})<cr>"
-lvim.keys.visual_mode["<leader>fw"]   = "<Esc>:lua require('my_funcs').live_grep_raw({}, 'v')<cr>"
-lvim.keys.normal_mode["<leader>fw"]   = ":lua require('my_funcs').live_grep_raw({default_text = vim.fn.expand('<cword>')})<cr>"
-lvim.keys.normal_mode["<leader>fd"]   = ":lua require('my_funcs').live_grep_raw({default_text =  '-g' .. vim.fn.fnamemodify(vim.fn.expand('%'), ':.:h') .. '/*'})<cr>"
-lvim.keys.normal_mode["<leader>k"]   = "<cmd>Telescope keymaps<cr>"
+lvim.builtin.which_key.mappings.f   = nil
+lvim.builtin.which_key.mappings.s   = nil
+lvim.keys.normal_mode["<leader>s"]  = ":lua require('telescope.builtin').lsp_document_symbols()<cr>"
+lvim.keys.normal_mode["<leader>S"]  = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
+lvim.keys.normal_mode["<leader>ff"] = ":lua require('lvim.core.telescope.custom-finders').find_project_files()<cr>"
+lvim.keys.normal_mode["<leader>fe"] = ":lua require('my_funcs').live_grep_raw({default_text =''})<cr>"
+lvim.keys.visual_mode["<leader>fw"] = "<Esc>:lua require('my_funcs').live_grep_raw({}, 'v')<cr>"
+lvim.keys.normal_mode["<leader>fw"] = ":lua require('my_funcs').live_grep_raw({default_text = vim.fn.expand('<cword>')})<cr>"
+lvim.keys.normal_mode["<leader>fd"] = ":lua require('my_funcs').live_grep_raw({default_text =  '-g' .. vim.fn.fnamemodify(vim.fn.expand('%'), ':.:h') .. '/*' .. ' ' .. vim.fn.expand('<cword>')})<cr>"
+lvim.keys.normal_mode["<leader>k"]  = "<cmd>Telescope keymaps<cr>"
 
 -- hop
 lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
@@ -79,6 +76,9 @@ lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = req
 -- yank history
 lvim.keys.normal_mode["<leader>yh"] = "<cmd>Telescope neoclip<cr>"
 
+-- dap
+lvim.keys.normal_mode["<F12>"] = ":Telescope dap configurations<cr>"
+lvim.builtin.which_key.mappings.d.h = { "<cmd>lua require'dap.ui.widgets'.hover()<cr>", "Hover Variables" }
 
 -- unmap a default keymapping
 -- vim.keymap.del("n", "q")
@@ -202,9 +202,6 @@ require("lvim.lsp.manager").setup("pyright", {
     }
   },
 })
-
-
-
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
@@ -525,8 +522,25 @@ lvim.plugins = {
   },
   {
     "hrsh7th/cmp-nvim-lsp-signature-help",
+  },
+  {
+    'ethanholz/nvim-lastplace'
+  },
+  { -- json parser for dap launch.json
+    'Joakker/lua-json5',
+    run = './install.sh'
+  },
+  {
+    "nvim-telescope/telescope-dap.nvim",
+    config = function ()
+      require("telescope").load_extension('dap')
+    end
   }
 }
+
+
+--- dap config
+require("dap.dap-lldb")
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("FileType", {
