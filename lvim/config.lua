@@ -52,7 +52,7 @@ lvim.keys.visual_mode["L"] = "$"
 -- lsp
 lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
 lvim.keys.visual_mode["<leader>lf"] = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
-lvim.keys.normal_mode["<leader>ln"] = "<ESC><cmd>lua vim.lsp.buf.rename()<CR>"
+lvim.keys.normal_mode["<leader>ln"] = "<cmd>lua vim.lsp.buf.rename()<CR>"
 -- telescope
 lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
 
@@ -76,9 +76,30 @@ lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = req
 -- yank history
 lvim.keys.normal_mode["<leader>yh"] = "<cmd>Telescope neoclip<cr>"
 
+-- auto pairs
+lvim.builtin.autopairs.disable_filetype = { "TelescopePrompt", "spectre_panel", "repl" }
+
 -- dap
 lvim.keys.normal_mode["<F12>"] = ":Telescope dap configurations<cr>"
-lvim.builtin.which_key.mappings.d.h = { "<cmd>lua require'dap.ui.widgets'.hover()<cr>", "Hover Variables" }
+lvim.builtin.which_key.mappings.d = {
+  name = "Debug",
+  h = { "<cmd>lua require'dap.ui.widgets'.hover()<cr>", "Hover Variables" },
+  x = { "<cmd>lua require'dap'.terminate()<cr>", "Terminate" },
+  t = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
+  b = { "<cmd>lua require'dap'.step_back()<cr>", "Step Back" },
+  c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
+  C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run To Cursor" },
+  d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
+  g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
+  i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
+  o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
+  u = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
+  p = { "<cmd>lua require'dap'.pause()<cr>", "Pause" },
+  r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
+  s = { "<cmd>lua require'dap'.continue()<cr>", "Start" },
+  q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
+  U = { "<cmd>lua require'dapui'.toggle()<cr>", "Toggle UI" },
+}
 
 -- unmap a default keymapping
 -- vim.keymap.del("n", "q")
@@ -527,12 +548,13 @@ lvim.plugins = {
     'ethanholz/nvim-lastplace'
   },
   { -- json parser for dap launch.json
+    -- NOTE: cargo required: https://rustup.rs/
     'Joakker/lua-json5',
     run = './install.sh'
   },
   {
     "nvim-telescope/telescope-dap.nvim",
-    config = function ()
+    config = function()
       require("telescope").load_extension('dap')
     end
   }
@@ -540,7 +562,11 @@ lvim.plugins = {
 
 
 --- dap config
+-- load non-standard json file
+require('dap.ext.vscode').json_decode = require 'json5'.parse
+require('dap.ext.vscode').load_launchjs()
 require("dap.dap-lldb")
+require("dap.dap-cppdbg")
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("FileType", {
