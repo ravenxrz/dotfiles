@@ -12,7 +12,7 @@ dap.adapters.codelldb = {
 }
 
 dap.configurations.cpp = {
-  {
+  { -- launch
     name = "Launch",
     type = "codelldb",
     request = "launch",
@@ -23,6 +23,16 @@ dap.configurations.cpp = {
     cwd = "${workspaceFolder}",
     stopOnEntry = false,
     args = {},
+  },
+  { -- attach
+    name = "Attach process",
+    type = "codelldb",
+    request = "attach",
+    processId = require('dap.utils').pick_process,
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = "${workspaceFolder}"
   },
 }
 dap.configurations.c = dap.configurations.cpp

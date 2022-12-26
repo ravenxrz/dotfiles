@@ -14,14 +14,14 @@ package.path = home .. "/.dotfiles/lvim/?.lua"
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
 -- themes: https://vimcolorschemes.com/
-lvim.colorscheme = "gruvbox"
+lvim.colorscheme = "PaperColor"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
 --  options
-vim.opt["foldlevel"] = 99
-vim.opt["foldmethod"] = "expr"
-vim.opt["foldexpr"] = "nvim_treesitter#foldexpr()"
+vim.opt.foldlevel = 99
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
@@ -356,8 +356,8 @@ lvim.plugins = {
       })
     end
   },
-  { -- vscode theme
-    "Mofiqul/vscode.nvim"
+  {
+    "NLKNguyen/papercolor-theme"
   },
   { -- hop
     "phaazon/hop.nvim",
