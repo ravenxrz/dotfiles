@@ -14,7 +14,7 @@ package.path = home .. "/.dotfiles/lvim/?.lua"
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
 -- themes: https://vimcolorschemes.com/
-lvim.colorscheme = "PaperColor"
+lvim.colorscheme = "gruvbox"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -567,11 +567,11 @@ lvim.plugins = {
   {
     'ethanholz/nvim-lastplace'
   },
-  { -- json parser for dap launch.json
-    -- NOTE: cargo required: https://rustup.rs/
-    'Joakker/lua-json5',
-    run = './install.sh'
-  },
+  -- { -- json parser for dap launch.json
+  --   -- NOTE: cargo required: https://rustup.rs/
+  --   'Joakker/lua-json5',
+  --   run = './install.sh'
+  -- },
   {
     "nvim-telescope/telescope-dap.nvim",
     config = function()
@@ -583,10 +583,10 @@ lvim.plugins = {
 
 --- dap config
 -- load non-standard json file
-require('dap.ext.vscode').json_decode = require 'json5'.parse
-require('dap.ext.vscode').load_launchjs()
-require("dap.dap-lldb")
-require("dap.dap-cppdbg")
+-- require('dap.ext.vscode').json_decode = require 'json5'.parse
+-- require('dap.ext.vscode').load_launchjs()
+-- require("dap.dap-lldb")
+-- require("dap.dap-cppdbg")
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("FileType", {
