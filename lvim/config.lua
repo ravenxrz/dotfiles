@@ -42,12 +42,12 @@ lvim.keys.normal_mode["q"] = "<Nop>"
 lvim.keys.normal_mode["n"] = "nzzzv"
 lvim.keys.normal_mode["N"] = "Nzzzv"
 lvim.keys.normal_mode["J"] = "mzJ`z"
--- lvim.keys.normal_mode["j"] = "jzz"
--- lvim.keys.normal_mode["k"] = "kzz"
 
 lvim.keys.visual_mode["p"] = "P"
 lvim.keys.visual_mode["H"] = "^"
 lvim.keys.visual_mode["L"] = "$"
+lvim.keys.visual_mode["J"] = ":m '>+1<CR>gv=gv"
+lvim.keys.visual_mode["K"] = ":m '<-2<CR>gv=gv"
 
 -- lsp
 lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
