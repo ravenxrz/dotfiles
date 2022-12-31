@@ -30,7 +30,7 @@
     ~/.tmux.conf: tmux/tmux.conf
     ~/.vimrc:
     ~/.config/lazygit: lazygit
-    ~/.config/nvim: nvim
+    # ~/.config/nvim: nvim
     ~/.config/lvim: lvim
     ~/.config/zellij: zellij
     ~/.config/alacritty: alacritty 
@@ -40,6 +40,8 @@
     ~/.zsh:
     ~/.zshrc:
     ~/.shell_local_before:
+    ~/Library/Preferences/clangd: clangd  # macos
+    ~/.config/clangd: clangd  # macos
     # ~/.zfunctions/prompt_spaceship_setup: zsh/prompt/spaceship-prompt/spaceship.zsh
 
 - create:

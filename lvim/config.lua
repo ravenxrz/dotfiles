@@ -406,17 +406,19 @@ lvim.plugins = {
       local provider = "clangd"
       local clangd_flags = {
         -- 在后台自动分析文件（基于complie_commands)
+        "--compile-commands-dir=build",
         "--background-index",
-        "--background-index-priority=low",
         "--completion-style=detailed",
         -- 同时开启的任务数量
         "--all-scopes-completion=true",
-        "-j=12",
+        "--recovery-ast",
+        "--suggest-missing-includes",
         -- 告诉clangd用那个clang进行编译，路径参考which clang++的路径
-        "--query-driver=/usr/bin/clang++,/usr/bin/g++",
+        "--query-driver=/usr/locla/bin/clang++,/usr/bin/g++",
         "--clang-tidy",
         -- 全局补全（会自动补充头文件）
         "--all-scopes-completion",
+        "--cross-file-rename",
         -- 更详细的补全内容
         "--completion-style=detailed",
         "--function-arg-placeholders=false",
@@ -424,7 +426,7 @@ lvim.plugins = {
         "--header-insertion=never",
         -- pch优化的位置
         "--pch-storage=memory",
-        "--malloc-trim"
+        "-j=12",
       }
 
       local custom_on_attach = function(client, bufnr)
