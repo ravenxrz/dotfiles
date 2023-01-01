@@ -185,7 +185,7 @@ lvim.builtin.treesitter.highlight.enable = true
 -- -- make sure server will always be installed even if the server is in skipped_servers list
 lvim.lsp.installer.setup.ensure_installed = {
   "clangd",
-  "pyright"
+  "pyright",
 }
 
 -- -- change UI setting of `LspInstallInfo`
@@ -201,6 +201,7 @@ lvim.lsp.installer.setup.ensure_installed = {
 lvim.lsp.installer.setup.automatic_installation = false
 
 -- disable diagnostics which is super annoying in my case
+lvim.lsp.diagnostics.virtual_text = false
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
@@ -270,25 +271,8 @@ formatters.setup {
 --   },
 -- }
 
--- lazygit
-require("lvim.core.terminal").lazygit_toggle = function()
-  local Terminal = require("toggleterm.terminal").Terminal
-  local lazygit = Terminal:new {
-    cmd = "lazygit",
-    hidden = true,
-    direction = "float",
-    float_opts = {
-      border = "none",
-      width = 100000,
-      height = 100000,
-    },
-    on_open = function(_)
-      vim.cmd "startinsert!"
-    end,
-    -- on_close = function(_) end,
-    count = 99,
-  }
-  lazygit:toggle()
+lvim.lsp.null_ls.setup.on_init = function(new_client, _)
+  new_client.offset_encoding = "utf-16"
 end
 
 
@@ -426,6 +410,7 @@ lvim.plugins = {
         "--header-insertion=never",
         -- pch优化的位置
         "--pch-storage=memory",
+        "--offset-encoding=utf-16",
         "-j=12",
       }
 
