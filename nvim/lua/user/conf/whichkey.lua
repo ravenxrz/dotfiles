@@ -92,12 +92,11 @@ local mappings = {
   ["C"] = { "<cmd>%bd|e#<CR>", "Close Other Buffers" },
   -- ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
   ["f"] = {
-    "<cmd>lua require('telescope.builtin').find_files()<cr>",
-    -- "<cmd>lua require('telescope').extensions.frecenncy.frecency(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
+    "<cmd>Telescope fd<cr>",
     "Find files",
   },
   -- ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
-  ["F"] = { "<cmd>lua require('telescope').extensions.live_grep_raw.live_grep_raw(require('telescope.themes').get_ivy())<cr>", "Find Text" },
+  ["F"] = { "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy())<cr>", "Find Text" },
   ["s"] = {
     "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>",
     "Find Document Symbols",
