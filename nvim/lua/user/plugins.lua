@@ -236,6 +236,8 @@ return packer.startup(function(use)
     use "ldelossa/litee.nvim"
     use "ldelossa/litee-calltree.nvim"
 
+    use {"cpea2506/one_monokai.nvim", tag = "723f41c42603106e76e7408f88f847e76e47dddd"}
+
     -- tools
     -- use "cdelledonne/vim-cmake"
     use "ravenxrz/neovim-cmake"
