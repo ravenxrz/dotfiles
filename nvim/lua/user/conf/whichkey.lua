@@ -108,15 +108,10 @@ local mappings = {
   },
   ["p"] = { "<cmd>Telescope projects<cr>", "Projects" },
 
-  ["P"] = { "<cmd>SessionManager load_session<cr>", "Projects" },
-
-  ["t"] = {
-    "<cmd>UltestSummary<CR>", "Unit Test"
-  },
-
   ["o"] = {
     "<cmd>AerialToggle<CR>", "Outline"
   },
+
   ["v"] = {
     "<cmd>lua require('telescope').extensions.neoclip.default(require('telescope.themes').get_ivy())<cr>",
     "Clipboard Manager"
