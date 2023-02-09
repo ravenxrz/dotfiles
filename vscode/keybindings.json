@@ -64,14 +64,10 @@
 		"command": "extension.multiCommand.execute",
 		"args": {
 			"sequence": [
-				"search.focus.nextInputBox",
-				"search.focus.nextInputBox",
-				"search.focus.nextInputBox",
-				"search.focus.nextInputBox",
-				"list.focusFirst",
+				"search.action.focusSearchList"
 			]
 		},
-		"when": "hasSearchResult && searchViewletFocus"
+		"when": "searchViewletFocus"
 	},
 	{ // focus on search input box
 		"key": "shift+tab",
@@ -103,23 +99,14 @@
 		"when": "listFocus && !inputFocus && hasSearchResult && searchViewletFocus"
 	},
 	// -----searching pane end------
-	// -----file expoler start------
-	{ // open file expoler use which key
+	// -----file explorer start------
+	{ // open file explorer use which key
 		"key": "e",
 		"command": "whichkey.triggerKey",
 		"when": "whichkeyVisible && sideBarVisible && explorerViewletVisible",
 		"args": {
 			"key": "e",
 			"when": "sideBarVisible && explorerViewletVisible"
-		},
-	},
-	{ // open outline use which key
-		"key": "o",
-		"command": "whichkey.triggerKey",
-		"when": "whichkeyVisible && outlinerExplorerView.active && view.outline.visible",
-		"args": {
-			"key": "o",
-			"when": "outlinerExplorerView.active && view.outline.visible"
 		},
 	},
 	{ // rename file
@@ -142,7 +129,7 @@
 		"command": "list.focusUp",
 		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
 	},
-	// -----file expoler end------
+	// -----file explorer end------
 	// -----suggest item start------
 	{ // move down at auto completion prompt
 		"key": "ctrl+j",
@@ -300,10 +287,30 @@
 		"command": "-editor.action.startFindReplaceAction",
 		"when": "editorFocus || editorIsOpen"
 	},
-	{ // quit side bar only when explore is focused
-		"key": "q",
-		"command": "workbench.action.toggleSidebarVisibility",
-		"when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
+	// { // quit side bar only when explore is focused
+	// 	"key": "q",
+	// 	"command": "workbench.action.toggleSidebarVisibility",
+	// 	"when": "sideBarFocus && activeViewlet == 'workbench.view.explorer'"
+	// },
+	// fix ctrl d ctrl u in vim
+	// fix <C-d> and <C-u>
+	{
+		"key": "ctrl+d",
+		"command": "cursorMove",
+		"args": {
+			"to": "down",
+			"by": "line",
+			"value": 34
+		},
+	},
+	{
+		"key": "ctrl+u",
+		"command": "cursorMove",
+		"args": {
+			"to": "up",
+			"by": "line",
+			"value": 34
+		},
 	},
 	// -- disable a bunch of keybindings which may have conflicts with above keybindings
 	{
@@ -574,5 +581,116 @@
 		"key": "ctrl+d",
 		"command": "-workbench.action.debug.run",
 		"when": "debuggersAvailable && !inDebugMode && !terminalFocus"
+	},
+	{
+		"key": "alt+o",
+		"command": "-C_Cpp.SwitchHeaderSource",
+		"when": "editorTextFocus && editorLangId == 'c' || editorTextFocus && editorLangId == 'cpp' || editorTextFocus && editorLangId == 'cuda-cpp'"
+	},
+	{
+		"key": "alt+o",
+		"command": "clangd.switchheadersource",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+i",
+		"command": "-editor.action.codeAction",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+o",
+		"command": "-editor.action.codeAction",
+		"when": "editorTextFocus"
+	},
+	{
+		"key": "ctrl+o",
+		"command": "-lineBreakInsert",
+		"when": "textInputFocus && !editorReadonly"
+	},
+	{
+		"key": "ctrl+i",
+		"command": "extension.vim_ctrl+i",
+		"when": "editorTextFocus && vim.active && vim.use<C-i> && !inDebugRepl"
+	},
+	{
+		"key": "ctrl+i",
+		"command": "-extension.vim_ctrl+i",
+		"when": "editorTextFocus && vim.active && vim.use<C-i> && !inDebugRepl"
+	},
+	{
+		"key": "ctrl+o",
+		"command": "workbench.action.navigateBack",
+		"when": "canNavigateBack"
+	},
+	{
+		"key": "ctrl+i",
+		"command": "workbench.action.navigateForward",
+		"when": "canNavigateForward"
+	},
+	{
+		"key": "cmd+p",
+		"command": "workbench.action.showCommands"
+	},
+	{
+		"key": "shift+cmd+a",
+		"command": "-workbench.action.showCommands"
+	},
+	{
+		"key": "cmd+r",
+		"command": "-workbench.action.reloadWindow",
+		"when": "isDevelopment"
+	},
+	{
+		"key": "cmd+r",
+		"command": "-jupyter.refreshDataViewer",
+		"when": "isWorkspaceTrusted && jupyter.dataViewerActive"
+	},
+	{
+		"key": "cmd+r",
+		"command": "-python.refreshTensorBoard",
+		"when": "python.hasActiveTensorBoardSession"
+	},
+	{
+		"key": "cmd+r",
+		"command": "-editor.action.startFindReplaceAction",
+		"when": "editorFocus || editorIsOpen"
+	},
+	{
+		"key": "ctrl+r",
+		"command": "-workbench.action.openRecent"
+	},
+	{
+		"key": "ctrl+r",
+		"command": "-go.test.previous",
+		"when": "editorLangId == 'go'"
+	},
+	{
+		"key": "ctrl+r",
+		"command": "-workbench.action.tasks.reRunTask"
+	},
+	{
+		"key": "ctrl+r",
+		"command": "-workbench.action.quickOpenNavigateNextInRecentFilesPicker",
+		"when": "inQuickOpen && inRecentFilesPicker"
+	},
+	{
+		"key": "cmd+r",
+		"command": "editor.action.startFindReplaceAction",
+		"when": "editorFocus || editorIsOpen"
+	},
+	{
+		"key": "ctrl+u",
+		"command": "-extension.vim_ctrl+u",
+		"when": "editorTextFocus && vim.active && vim.use<C-u> && !inDebugRepl"
+	},
+	{
+		"key": "ctrl+up",
+		"command": "-extension.vim_ctrl+up",
+		"when": "editorTextFocus && vim.active && !inDebugRepl && vim.mode != 'Insert'"
+	},
+	{
+		"key": "ctrl+u",
+		"command": "-list.focusPageUp",
+		"when": "listFocus && !inputFocus"
 	}
 ]
