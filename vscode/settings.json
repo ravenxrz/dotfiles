@@ -384,7 +384,30 @@
 			"commands": [
 				"extension.searchUnderCursor",
 			]
-		}
+		},
+		// gg and G jump mark
+		{
+			"before": [
+				"g",
+				"g",
+			],
+			"after": [
+				"m",
+				"a",
+				"g",
+				"g",
+			]
+		},
+		{
+			"before": [
+				"G",
+			],
+			"after": [
+				"m",
+				"a",
+				"G",
+			]
+		},
 	],
 	"vim.visualModeKeyBindings": [
 		{ // which key
@@ -510,7 +533,7 @@
 	"hexeditor.showDecodedText": true,
 	"hexeditor.defaultEndianness": "little",
 	"hexeditor.inspectorType": "aside",
-	"editor.wordWrap": "off",
+	"editor.wordWrap": "on",
 	"vscode-office.openOutline": false,
 	"remote.SSH.remotePlatform": {
 		"234": "linux",
