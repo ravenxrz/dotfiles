@@ -1,5 +1,5 @@
 -- cursor color: #61AFEF
-local colorscheme = "catppuccin"
+local colorscheme = "one_monokai"
 -- local colorscheme = "darkplus"
 -- local colorscheme = "github_light"
 -- require "user.conf.github-nvim-theme"
@@ -10,8 +10,3 @@ if not status_ok then
   return
 end
 
-if colorscheme == "onedark" then
-  require "user.themes.onedark"
-elseif colorscheme == "catppuccin" then
-  require "user.themes.catppuccin"
-end
