@@ -11,9 +11,6 @@ map L $
 nmap <Leader>t <C-]>
 " 定义快速跳转回退
 nmap <Leader>T <C-t>
-" 标签页后退 ---标签页前进是gt
-nmap R gt
-nmap E gT
 
 " 文件操作相关
 " 定义快捷键关闭当前分割窗口

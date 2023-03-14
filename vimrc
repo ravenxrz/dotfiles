@@ -20,19 +20,20 @@ if exists('+termguicolors')
     set termguicolors
 endif
 set cursorline
-colorscheme onehalfdark
-let g:lightline = { 'colorscheme': 'onehalfdark' }
+colorscheme desert
+" let g:lightline = { 'colorscheme': 'onehalfdark' }
 
 
 filetype plugin indent on " enable file type detection
 set autoindent
+
 
 "---------------------
 " Basic editing config
 "---------------------
 set shortmess+=I " disable startup message
 set nu " number lines
-set rnu " relative line numbering
+" set rnu " relative line numbering
 set incsearch " incremental search (as string is being typed)
 set hls " highlight search
 set listchars=tab:>>,nbsp:~ " set list to see tabs and non-breakable spaces
@@ -179,6 +180,7 @@ map zg/ <Plug>(incsearch-easymotion-stay)
 nnoremap <Leader>a :ArgWrap<CR>
 
 noremap <Leader>x :OverCommandLine<CR>
+
 
 " markdown
 let g:markdown_fenced_languages = [
