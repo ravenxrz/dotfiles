@@ -35,7 +35,6 @@
 	"C_Cpp.vcFormat.indent.braces": true,
 	"C_Cpp.vcFormat.indent.caseContentsWhenBlock": true,
 	"clang-format.executable": "clang-format",
-	"clangd.path": "/Users/bytedance/Library/Application Support/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/15.0.6/clangd_15.0.6/bin/clangd",
 	"clangd.onConfigChanged": "restart",
 	"clangd.arguments": [
 		// "--compile-commands-dir=${workspaceFolder}/build", // compile data base path
@@ -84,10 +83,9 @@
 	"editor.suggestSelection": "first",
 	"editor.tabCompletion": "on",
 	"editor.wordSeparators": "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-",
-	"errorLens.enabled": false,
 	"errorLens.enabledDiagnosticLevels": [
-		"error",
-		"warning"
+		"warning",
+		"error"
 	],
 	"explorer.confirmDelete": false,
 	"explorer.confirmDragAndDrop": false,
@@ -100,7 +98,8 @@
 		"**/.classpath": true,
 		"**/.factorypath": true,
 		"**/.project": true,
-		"**/.settings": true
+		"**/.settings": true,
+		"**/*INFO*": true
 	},
 	"git.autofetch": true,
 	"git.suggestSmartCommit": false,
@@ -131,7 +130,7 @@
 	"svg.preview.mode": "svg",
 	"terminal.external.osxExec": "iTerm.app",
 	"terminal.integrated.cwd": "",
-	"terminal.integrated.defaultProfile.linux": "bash",
+	"terminal.integrated.defaultProfile.linux": "zsh",
 	"terminal.integrated.fontSize": 12,
 	"testExplorer.hideEmptyLog": false,
 	"testMate.cpp.debug.configTemplate": {
@@ -199,6 +198,24 @@
 		}
 	],
 	"vim.normalModeKeyBindingsNonRecursive": [
+		{
+			"before": [
+				"E",
+			],
+			"after": [
+				"g",
+				"T",
+			]
+		},
+		{
+			"before": [
+				"R",
+			],
+			"after": [
+				"g",
+				"t"
+			]
+		},
 		{
 			"before": [
 				"<leader>",
@@ -398,16 +415,6 @@
 				"g",
 			]
 		},
-		{
-			"before": [
-				"G",
-			],
-			"after": [
-				"m",
-				"a",
-				"G",
-			]
-		},
 	],
 	"vim.visualModeKeyBindings": [
 		{ // which key
@@ -488,6 +495,12 @@
 			"command": "workbench.action.toggleAuxiliaryBar"
 		},
 		{
+			"key": "h",
+			"name": "bookmark",
+			"type": "command",
+			"command": "lineHighlightBookmark.toogleBookmarks"
+		},
+		{
 			"key": "g",
 			"name": "Source contrl",
 			"type": "command",
@@ -551,7 +564,8 @@
 		"storage-143": "linux",
 		"wuli100": "linux",
 		"wuli38": "linux",
-		"wuli24": "linux"
+		"wuli24": "linux",
+		"wuli53": "linux"
 	},
 	"terminal.integrated.defaultProfile.osx": "zsh",
 	"gnuGlobal.gtagsForceCpp": "Enabled",
@@ -570,7 +584,7 @@
 	"C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
 	"C_Cpp.inlayHints.parameterNames.enabled": true,
 	"C_Cpp.inlayHints.referenceOperator.enabled": true,
-	"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": false,
+	"C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
 	"python.analysis.inlayHints.functionReturnTypes": true,
 	"python.analysis.inlayHints.variableTypes": true,
 	"go.inlayHints.rangeVariableTypes": true,
@@ -587,4 +601,22 @@
 	"C_Cpp.codeFolding": "disabled",
 	"C_Cpp.intelliSenseEngine": "disabled",
 	"vsicons.presets.jsOfficial": true,
+	"extensions.supportUntrustedWorkspaces": {
+		"byted-ide.dev-environment-manager": {
+			"supported": true
+		}
+	},
+	"remote.SSH.defaultExtensions": [
+		"byted-ide.gallery"
+	],
+	"errorLens.statusBarIconsEnabled": true,
+	"errorLens.enabled": false,
+	"git.openRepositoryInParentFolders": "never",
+	"projectManager.git.baseFolders": [
+		"/data05",
+		"/data05/pagestore"
+	],
+	"terminal.external.linuxExec": "zsh",
+	"markdown.editor.drop.enabled": false,
+	"git.confirmSync": false,
 }
