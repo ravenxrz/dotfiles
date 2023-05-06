@@ -5,7 +5,6 @@ filled in as strings with either
 a global executable or a path to
 an executable
 ]]
-
 local home = os.getenv("HOME")
 package.path = home .. "/.dotfiles/lvim/?.lua"
 
@@ -14,7 +13,7 @@ package.path = home .. "/.dotfiles/lvim/?.lua"
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
 -- themes: https://vimcolorschemes.com/
-lvim.colorscheme = "gruvbox"
+lvim.colorscheme = "tokyonight-night"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -25,63 +24,72 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
-lvim.leader = "space"
+lvim.leader                                         = "space"
 -- add your own keymapping
-lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
-lvim.keys.normal_mode["E"] = ":BufferLineCyclePrev<CR>"
-lvim.keys.normal_mode["R"] = ":BufferLineCycleNext<CR>"
-lvim.keys.normal_mode["H"] = "^"
-lvim.keys.normal_mode["L"] = "$"
-lvim.keys.normal_mode["Q"] = "q"
-lvim.keys.normal_mode["<leader>h"] = ":nohl<cr>"
-lvim.keys.normal_mode["<leader>j"] = ":ClangdSwitchSourceHeader<cr>"
-lvim.keys.normal_mode["<leader>H"] = ":ClangdTypeHierarchy<cr>"
-lvim.keys.normal_mode["<leader>o"] = ":Vista!!<cr>"
-lvim.keys.normal_mode["<leader>q"] = ":bd<cr>"
-lvim.keys.normal_mode["q"] = "<Nop>"
-lvim.keys.normal_mode["n"] = "nzzzv"
-lvim.keys.normal_mode["N"] = "Nzzzv"
-lvim.keys.normal_mode["J"] = "mzJ`z"
+lvim.keys.normal_mode["<C-s>"]                      = ":w<cr>"
+lvim.keys.normal_mode["E"]                          = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["R"]                          = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["H"]                          = "^"
+lvim.keys.normal_mode["L"]                          = "$"
+lvim.keys.normal_mode["Q"]                          = "q"
+lvim.keys.normal_mode["<leader>h"]                  = ":nohl<cr>"
+lvim.keys.normal_mode["<leader>j"]                  = ":ClangdSwitchSourceHeader<cr>"
+lvim.keys.normal_mode["<leader>H"]                  = ":ClangdTypeHierarchy<cr>"
+lvim.keys.normal_mode["<leader>o"]                  = ":Vista!!<cr>"
+lvim.keys.normal_mode["<leader>q"]                  = ":bd<cr>"
+lvim.keys.normal_mode["q"]                          = "<Nop>"
+lvim.keys.normal_mode["n"]                          = "nzzzv"
+lvim.keys.normal_mode["N"]                          = "Nzzzv"
+lvim.keys.normal_mode["J"]                          = "mzJ`z"
 
-lvim.keys.visual_mode["p"] = "P"
-lvim.keys.visual_mode["H"] = "^"
-lvim.keys.visual_mode["L"] = "$"
-lvim.keys.visual_mode["J"] = ":m '>+1<CR>gv=gv"
-lvim.keys.visual_mode["K"] = ":m '<-2<CR>gv=gv"
+lvim.keys.visual_mode["p"]                          = "P"
+lvim.keys.visual_mode["H"]                          = "^"
+lvim.keys.visual_mode["L"]                          = "$"
+lvim.keys.visual_mode["J"]                          = ":m '>+1<CR>gv=gv"
+lvim.keys.visual_mode["K"]                          = ":m '<-2<CR>gv=gv"
 
 -- lsp
-lvim.keys.normal_mode["<leader>in"] = ":lua vim.lsp.buf.incoming_calls()<cr>"
-lvim.keys.visual_mode["<leader>lf"] = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
-lvim.keys.normal_mode["<leader>ln"] = "<cmd>lua vim.lsp.buf.rename()<CR>"
+lvim.keys.normal_mode["<leader>in"]                 = ":lua vim.lsp.buf.incoming_calls()<cr>"
+lvim.keys.visual_mode["<leader>lf"]                 = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
+lvim.keys.normal_mode["<leader>ln"]                 = "<cmd>lua vim.lsp.buf.rename()<CR>"
 -- telescope
-lvim.keys.normal_mode["<leader>r"] = ":Telescope oldfiles<cr>"
+lvim.keys.normal_mode["<leader>r"]                  = ":Telescope oldfiles<cr>"
 
 -- orverwirte old 's'
-lvim.builtin.which_key.mappings.f   = nil
-lvim.builtin.which_key.mappings.s   = nil
-lvim.keys.normal_mode["<leader>s"]  = ":lua require('telescope.builtin').lsp_document_symbols()<cr>"
-lvim.keys.normal_mode["<leader>S"]  = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
-lvim.keys.normal_mode["<leader>ff"] = ":lua require('lvim.core.telescope.custom-finders').find_project_files()<cr>"
-lvim.keys.normal_mode["<leader>fe"] = ":lua require('my_funcs').live_grep_raw({default_text =''})<cr>"
-lvim.keys.visual_mode["<leader>fw"] = "<Esc>:lua require('my_funcs').live_grep_raw({}, 'v')<cr>"
-lvim.keys.normal_mode["<leader>fw"] = ":lua require('my_funcs').live_grep_raw({default_text = vim.fn.expand('<cword>')})<cr>"
-lvim.keys.normal_mode["<leader>fd"] = ":lua require('my_funcs').live_grep_raw({default_text =  '-g' .. vim.fn.fnamemodify(vim.fn.expand('%'), ':.:h') .. '/*' .. ' ' .. vim.fn.expand('<cword>')})<cr>"
-lvim.keys.normal_mode["<leader>k"]  = "<cmd>Telescope keymaps<cr>"
+lvim.builtin.which_key.mappings.f                   = nil
+lvim.builtin.which_key.mappings.s                   = nil
+lvim.keys.normal_mode["<leader>s"]                  = ":lua require('telescope.builtin').lsp_document_symbols()<cr>"
+lvim.keys.normal_mode["<leader>S"]                  = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
+lvim.keys.normal_mode["<leader>ff"]                 = ":lua require('lvim.core.telescope.custom-finders').find_project_files()<cr>"
+lvim.keys.normal_mode["<leader>fe"]                 = ":lua require('my_funcs').live_grep_raw({default_text =''})<cr>"
+lvim.keys.visual_mode["<leader>fw"]                 = "<Esc>:lua require('my_funcs').live_grep_raw({}, 'v')<cr>"
+lvim.keys.normal_mode["<leader>fw"]                 =
+":lua require('my_funcs').live_grep_raw({default_text = vim.fn.expand('<cword>')})<cr>"
+lvim.keys.normal_mode["<leader>fd"]                 =
+":lua require('my_funcs').live_grep_raw({default_text =  '-g' .. vim.fn.fnamemodify(vim.fn.expand('%'), ':.:h') .. '/*' .. ' ' .. vim.fn.expand('<cword>')})<cr>"
+lvim.keys.normal_mode["<leader>k"]                  = "<cmd>Telescope keymaps<cr>"
 
 -- hop
-lvim.keys.normal_mode["f"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["F"] = "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode["f"]                          =
+"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode[";;s"]                        = "<cmd>HopChar1AC<cr>"
+lvim.keys.normal_mode[";;j"]                        = "<cmd>HopLine<cr>"
+lvim.keys.normal_mode[";;k"]                        = "<cmd>HopLine<cr>"
 -- lvim.keys.normal_mode["<leader>k"] = "<cmd>HopChar2<cr>"
 
 -- yank history
-lvim.keys.normal_mode["<leader>yh"] = "<cmd>Telescope neoclip<cr>"
+lvim.keys.normal_mode["<leader>yh"]                 = "<cmd>Telescope neoclip<cr>"
+
+-- lualine
+-- show file path
+lvim.builtin.lualine.sections.lualine_c             = { { 'filename', path = 1 } }
 
 -- auto pairs
-lvim.builtin.autopairs.disable_filetype = { "TelescopePrompt", "spectre_panel", "repl" }
+lvim.builtin.autopairs.disable_filetype             = { "TelescopePrompt", "spectre_panel", "repl" }
 
 -- dap
-lvim.keys.normal_mode["<F12>"] = ":Telescope dap configurations<cr>"
-lvim.builtin.which_key.mappings.d = {
+lvim.keys.normal_mode["<F12>"]                      = ":Telescope dap configurations<cr>"
+lvim.builtin.which_key.mappings.d                   = {
   name = "Debug",
   h = { "<cmd>lua require'dap.ui.widgets'.hover()<cr>", "Hover Variables" },
   x = { "<cmd>lua require'dap'.terminate()<cr>", "Terminate" },
@@ -108,8 +116,8 @@ lvim.builtin.which_key.mappings.d = {
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
-local _, actions = pcall(require, "telescope.actions")
-lvim.builtin.telescope.defaults.mappings = {
+local _, actions                                    = pcall(require, "telescope.actions")
+lvim.builtin.telescope.defaults.mappings            = {
   -- for input mode
   i = {
     ["<C-j>"] = actions.move_selection_next,
@@ -129,8 +137,8 @@ lvim.builtin.telescope.defaults.mappings = {
 -- lvim.builtin.theme.options.style = "storm"
 
 -- Use which-key to add extra bindings with the leader-key prefix
-lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
-lvim.builtin.which_key.mappings["t"] = {
+lvim.builtin.which_key.mappings["P"]                = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["t"]                = {
   name = "+Trouble",
   r = { "<cmd>Trouble lsp_references<cr>", "References" },
   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
@@ -143,15 +151,15 @@ lvim.builtin.which_key.mappings["t"] = {
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.alpha.active = true
-lvim.builtin.alpha.mode = "dashboard"
-lvim.builtin.terminal.active = true
+lvim.builtin.alpha.active                           = true
+lvim.builtin.alpha.mode                             = "dashboard"
+lvim.builtin.terminal.active                        = true
 -- nvim tree
-lvim.builtin.nvimtree.setup.view.side = "right"
-lvim.builtin.nvimtree.setup.view.adaptive_size = true
+lvim.builtin.nvimtree.setup.view.side               = "right"
+lvim.builtin.nvimtree.setup.view.adaptive_size      = false
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 -- cmp
-lvim.builtin.cmp.cmdline.enable = true
+lvim.builtin.cmp.cmdline.enable                     = true
 table.insert(lvim.builtin.cmp.sources, {
   name = 'nvim_lsp_signature_help'
 });
@@ -282,12 +290,17 @@ lvim.plugins = {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
   },
-  { -- better quick fix
+  {
+    -- better quick fix
     "kevinhwang91/nvim-bqf",
     config = function()
       require('bqf').setup(
         {
+          auto_enable = true,
+          auto_resize_height = true, -- highly recommended enable
           func_map = {
+            open = 'o',
+            openc = '<CR>',
             pscrollup = "<C-u>",
             pscrolldown = "<C-d>"
           },
@@ -295,12 +308,13 @@ lvim.plugins = {
       )
     end
   },
-  { -- only works on https://github.com/universal-ctags/ctags
+  {
+    -- only works on https://github.com/universal-ctags/ctags
     "liuchengxu/vista.vim",
     config = function()
-      vim.cmd([[ 
-      let g:vista_sidebar_position = 'vertical topleft' 
-      let g:vista_default_executive = 'nvim_lsp' 
+      vim.cmd([[
+      let g:vista_sidebar_position = 'vertical topleft'
+      let g:vista_default_executive = 'nvim_lsp'
       ]])
     end
   },
@@ -313,7 +327,8 @@ lvim.plugins = {
       require("litee.lib").setup({})
     end
   },
-  { -- calltree
+  {
+    -- calltree
     "ldelossa/litee-calltree.nvim",
     config = function()
       require("litee.calltree").setup({
@@ -341,9 +356,7 @@ lvim.plugins = {
     end
   },
   {
-    "NLKNguyen/papercolor-theme"
-  },
-  { -- hop
+    -- hop
     "phaazon/hop.nvim",
     branch = 'v2', -- optional but strongly recommended
     config = function()
@@ -354,7 +367,8 @@ lvim.plugins = {
   { -- resize window
     "simeji/winresizer"
   },
-  { -- vim clip on server
+  {
+    -- vim clip on server
     "wincent/vim-clipper",
     config = function()
       vim.cmd([[
@@ -362,11 +376,8 @@ lvim.plugins = {
       let g:ClipperPort=8377
       let g:ClipperAuto=1
       call clipper#set_invocation('netcat -c 127.0.0.1 8377')
-    ]] )
+    ]])
     end
-  },
-  { -- log file content highlighting
-    "mtdl9/vim-log-highlighting"
   },
   {
     "tpope/vim-surround"
@@ -451,7 +462,6 @@ lvim.plugins = {
         textobjects = {
           select = {
             enable = true,
-
             -- Automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
             keymaps = {
@@ -472,7 +482,7 @@ lvim.plugins = {
             -- mapping query_strings to modes.
             selection_modes = {
               ['@parameter.outer'] = 'v', -- charwise
-              ['@function.outer'] = 'V', -- linewise
+              ['@function.outer'] = 'V',  -- linewise
               ['@class.outer'] = '<c-v>', -- blockwise
             },
             -- If you set this to `true` (default is `false`) then any textobject is
@@ -588,3 +598,24 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "python",
   command = "set tabstop=2  shiftwidth=2"
 })
+
+
+vim.lsp.handlers["textDocument/definition"] = function(_, result, context)
+  if not result or vim.tbl_isempty(result) then
+    print("No definition found")
+    return
+  end
+  -- 获取第一个定义的位置
+  local target = result[1]
+  -- 跳转到定义处
+  vim.lsp.util.jump_to_location(target, 'utf-8', true)
+  -- 将跳转到的行置顶
+  vim.cmd("normal! zt")
+end
+
+vim.cmd([[
+  augroup disable_log_files
+    autocmd!
+    autocmd BufEnter *.log.*,*.DEBUG setlocal filetype=off | setlocal nosyntax | set undolevels=-1 | setlocal bufsize=1024*1024*1024*10
+  augroup END
+]])
