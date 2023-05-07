@@ -330,11 +330,37 @@ lvim.plugins = {
     "ldelossa/litee-calltree.nvim",
     config = function()
       require("litee.calltree").setup({
-        -- NOTE: the plugin is in-progressing
-        on_open = "pannel", -- pannel | popout
-        hide_cursor = false,
+        -- When retrieving Call Hierarchy items some language servers will respond with
+        -- different symbol names then when a document symbol or workspace symbol request
+        -- is made.
+        --
+        -- To unify the experience `litee-calltree.nvim` can collect symbol details for
+        -- each Call Hierarhcy item, providing a more accurate display of symbol details
+        -- in the Calltree UI window.
+        --
+        -- This takes a little longer, but is also async, and will not block Neovim.
+        resolve_symbols = true,
+        -- the jump_mode used for jumping from
+        -- calltree node to source code line.
+        -- "invoking" will use the last window that invoked the calltree (feels natural)
+        -- "neighbor" will use the closest neighbor opposite to the panel orientation
+        -- (if panel is left, uses window to the right.)
+        jump_mode = "invoking",
+        -- enables hiding the cursor inside the Calltree UI.
+        hide_cursor = true,
+        -- Maps arrow keys to resizing the Calltree UI within the `litee.nvim` Panel.
+        map_resize_keys = true,
+        -- Disables all highlighting.
+        no_hls = false,
+        -- Determines if initial creation of a calltree opens in the
+        -- Panel or in a Popout window. Options are "panel" or "popout"
+        on_open = "panel",
+        -- If true, disable all keymaps
+        disable_keymaps = false,
+        -- The default keymaps. Users can provide overrides
+        -- to these mappings via the setup function.
         keymaps = {
-          expand = "o",
+          expand = "zo",
           collapse = "zc",
           collapse_all = "zM",
           jump = "<CR>",
@@ -344,7 +370,7 @@ lvim.plugins = {
           hover = "i",
           details = "d",
           close = "X",
-          close_panel_pop_out = "<C-c>",
+          close_panel_pop_out = "<Esc>",
           help = "?",
           hide = "H",
           switch = "S",
@@ -522,6 +548,7 @@ lvim.plugins = {
   },
   {
     "sakhnik/nvim-gdb",
+    run = "./install.sh",
     config = function()
       -- set gdb window vertically
       vim.cmd([[
@@ -577,6 +604,7 @@ vim.lsp.handlers["textDocument/definition"] = function(_, result, context)
   vim.cmd("normal! zt")
 end
 
+-- 大文件读取优化
 vim.cmd([[
 augroup LargeFile
         let g:large_file = 3145728 " 3MB
@@ -598,3 +626,38 @@ augroup LargeFile
                 \ endif
 augroup END
 ]])
+
+
+-- 将Docker容器中的Make命令封装为NeoVim命令
+vim.cmd([[autocmd FileType qf wincmd J | wincmd _ | resize 10 ]])
+vim.cmd('command! -nargs=* Dmake call v:lua.Dmake(<f-args>)')
+function _G.Dmake(...)
+  local compile_dir = "/data05/cache-dev/pagestore/build"
+  local container_name = 'zxr_compile'
+
+  local targets = { ... }
+  local make_args = ""
+  if #targets > 0 then
+    make_args = table.concat(targets, " ")
+  end
+  local docker_cmd = string.format("docker exec -i %s sh -c 'cd %s && make %s'", container_name, compile_dir, make_args)
+  local temp_file = os.tmpname()
+  os.execute(docker_cmd .. " > " .. temp_file .. " 2>&1 &")
+
+  -- 打开quickfix窗口并清空
+  vim.cmd('copen')
+  vim.fn.setqflist({}, 'r')
+  local job_id = vim.fn.jobstart("tail -f " .. temp_file, {
+    on_stdout = function(_, data, _)
+      vim.fn.setqflist({}, 'a', {
+        lines = vim.split(data[1], '\n'),
+      })
+    end,
+    on_stderr = function(_, data, _)
+      vim.fn.setqflist({}, 'a', {
+        lines = vim.split(data[1], '\n'),
+      })
+    end
+  })
+  vim.fn.chansend(job_id, "q\n")
+end
