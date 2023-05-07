@@ -371,9 +371,6 @@ lvim.plugins = {
     ]])
     end
   },
-  {
-    "tpope/vim-surround"
-  },
   { -- theme
     "morhetz/gruvbox"
   },
@@ -521,52 +518,11 @@ lvim.plugins = {
     end
   },
   {
-    "AckslD/nvim-neoclip.lua",
-    config = function()
-      require('neoclip').setup({
-        keys = {
-          telescope = {
-            i = {
-              select = '<cr>',
-              paste = '<c-p>',
-              paste_behind = '<c-P>',
-              replay = '<c-q>', -- replay a macro
-              delete = '<c-d>', -- delete an entry
-              custom = {},
-            },
-            n = {
-              select = '<cr>',
-              paste = 'p',
-              --- It is possible to map to more than one key.
-              -- paste = { 'p', '<c-p>' },
-              paste_behind = 'P',
-              replay = 'q',
-              delete = 'd',
-              custom = {},
-            },
-          },
-        },
-      })
-      require('telescope').load_extension('neoclip')
-    end,
-  },
-  {
     "hrsh7th/cmp-nvim-lsp-signature-help",
   },
   {
     'ethanholz/nvim-lastplace'
   },
-  -- { -- json parser for dap launch.json
-  --   -- NOTE: cargo required: https://rustup.rs/
-  --   'Joakker/lua-json5',
-  --   run = './install.sh'
-  -- },
-  {
-    "nvim-telescope/telescope-dap.nvim",
-    config = function()
-      require("telescope").load_extension('dap')
-    end
-  }
 }
 
 
