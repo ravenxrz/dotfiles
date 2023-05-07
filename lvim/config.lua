@@ -14,6 +14,7 @@ lvim.log.level = "warn"
 lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
 -- themes: https://vimcolorschemes.com/
 lvim.colorscheme = "tokyonight-night"
+-- lvim.colorscheme = "colorscheme rose-pine"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -69,13 +70,10 @@ lvim.keys.normal_mode["<leader>fd"]                 =
 ":lua require('my_funcs').live_grep_raw({default_text =  '-g' .. vim.fn.fnamemodify(vim.fn.expand('%'), ':.:h') .. '/*' .. ' ' .. vim.fn.expand('<cword>')})<cr>"
 lvim.keys.normal_mode["<leader>k"]                  = "<cmd>Telescope keymaps<cr>"
 
--- hop
-lvim.keys.normal_mode["f"]                          =
-"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode[";;s"]                        = "<cmd>HopChar1AC<cr>"
-lvim.keys.normal_mode[";;j"]                        = "<cmd>HopLine<cr>"
-lvim.keys.normal_mode[";;k"]                        = "<cmd>HopLine<cr>"
--- lvim.keys.normal_mode["<leader>k"] = "<cmd>HopChar2<cr>"
+-- leap
+-- "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
+lvim.keys.normal_mode["f"] = "<Plug>(leap-forward-to)"
+lvim.keys.normal_mode["F"] = "<Plug>(leap-backward-to)"
 
 -- yank history
 lvim.keys.normal_mode["<leader>yh"]                 = "<cmd>Telescope neoclip<cr>"
@@ -356,13 +354,7 @@ lvim.plugins = {
     end
   },
   {
-    -- hop
-    "phaazon/hop.nvim",
-    branch = 'v2', -- optional but strongly recommended
-    config = function()
-      -- you can configure Hop the way you like here; see :h hop-config
-      require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-    end
+    "ggandor/leap.nvim"
   },
   { -- resize window
     "simeji/winresizer"
@@ -616,6 +608,6 @@ end
 vim.cmd([[
   augroup disable_log_files
     autocmd!
-    autocmd BufEnter *.log.*,*.DEBUG setlocal filetype=off | setlocal nosyntax | set undolevels=-1 | setlocal bufsize=1024*1024*1024*10
+    autocmd BufEnter *.log.*,*.DEBUG setlocal filetype=off | setlocal nosyntax | set undolevels=-1 | setlocal bufsize=1024*1024*1024
   augroup END
 ]])
