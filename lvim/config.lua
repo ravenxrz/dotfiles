@@ -631,6 +631,7 @@ augroup END
 -- 将Docker容器中的Make命令封装为NeoVim命令
 vim.cmd([[autocmd FileType qf wincmd J | wincmd _ | resize 10 ]])
 vim.cmd('command! -nargs=* Dmake call v:lua.Dmake(<f-args>)')
+
 function _G.Dmake(...)
   local compile_dir = "/data05/cache-dev/pagestore/build"
   local container_name = 'zxr_compile'
@@ -640,24 +641,37 @@ function _G.Dmake(...)
   if #targets > 0 then
     make_args = table.concat(targets, " ")
   end
-  local docker_cmd = string.format("docker exec -i %s sh -c 'cd %s && make %s'", container_name, compile_dir, make_args)
-  local temp_file = os.tmpname()
-  os.execute(docker_cmd .. " > " .. temp_file .. " 2>&1 &")
 
-  -- 打开quickfix窗口并清空
+  local stdout = vim.loop.new_pipe(false)
+  local stderr = vim.loop.new_pipe(false)
+  local timer = vim.loop.new_timer()
+  local interval = 1000 -- 定时器的时间间隔，单位为毫秒
+
+  local handle = vim.loop.spawn("docker", {
+    args = { 'exec', '-i', container_name, 'bash', '-c', 'cd ' .. compile_dir .. ' && make ' .. make_args },
+    stdio = { nil, stdout, stderr }
+  }, function(code)
+    timer:stop()
+  end)
+
+  -- 存储输出的变量
+  local buf = {}
+
   vim.cmd('copen')
-  vim.fn.setqflist({}, 'r')
-  local job_id = vim.fn.jobstart("tail -f " .. temp_file, {
-    on_stdout = function(_, data, _)
-      vim.fn.setqflist({}, 'a', {
-        lines = vim.split(data[1], '\n'),
-      })
-    end,
-    on_stderr = function(_, data, _)
-      vim.fn.setqflist({}, 'a', {
-        lines = vim.split(data[1], '\n'),
-      })
-    end
-  })
-  vim.fn.chansend(job_id, "q\n")
+  vim.loop.read_start(stdout, function(_, data)
+    table.insert(buf, data)
+  end)
+  vim.loop.read_start(stderr, function(_, data)
+    table.insert(buf, data)
+  end)
+
+  -- 在回调函数之外处理输出
+  timer:start(interval, 0, vim.schedule_wrap(function()
+    vim.fn.setqflist({}, 'a', {
+      lines = buf,
+    })
+    -- 清空输出缓存
+    buf = {}
+    stderr_buf = {}
+  end))
 end
