@@ -75,6 +75,10 @@ lvim.keys.normal_mode["<leader>k"]                  = "<cmd>Telescope keymaps<cr
 lvim.keys.normal_mode["f"]                          = "<Plug>(leap-forward-to)"
 lvim.keys.normal_mode["F"]                          = "<Plug>(leap-backward-to)"
 
+-- indentlines
+lvim.builtin.indentlines.options.use_treesitter = true
+lvim.builtin.indentlines.options.show_current_context  = true
+
 -- lualine
 -- show file path
 lvim.builtin.lualine.sections.lualine_c             = { { 'filename', path = 1 } }
