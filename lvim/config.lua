@@ -56,9 +56,9 @@ lvim.keys.normal_mode["<leader>ln"]                 = "<cmd>lua vim.lsp.buf.rena
 -- telescope
 lvim.keys.normal_mode["<leader>r"]                  = ":Telescope oldfiles<cr>"
 
--- orverwirte old 's'
 lvim.builtin.which_key.mappings.f                   = nil
 lvim.builtin.which_key.mappings.s                   = nil
+lvim.builtin.which_key.mappings.d                   = nil
 lvim.keys.normal_mode["<leader>s"]                  = ":lua require('telescope.builtin').lsp_document_symbols()<cr>"
 lvim.keys.normal_mode["<leader>S"]                  = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
 lvim.keys.normal_mode["<leader>ff"]                 = ":lua require('lvim.core.telescope.custom-finders').find_project_files()<cr>"
@@ -72,11 +72,8 @@ lvim.keys.normal_mode["<leader>k"]                  = "<cmd>Telescope keymaps<cr
 
 -- leap
 -- "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["f"] = "<Plug>(leap-forward-to)"
-lvim.keys.normal_mode["F"] = "<Plug>(leap-backward-to)"
-
--- yank history
-lvim.keys.normal_mode["<leader>yh"]                 = "<cmd>Telescope neoclip<cr>"
+lvim.keys.normal_mode["f"]                          = "<Plug>(leap-forward-to)"
+lvim.keys.normal_mode["F"]                          = "<Plug>(leap-backward-to)"
 
 -- lualine
 -- show file path
@@ -86,26 +83,25 @@ lvim.builtin.lualine.sections.lualine_c             = { { 'filename', path = 1 }
 lvim.builtin.autopairs.disable_filetype             = { "TelescopePrompt", "spectre_panel", "repl" }
 
 -- dap
-lvim.keys.normal_mode["<F12>"]                      = ":Telescope dap configurations<cr>"
-lvim.builtin.which_key.mappings.d                   = {
-  name = "Debug",
-  h = { "<cmd>lua require'dap.ui.widgets'.hover()<cr>", "Hover Variables" },
-  x = { "<cmd>lua require'dap'.terminate()<cr>", "Terminate" },
-  t = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
-  b = { "<cmd>lua require'dap'.step_back()<cr>", "Step Back" },
-  c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
-  C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run To Cursor" },
-  d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
-  g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
-  i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
-  o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
-  u = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
-  p = { "<cmd>lua require'dap'.pause()<cr>", "Pause" },
-  r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
-  s = { "<cmd>lua require'dap'.continue()<cr>", "Start" },
-  q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
-  U = { "<cmd>lua require'dapui'.toggle()<cr>", "Toggle UI" },
-}
+-- lvim.builtin.which_key.mappings.d                   = {
+--   name = "Debug",
+--   h = { "<cmd>lua require'dap.ui.widgets'.hover()<cr>", "Hover Variables" },
+--   x = { "<cmd>lua require'dap'.terminate()<cr>", "Terminate" },
+--   t = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
+--   b = { "<cmd>lua require'dap'.step_back()<cr>", "Step Back" },
+--   c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
+--   C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run To Cursor" },
+--   d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
+--   g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
+--   i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
+--   o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
+--   u = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
+--   p = { "<cmd>lua require'dap'.pause()<cr>", "Pause" },
+--   r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
+--   s = { "<cmd>lua require'dap'.continue()<cr>", "Start" },
+--   q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
+--   U = { "<cmd>lua require'dapui'.toggle()<cr>", "Toggle UI" },
+-- }
 
 -- unmap a default keymapping
 -- vim.keymap.del("n", "q")
@@ -521,8 +517,15 @@ lvim.plugins = {
     "hrsh7th/cmp-nvim-lsp-signature-help",
   },
   {
-    'ethanholz/nvim-lastplace'
-  },
+    "sakhnik/nvim-gdb",
+    config = function()
+      -- set gdb window vertically
+      vim.cmd([[
+       let w:nvimgdb_termwin_command = "rightbelow vnew"
+       let w:nvimgdb_codewin_command = "vnew"
+      ]])
+    end
+  }
 }
 
 
@@ -548,6 +551,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 
+-- definition 跳转后，执行zt，保证跳转到的行，置于屏幕顶部
 vim.lsp.handlers["textDocument/definition"] = function(_, result, context)
   if not result or vim.tbl_isempty(result) then
     print("No definition found")
@@ -564,6 +568,6 @@ end
 vim.cmd([[
   augroup disable_log_files
     autocmd!
-    autocmd BufEnter *.log.*,*.DEBUG setlocal filetype=off | setlocal nosyntax | set undolevels=-1 | setlocal bufsize=1024*1024*1024
+    autocmd BufEnter *.log.*,*.DEBUG setlocal filetype=off | setlocal nosyntax | set undolevels=-1
   augroup END
 ]])
