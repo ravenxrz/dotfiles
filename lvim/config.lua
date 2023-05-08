@@ -406,9 +406,9 @@ lvim.plugins = {
       require("todo-comments").setup {}
     end
   },
-  { -- auto save
-    "pocco81/auto-save.nvim"
-  },
+  -- { -- auto save
+  --   "pocco81/auto-save.nvim"
+  -- },
   {
     "p00f/clangd_extensions.nvim",
     after = "mason-lspconfig.nvim", -- make sure to load after mason-lspconfig
@@ -629,7 +629,7 @@ augroup END
 
 
 -- 将Docker容器中的Make命令封装为NeoVim命令
-vim.cmd([[autocmd FileType qf wincmd J | wincmd _ | resize 10 ]])
+vim.cmd([[autocmd FileType qf wincmd J | wincmd _ | resize 20 ]])
 vim.cmd('command! -nargs=* Dmake call v:lua.Dmake(<f-args>)')
 
 function _G.Dmake(...)
@@ -645,33 +645,53 @@ function _G.Dmake(...)
   local stdout = vim.loop.new_pipe(false)
   local stderr = vim.loop.new_pipe(false)
   local timer = vim.loop.new_timer()
-  local interval = 1000 -- 定时器的时间间隔，单位为毫秒
+  local interval = 10 -- 定时器的时间间隔，单位为毫秒
+  local buf = {}
+  -- local mutex = vim.loop.new_mutex()  -- 创建互斥锁对象
+  local on_read = function(err, data)
+    if err then
+      print('ERROR: ', err)
+    end
+    if data then
+      local vals = vim.split(data, "\n")
+      -- mutex:lock()
+      for _, d in pairs(vals) do
+        if d == "" then goto continue end
+        table.insert(buf, d)
+        ::continue::
+      end
+      -- mutex:unlock()
+    end
+  end
 
-  local handle = vim.loop.spawn("docker", {
+  vim.loop.spawn("docker", {
     args = { 'exec', '-i', container_name, 'bash', '-c', 'cd ' .. compile_dir .. ' && make ' .. make_args },
     stdio = { nil, stdout, stderr }
-  }, function(code)
+  }, vim.schedule_wrap(function()
     timer:stop()
-  end)
-
-  -- 存储输出的变量
-  local buf = {}
-
-  vim.cmd('copen')
-  vim.loop.read_start(stdout, function(_, data)
-    table.insert(buf, data)
-  end)
-  vim.loop.read_start(stderr, function(_, data)
-    table.insert(buf, data)
-  end)
-
-  -- 在回调函数之外处理输出
-  timer:start(interval, 0, vim.schedule_wrap(function()
+    stdout:read_stop()
+    stderr:read_stop()
+    stdout:close()
+    stderr:close()
+    -- flush the final buf
     vim.fn.setqflist({}, 'a', {
       lines = buf,
     })
+  end))
+
+  vim.cmd('copen')
+  vim.fn.setqflist({}, 'r')
+  vim.loop.read_start(stdout, on_read)
+  vim.loop.read_start(stderr, on_read)
+
+  -- 在回调函数之外处理输出
+  timer:start(0, interval, vim.schedule_wrap(function()
+    -- mutex:lock()
+    -- vim.fn.setqflist({}, 'a', {
+    --   lines = buf,
+    -- })
     -- 清空输出缓存
-    buf = {}
-    stderr_buf = {}
+    -- buf = {}
+    -- mutex:unlock()
   end))
 end
