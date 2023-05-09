@@ -64,8 +64,8 @@ return packer.startup(function(use)
     use "nvim-telescope/telescope-dap.nvim"
 
     -- Treesittetr
-    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", tag = "v0.8.3" }
-    use { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter", requires = "nvim-treesitter/nvim-treesitter" } -- enhance texetobject selection
+    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", commit = "4cccb6f494eb255b32a290d37c35ca12584c74d0" }
+    use { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter", requires = "nvim-treesitter/nvim-treesitter", commit = "c81382328ad47c154261d1528d7c921acad5eae5"} -- enhance texetobject selection
     use "romgrk/nvim-treesitter-context" -- show class/function at the top
     use "andymass/vim-matchup"
 
