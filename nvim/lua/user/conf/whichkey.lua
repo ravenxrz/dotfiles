@@ -116,11 +116,6 @@ local mappings = {
     "<cmd>NvimTreeToggle<CR>", "File Explorer"
   },
 
-  ["v"] = {
-    "<cmd>lua require('telescope').extensions.neoclip.default(require('telescope.themes').get_ivy())<cr>",
-    "Clipboard Manager"
-  },
-
   c = {
     name = "CMake",
     g = {"<cmd>CMake configure<CR>", "Configure"},
