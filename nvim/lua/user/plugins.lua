@@ -130,7 +130,6 @@ return packer.startup(function(use)
 
     -- tools
     use "ravenxrz/neovim-cmake"
-    use { "skanehira/preview-markdown.vim", opt = true, cmd = "PreviewMarkdown" } -- NOTE:: glow required : https://github.com/charmbracelet/glow
     use "voldikss/vim-translator"
     use "mtdl9/vim-log-highlighting"
     use "Pocco81/HighStr.nvim"
@@ -144,10 +143,7 @@ return packer.startup(function(use)
     -- use "ravenxrz/DoxygenToolkit.vim"
     use "Pocco81/auto-save.nvim"
     use "djoshea/vim-autoread"
-    use { 
-        "stevearc/aerial.nvim",
-        branch = "nvim-0.5"
-    }
+    use { "stevearc/aerial.nvim", branch = "nvim-0.5" }
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
