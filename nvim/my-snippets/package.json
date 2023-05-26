@@ -8,6 +8,10 @@
       {
         "language": "json",
         "path": "./debug_config.json"
+      },
+      {
+          "language" : "cpp",
+          "path": "./cpp.json"
       }
     ]
   }

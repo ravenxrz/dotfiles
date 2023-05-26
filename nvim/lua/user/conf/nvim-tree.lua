@@ -113,9 +113,9 @@ nvim_tree.setup({
     },
   },
   filters = {
-    dotfiles = false,
+    dotfiles = true,
     custom = {"CMakeCache.txt", "CMakeFiles"},
-    exclude = {},
+    exclude = {".gitignore"},
   },
   git = {
     enable = true,

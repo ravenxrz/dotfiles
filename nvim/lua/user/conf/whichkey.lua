@@ -112,6 +112,10 @@ local mappings = {
     "<cmd>AerialToggle<CR>", "Outline"
   },
 
+  ["e"] = {
+    "<cmd>NvimTreeToggle<CR>", "File Explorer"
+  },
+
   ["v"] = {
     "<cmd>lua require('telescope').extensions.neoclip.default(require('telescope.themes').get_ivy())<cr>",
     "Clipboard Manager"

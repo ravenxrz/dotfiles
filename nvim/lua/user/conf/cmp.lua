@@ -272,22 +272,23 @@ cmp_config = {
 
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.abort(),
-    ["<CR>"] = cmp.mapping(function(fallback)
-      if cmp.visible() and cmp.confirm(cmp_config.confirm_opts) then
-        if jumpable(1) then
-          luasnip.jump(1)
-        end
-        return
-      end
-
-      if jumpable(1) then
-        if not luasnip.jump(1) then
-          fallback()
-        end
-      else
-        fallback()
-      end
-    end),
+    -- ["<CR>"] = cmp.mapping(function(fallback)
+    --   if cmp.visible() and cmp.confirm(cmp_config.confirm_opts) then
+    --     if jumpable(1) then
+    --       luasnip.jump(1)
+    --     end
+    --     return
+    --   end
+    --
+    --   if jumpable(1) then
+    --     if not luasnip.jump(1) then
+    --       fallback()
+    --     end
+    --   else
+    --     fallback()
+    --   end
+    -- end),
+    ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
   },
 }
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).

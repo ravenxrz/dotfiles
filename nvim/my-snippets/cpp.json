@@ -1,0 +1,28 @@
+{
+    "headerinfo" : {
+        "prefix" : "hd",
+        "body": [
+            "/********************************************************",
+            " * Copyright (C) $CURRENT_YEAR, Universal Ubiquitous Co.,Ltd.",
+            " * ",
+            " * Project:    Applcaition",
+            " * FileName:   $TM_FILENAME",
+            " * Author:     lishi",
+            " * Email:      wangtun@uni-ubi.com",
+            " * Date:       $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE",
+            " * Description: ",
+            " *******************************************************/"
+        ]
+    },
+    "comment": {
+        "prefix" : "/**",
+        "body": [
+            "/**",
+            " * @brief ",
+            " * @param[in] ",
+            " * @param[out] ",
+            " * @return ",
+            " */ "
+        ]
+    }
+}

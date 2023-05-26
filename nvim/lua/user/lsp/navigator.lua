@@ -57,7 +57,7 @@ require 'navigator'.setup({
     },
 
     clangd = { -- clangd settings
-      cmd = { install_root_dir .. '/clangd/clangd/bin/clangd' },
+      cmd = { install_root_dir .. 'clangd' },
     },
 
     -- servers = { 'cmake', 'ltex' }, -- by default empty, and it should load all LSP clients avalible based on filetype

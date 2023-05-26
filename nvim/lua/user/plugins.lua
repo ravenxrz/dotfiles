@@ -67,7 +67,7 @@ return packer.startup(function(use)
     use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", commit = "4cccb6f494eb255b32a290d37c35ca12584c74d0" }
     use { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter", requires = "nvim-treesitter/nvim-treesitter", commit = "c81382328ad47c154261d1528d7c921acad5eae5"} -- enhance texetobject selection
     use "romgrk/nvim-treesitter-context" -- show class/function at the top
-    use "andymass/vim-matchup"
+    use {"andymass/vim-matchup", tag = "v0.7.2"}
 
     use { "neovim/nvim-lspconfig", commit = "f11fdff7e8b5b415e5ef1837bdcdd37ea6764dda" } -- enable LSP
     use { "williamboman/mason.nvim", commit = "c2002d7a6b5a72ba02388548cfaf420b864fbc12"} -- simple to use language server installer
@@ -78,8 +78,10 @@ return packer.startup(function(use)
 
     use "ray-x/lsp_signature.nvim" -- show function signature when typing
     -- Editor enhance
-    use "terrortylor/nvim-comment"
+    use "terrortylor/nvim-comment"  -- for comment
+    use "preservim/nerdcommenter"
     use "Shatur/neovim-session-manager"
+    use 'Davonter/codeium.vim'      -- for completion by AI
 
     -- cmp plugins
     use { "hrsh7th/nvim-cmp", commit = "b0dff0ec4f2748626aae13f011d1a47071fe9abc" } -- The completion plugin
