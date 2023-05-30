@@ -82,16 +82,7 @@ telescope.setup {
 
     prompt_prefix = " ",
     selection_caret = " ",
-    path_display = {
-      shorten= {
-        -- e.g. for a path like
-        --   `alpha/beta/gamma/delta.txt`
-        -- setting `path_display.shorten = { len = 1, exclude = {1, -1} }`
-        -- will give a path like:
-        --   `alpha/b/g/delta.txt`
-        len = 3, exclude = {1, -1}
-      },
-    },
+    path_display = { "absolute" },
 
     mappings = {
       i = {
@@ -163,7 +154,7 @@ telescope.setup {
       theme = "dropdown",
       previewer = false,
       -- find_command = { "find", "-type", "f" },
-      find_command = {"fdfind"},
+      find_command = {"fd", "-H", "-I"},
     },
 
     -- Default configuration for builtin pickers goes here:
@@ -206,7 +197,8 @@ telescope.setup {
 
 -- telescope.load_extension("frecency")
 -- telescope.load_extension('fzf')
--- telescope.load_extension("ui-select")
+telescope.load_extension("ui-select")
 -- telescope.load_extension('dap')
+telescope.load_extension("live_grep_args")
 -- telescope.load_extension('vim_bookmarks')
 -- load project extension. see project.lua file
