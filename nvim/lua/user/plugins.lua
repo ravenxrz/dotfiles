@@ -128,6 +128,7 @@ return packer.startup(function(use)
     use "ldelossa/litee-calltree.nvim"
 
     use {"cpea2506/one_monokai.nvim"}
+    use { "loctvl842/monokai-pro.nvim" }
 
     -- tools
     use "ravenxrz/neovim-cmake"
