@@ -114,8 +114,8 @@ keymap("v", "p", '"_dP', opts)
 -- keymap("n", "<Space>F", "<cmd>Telescope live_grep<cr>", opts)
 
 -- bookmark's
-keymap("n", "ma", "<cmd>Telescope vim_bookmarks current_file<cr>", opts)
-keymap("n", "mA", "<cmd>Telescope vim_bookmarks all<cr>", opts)
+-- keymap("n", "ma", "<cmd>Telescope vim_bookmarks current_file<cr>", opts)
+keymap("n", "ma", "<cmd>Telescope vim_bookmarks all<cr>", opts)
 
 keymap("n", "<A-o>", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 
