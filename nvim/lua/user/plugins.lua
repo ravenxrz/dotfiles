@@ -82,7 +82,7 @@ return packer.startup(function(use)
     use "preservim/nerdcommenter"
     use "Shatur/neovim-session-manager"
     use 'Davonter/codeium.vim'      -- for completion by AI
-    use "simrat39/symbols-outline.nvim"
+    use { "enddeadroyal/symbols-outline.nvim", branch = "bugfix/symbol-hover-misplacement" }
 
     -- cmp plugins
     use { "hrsh7th/nvim-cmp", commit = "b0dff0ec4f2748626aae13f011d1a47071fe9abc" } -- The completion plugin
