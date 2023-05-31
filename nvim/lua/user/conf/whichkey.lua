@@ -109,7 +109,7 @@ local mappings = {
   ["p"] = { "<cmd>Telescope projects<cr>", "Projects" },
 
   ["o"] = {
-    "<cmd>AerialToggle<CR>", "Outline"
+    "<cmd>SymbolsOutline<CR>", "Outline"
   },
 
   ["e"] = {

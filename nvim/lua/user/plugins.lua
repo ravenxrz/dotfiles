@@ -82,6 +82,7 @@ return packer.startup(function(use)
     use "preservim/nerdcommenter"
     use "Shatur/neovim-session-manager"
     use 'Davonter/codeium.vim'      -- for completion by AI
+    use "simrat39/symbols-outline.nvim"
 
     -- cmp plugins
     use { "hrsh7th/nvim-cmp", commit = "b0dff0ec4f2748626aae13f011d1a47071fe9abc" } -- The completion plugin
@@ -143,7 +144,7 @@ return packer.startup(function(use)
     -- use "ravenxrz/DoxygenToolkit.vim"
     use "Pocco81/auto-save.nvim"
     use "djoshea/vim-autoread"
-    use { "stevearc/aerial.nvim", branch = "nvim-0.5" }
+    -- use { "stevearc/aerial.nvim", branch = "nvim-0.5" }
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
