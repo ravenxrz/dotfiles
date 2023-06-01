@@ -158,6 +158,8 @@ keymap("v", "<leader>rs", ":%SnipRun<cr>", opts)
 keymap("", "<A-o>", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 keymap("", "<A-2>", "<cmd>SymbolsOutline<cr>", opts)
 
+keymap("n", ":", "<cmd>FineCmdline<cr>", opts)
+
 -- for spell check
 vim.cmd(
 [[
