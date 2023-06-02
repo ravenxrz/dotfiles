@@ -33,6 +33,10 @@ configs.setup {
     swap = {
       enable = false,
     },
+    highlight = {
+        enable = true,
+        disable = {"help"}
+    },
     select = {
       enable = true,
       -- Automatically jump forward to textobj, similar to targets.vim
@@ -43,6 +47,18 @@ configs.setup {
         ["if"] = "@function.inner",
         ["ac"] = "@class.outer",
         ["ic"] = "@class.inner",
+        ["iu"] = "@comment.outer",
+        ["il"] = "@loop.outer",
+        ["ia"] = "@parameter.inner",
+        ["aa"] = "@parameter.outer",
+        ["im"] = "@call.outer",
+        ["am"] = "@call.outer",
+        ["iM"] = "@call.inner",
+        ["aM"] = "@call.inner",
+        ["i,"] = "@textobj-clang-include.outer",
+        ["a,"] = "@textobj-clang-include.outer",
+        ["i0"] = "@textobj-clang-inactive.inner",
+        ["a0"] = "@textobj-clang-inactive.outer",
       },
     },
     move = {
