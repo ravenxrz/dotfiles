@@ -1,6 +1,6 @@
 # Neovim 配置
 
-**neovim 版本： 目前仅在0.7.0 版本测试通过， 其余版本请自行测试**
+**neovim 版本：nvim 0.8.3*
 
 >建议：除了arch系linux，其余linux发行版在[此处](https://github.com/neovim/neovim/releases)下载可执行文件。 通过类似 `apt` 的方式安装往往都是旧版本。
 
