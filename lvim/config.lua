@@ -72,8 +72,8 @@ lvim.keys.normal_mode["<leader>k"]                    = "<cmd>Telescope keymaps<
 
 -- leap
 -- "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["f"]                            = "<Plug>(leap-forward-to)"
-lvim.keys.normal_mode["F"]                            = "<Plug>(leap-backward-to)"
+lvim.keys.normal_mode["c"]                            = "<Plug>(leap-forward-to)"
+lvim.keys.normal_mode["C"]                            = "<Plug>(leap-backward-to)"
 
 -- indentlines
 lvim.builtin.indentlines.options.use_treesitter       = true
@@ -154,7 +154,7 @@ lvim.builtin.alpha.mode                               = "dashboard"
 lvim.builtin.terminal.active                          = true
 -- nvim tree
 lvim.builtin.nvimtree.setup.view.side                 = "right"
-lvim.builtin.nvimtree.setup.view.adaptive_size        = false
+lvim.builtin.nvimtree.setup.view.adaptive_size        = true
 lvim.builtin.nvimtree.setup.renderer.icons.show.git   = false
 -- cmp
 lvim.builtin.cmp.cmdline.enable                       = true
