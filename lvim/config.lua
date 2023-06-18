@@ -50,30 +50,35 @@ lvim.keys.visual_mode["J"]                            = ":m '>+1<CR>gv=gv"
 lvim.keys.visual_mode["K"]                            = ":m '<-2<CR>gv=gv"
 
 -- lsp
-lvim.keys.normal_mode["<leader>in"]                   = ":lua vim.lsp.buf.incoming_calls()<cr>"
+-- lvim.keys.normal_mode["<leader>in"]                   = ":lua vim.lsp.buf.incoming_calls()<cr>"
 lvim.keys.visual_mode["<leader>lf"]                   = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
 lvim.keys.normal_mode["<leader>ln"]                   = "<cmd>lua vim.lsp.buf.rename()<CR>"
--- telescope
-lvim.keys.normal_mode["<leader>r"]                    = ":Telescope oldfiles<cr>"
+lvim.keys.normal_mode["<leader>r"]                    = ":FzfLua oldfiles<cr>"
 
 lvim.builtin.which_key.mappings.f                     = nil
 lvim.builtin.which_key.mappings.s                     = nil
 lvim.builtin.which_key.mappings.d                     = nil
-lvim.keys.normal_mode["<leader>s"]                    = ":lua require('telescope.builtin').lsp_document_symbols()<cr>"
-lvim.keys.normal_mode["<leader>S"]                    = ":lua require('telescope.builtin').lsp_dynamic_workspace_symbols()<cr>"
-lvim.keys.normal_mode["<leader>ff"]                   = ":lua require('lvim.core.telescope.custom-finders').find_project_files()<cr>"
-lvim.keys.normal_mode["<leader>fe"]                   = ":lua require('my_funcs').live_grep_raw({default_text =''})<cr>"
-lvim.keys.visual_mode["<leader>fw"]                   = "<Esc>:lua require('my_funcs').live_grep_raw({}, 'v')<cr>"
-lvim.keys.normal_mode["<leader>fw"]                   =
-":lua require('my_funcs').live_grep_raw({default_text = vim.fn.expand('<cword>')})<cr>"
-lvim.keys.normal_mode["<leader>fd"]                   =
-":lua require('my_funcs').live_grep_raw({default_text =  '-g' .. vim.fn.fnamemodify(vim.fn.expand('%'), ':.:h') .. '/*' .. ' ' .. vim.fn.expand('<cword>')})<cr>"
-lvim.keys.normal_mode["<leader>k"]                    = "<cmd>Telescope keymaps<cr>"
+
+-- FzfLua config
+lvim.keys.term_mode["<C-h>"]                          = false
+lvim.keys.term_mode["<C-j>"]                          = false
+lvim.keys.term_mode["<C-k>"]                          = false
+lvim.keys.term_mode["<C-l>"]                          = false
+-- rm lvim/config.lua gr shortcut first
+lvim.keys.normal_mode["gr"]                           = ":FzfLua lsp_references<cr>"
+lvim.keys.normal_mode["<leader>in"]                   = ":FzfLua lsp_incoming_calls<cr>"
+lvim.keys.normal_mode["<leader>s"]                    = ":FzfLua lsp_document_symbols<cr>"
+lvim.keys.normal_mode["<leader>S"]                    = ":FzfLua lsp_workspace_symbols<cr>"
+lvim.keys.normal_mode["<leader>ff"]                   = ":FzfLua files<cr>"
+lvim.keys.normal_mode["<leader>fg"]                   = ":FzfLua live_grep_glob<cr>"
+lvim.keys.normal_mode["<leader>fw"]                   = ":FzfLua grep_cWORD<cr>"
+lvim.keys.normal_mode["<leader>fb"]                   = ":FzfLua buffers<cr>"
+lvim.keys.normal_mode["<leader>fc"]                   = ":FzfLua colorschemes<cr>"
+lvim.keys.visual_mode["v"]                            = ":<c-u>FzfLua grep_visual<cr>"
 
 -- leap
--- "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>"
-lvim.keys.normal_mode["c"]                            = "<Plug>(leap-forward-to)"
-lvim.keys.normal_mode["C"]                            = "<Plug>(leap-backward-to)"
+lvim.keys.normal_mode["t"]                            = "<Plug>(leap-forward-to)"
+lvim.keys.normal_mode["T"]                            = "<Plug>(leap-backward-to)"
 
 -- indentlines
 lvim.builtin.indentlines.options.use_treesitter       = true
@@ -136,21 +141,12 @@ lvim.builtin.telescope.defaults.mappings              = {
 
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["P"]                  = { "<cmd>Telescope projects<CR>", "Projects" }
-lvim.builtin.which_key.mappings["t"]                  = {
-  name = "+Trouble",
-  r = { "<cmd>Trouble lsp_references<cr>", "References" },
-  f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
-  d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
-  q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
-  l = { "<cmd>Trouble loclist<cr>", "LocationList" },
-  w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
-  t = { "<cmd>TodoTrouble<cr>", "Todo" }
-}
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.alpha.active                             = true
+lvim.builtin.alpha.active                             = false
 lvim.builtin.alpha.mode                               = "dashboard"
+
 lvim.builtin.terminal.active                          = true
 -- nvim tree
 lvim.builtin.nvimtree.setup.view.side                 = "right"
@@ -285,28 +281,6 @@ end
 -- Additional Plugins
 lvim.plugins = {
   {
-    "folke/trouble.nvim",
-    cmd = "TroubleToggle",
-  },
-  {
-    -- better quick fix
-    "kevinhwang91/nvim-bqf",
-    config = function()
-      require('bqf').setup(
-        {
-          auto_enable = true,
-          auto_resize_height = true, -- highly recommended enable
-          func_map = {
-            open = 'o',
-            openc = '<CR>',
-            pscrollup = "<C-u>",
-            pscrolldown = "<C-d>"
-          },
-        }
-      )
-    end
-  },
-  {
     -- only works on https://github.com/universal-ctags/ctags
     "liuchengxu/vista.vim",
     config = function()
@@ -316,8 +290,54 @@ lvim.plugins = {
       ]])
     end
   },
-  { -- telescope instant searching
-    "nvim-telescope/telescope-live-grep-args.nvim"
+  {
+    'ibhagwan/fzf-lua',
+    config = function()
+      require 'fzf-lua'.setup {
+        winopts = {
+          preview = {
+            -- default     = 'bat',           -- override the default previewer?
+            -- default uses the 'builtin' previewer
+            border       = 'border', -- border|noborder, applies only to
+            -- native fzf previewers (bat/cat/git/etc)
+            wrap         = 'nowrap', -- wrap|nowrap
+            hidden       = 'nohidden', -- hidden|nohidden
+            vertical     = 'down:45%', -- up|down:size
+            horizontal   = 'right:40%', -- right|left:size
+            layout       = 'flex',  -- horizontal|vertical|flex
+            flip_columns = 120,     -- #cols to switch to horizontal on flex
+            -- Only used with the builtin previewer:
+            title        = true,    -- preview border title (file/buf)?
+            title_align  = "left",  -- left|center|right, title alignment
+            scrollbar    = 'float', -- `false` or string:'float|border'
+            -- float:  in-window floating border
+            -- border: in-border chars (see below)
+            scrolloff    = '-2',   -- float scrollbar offset from right
+            -- applies only when scrollbar = 'float'
+            scrollchars  = { '█', '' }, -- scrollbar chars ({ <full>, <empty> }
+            -- applies only when scrollbar = 'border'
+            delay        = 100,    -- delay(ms) displaying the preview
+            -- prevents lag on fast scrolling
+            winopts      = {
+                                   -- builtin previewer window options
+              number         = true,
+              relativenumber = false,
+              cursorline     = true,
+              cursorlineopt  = 'both',
+              cursorcolumn   = false,
+              signcolumn     = 'no',
+              list           = false,
+              foldenable     = false,
+              foldmethod     = 'manual',
+            },
+          },
+          on_create = function()
+            vim.keymap.set("t", "<C-j>", "<Down>", { silent = true, buffer = true })
+            vim.keymap.set("t", "<C-k>", "<Up>", { silent = true, buffer = true })
+          end,
+        }
+      }
+    end
   },
   {
     "ldelossa/litee.nvim",
@@ -629,7 +649,62 @@ augroup END
 
 
 -- 将Docker容器中的Make命令封装为NeoVim命令
-vim.cmd([[
-  set makeprg=docker\ exec\ --user\ tiger\ -i\ zxr_compile\ bash\ -c\ \"cd\ /data05/cache-dev/pagestore/build\ \&\&\ make\ \"
-]])
+vim.cmd([[autocmd FileType qf wincmd J | wincmd _ | resize 20 ]])
+vim.cmd('command! -nargs=* Dmake call v:lua.Dmake(<f-args>)')
 
+function _G.Dmake(...)
+  local compile_dir = "/data05/cache-dev/pagestore/build"
+  local container_name = 'zxr_compile'
+
+  local targets = { ... }
+  local make_args = ""
+  if #targets > 0 then
+    make_args = table.concat(targets, " ")
+  end
+
+  local stdout = vim.loop.new_pipe(false)
+  local stderr = vim.loop.new_pipe(false)
+  local buf = {}
+  local on_read = function(err, data)
+    if err then
+      print('ERROR: ', err)
+    end
+    if data then
+      local vals = vim.split(data, "\n")
+      for _, d in pairs(vals) do
+        if d == "" then goto continue end
+        table.insert(buf, d)
+        ::continue::
+      end
+    end
+  end
+
+  vim.loop.spawn("docker", {
+    args = { 'exec', '--user', 'tiger', '-i', container_name, 'bash', '-c',
+      'cd ' .. compile_dir .. ' && make ' .. make_args },
+    stdio = { nil, stdout, stderr }
+  }, vim.schedule_wrap(function()
+    stdout:read_stop()
+    stderr:read_stop()
+    stdout:close()
+    stderr:close()
+    -- flush the final buf
+    vim.fn.setqflist({}, 'a', {
+      lines = buf,
+    })
+    vim.cmd('copen')
+  end))
+
+  vim.fn.setqflist({}, 'r')
+  vim.loop.read_start(stdout, on_read)
+  vim.loop.read_start(stderr, on_read)
+end
+
+-- second solution
+-- vim.cmd([[
+--   set makeprg=docker\ exec\ --user\ tiger\ -i\ zxr_compile\ bash\ -c\ \"cd\ /data05/cache-dev/pagestore/build\ \&\&\ make\ \"\"
+-- ]])
+
+-- vim.cmd([[
+--   command! -nargs=* Make make <args>" | copen
+-- ]])
