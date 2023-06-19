@@ -13,6 +13,8 @@ package.path = home .. "/.dotfiles/lvim/?.lua"
 lvim.log.level = "warn"
 lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
 -- themes: https://vimcolorschemes.com/
+
+-- lightscheme base16-atelier-seaside-light
 lvim.colorscheme = "tokyonight-night"
 -- lvim.colorscheme = "colorscheme rose-pine"
 -- to disable icons and use a minimalist setup, uncomment the following
@@ -74,6 +76,7 @@ lvim.keys.normal_mode["<leader>fg"]                   = ":FzfLua live_grep_glob<
 lvim.keys.normal_mode["<leader>fw"]                   = ":FzfLua grep_cword<cr>"
 lvim.keys.normal_mode["<leader>fb"]                   = ":FzfLua buffers<cr>"
 lvim.keys.normal_mode["<leader>fc"]                   = ":FzfLua colorschemes<cr>"
+lvim.keys.normal_mode["<leader>fr"]                   = ":FzfLua resume<cr>"
 lvim.keys.visual_mode["v"]                            = ":<c-u>FzfLua grep_visual<cr>"
 
 -- leap
@@ -140,7 +143,7 @@ lvim.builtin.telescope.defaults.mappings              = {
 -- lvim.builtin.theme.options.style = "storm"
 
 -- Use which-key to add extra bindings with the leader-key prefix
-lvim.builtin.which_key.mappings["P"]                  = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["P"]                  = { "<cmd>SessionManager load_session<CR>", "Projects" }
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
@@ -340,6 +343,9 @@ lvim.plugins = {
     end
   },
   {
+    "Shatur/neovim-session-manager"
+  },
+  {
     "ldelossa/litee.nvim",
     config = function()
       require("litee.lib").setup({})
@@ -419,6 +425,9 @@ lvim.plugins = {
   },
   { -- theme
     "morhetz/gruvbox"
+  },
+  {
+    "RRethy/nvim-base16"
   },
   {
     "folke/todo-comments.nvim",
@@ -646,4 +655,3 @@ augroup LargeFile
                 \ endif
 augroup END
 ]])
-
