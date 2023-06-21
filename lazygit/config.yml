@@ -42,7 +42,7 @@ git:
   paging:
     colorArg: always
     useConfig: false
-    pager: delta --dark --line-numbers
+    pager: delta --dark --line-numbers --paging=never
   commit:
     signOff: false
   merging:
