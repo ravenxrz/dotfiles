@@ -297,6 +297,11 @@ lvim.plugins = {
     'ibhagwan/fzf-lua',
     config = function()
       require 'fzf-lua'.setup {
+        "fzf-native",
+        grep = {
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096",
+          rg_glob = true,
+        },
         winopts = {
           preview = {
             -- default     = 'bat',           -- override the default previewer?
@@ -435,9 +440,9 @@ lvim.plugins = {
       require("todo-comments").setup {}
     end
   },
-  -- { -- auto save
-  --   "pocco81/auto-save.nvim"
-  -- },
+  { -- auto save
+    "pocco81/auto-save.nvim"
+  },
   {
     "p00f/clangd_extensions.nvim",
     after = "mason-lspconfig.nvim", -- make sure to load after mason-lspconfig
