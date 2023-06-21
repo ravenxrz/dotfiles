@@ -308,11 +308,11 @@ lvim.plugins = {
             -- default uses the 'builtin' previewer
             border       = 'border',    -- border|noborder, applies only to
             -- native fzf previewers (bat/cat/git/etc)
-            wrap         = 'wrap',    -- wrap|nowrap
+            wrap         = 'wrap',      -- wrap|nowrap
             hidden       = 'nohidden',  -- hidden|nohidden
             vertical     = 'down:45%',  -- up|down:size
             horizontal   = 'right:40%', -- right|left:size
-            layout       = 'vertical',      -- horizontal|vertical|flex
+            layout       = 'vertical',  -- horizontal|vertical|flex
             flip_columns = 120,         -- #cols to switch to horizontal on flex
             -- Only used with the builtin previewer:
             title        = true,        -- preview border title (file/buf)?
@@ -659,4 +659,19 @@ augroup LargeFile
                         \ set eventignore-=FileType |
                 \ endif
 augroup END
+]])
+
+
+-- edit file:linenumber directly
+function edit_file_with_linenumber(args)
+  local file, line = string.match(args, "(.-):(%d+)$")
+  if file and vim.fn.filereadable(file) == 1 then
+    vim.cmd("e " .. file .. "|" .. line)
+  else
+    vim.cmd("e " .. args)
+  end
+end
+
+vim.cmd([[
+:command! -nargs=1 E lua edit_file_with_linenumber(<f-args>)
 ]])
