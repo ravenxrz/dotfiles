@@ -284,6 +284,9 @@ end
 -- Additional Plugins
 lvim.plugins = {
   {
+    "MTDL9/vim-log-highlighting"
+  },
+  {
     -- only works on https://github.com/universal-ctags/ctags
     "liuchengxu/vista.vim",
     config = function()
