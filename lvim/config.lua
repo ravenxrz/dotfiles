@@ -1,5 +1,4 @@
 --[[
-
 Linters should be
 filled in as strings with either
 a global executable or a path to
@@ -414,7 +413,8 @@ lvim.plugins = {
     end
   },
   {
-    "ggandor/leap.nvim"
+    "ggandor/leap.nvim",
+    commit="27489b8698f23a83ebdec07688860fd19ff4d28b"
   },
   { -- resize window
     "simeji/winresizer"
