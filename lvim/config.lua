@@ -82,6 +82,9 @@ lvim.keys.visual_mode["v"]                            = ":<c-u>FzfLua grep_visua
 lvim.keys.normal_mode["t"]                            = "<Plug>(leap-forward-to)"
 lvim.keys.normal_mode["T"]                            = "<Plug>(leap-backward-to)"
 
+-- undo tree
+lvim.keys.normal_mode["<leader>u"]                    = ":UndotreeToggle<cr>"
+
 -- indentlines
 lvim.builtin.indentlines.options.use_treesitter       = true
 lvim.builtin.indentlines.options.show_current_context = true
@@ -283,6 +286,9 @@ end
 -- Additional Plugins
 lvim.plugins = {
   {
+    "mbbill/undotree"
+  },
+  {
     "MTDL9/vim-log-highlighting"
   },
   {
@@ -414,7 +420,7 @@ lvim.plugins = {
   },
   {
     "ggandor/leap.nvim",
-    commit="27489b8698f23a83ebdec07688860fd19ff4d28b"
+    commit = "27489b8698f23a83ebdec07688860fd19ff4d28b"
   },
   { -- resize window
     "simeji/winresizer"
