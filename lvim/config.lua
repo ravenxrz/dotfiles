@@ -286,7 +286,9 @@ end
 -- Additional Plugins
 lvim.plugins = {
   {
-    "mbbill/undotree"
+    "mbbill/undotree",
+    config = function()
+    end
   },
   {
     "MTDL9/vim-log-highlighting"
@@ -610,6 +612,10 @@ lvim.plugins = {
   -- }
 }
 
+vim.cmd([[
+  let g:undotree_WindowLayout = 2
+]])
+
 
 --- dap config
 -- load non-standard json file
@@ -627,25 +633,7 @@ lvim.plugins = {
 --   end,
 -- })
 --
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "python",
-  command = "set tabstop=2  shiftwidth=2"
-})
 
-
--- definition 跳转后，执行zt，保证跳转到的行，置于屏幕顶部
-vim.lsp.handlers["textDocument/definition"] = function(_, result, context)
-  if not result or vim.tbl_isempty(result) then
-    print("No definition found")
-    return
-  end
-  -- 获取第一个定义的位置
-  local target = result[1]
-  -- 跳转到定义处
-  vim.lsp.util.jump_to_location(target, 'utf-8', true)
-  -- 将跳转到的行置顶
-  vim.cmd("normal! zt")
-end
 
 -- 大文件读取优化
 vim.cmd([[
