@@ -61,7 +61,6 @@ return packer.startup(function(use)
     use "nvim-telescope/telescope-live-grep-args.nvim"
     use "MattesGroeger/vim-bookmarks"
     use "tom-anders/telescope-vim-bookmarks.nvim"
-    use "nvim-telescope/telescope-dap.nvim"
 
     -- Treesittetr
     use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", commit = "4cccb6f494eb255b32a290d37c35ca12584c74d0" }
@@ -104,12 +103,6 @@ return packer.startup(function(use)
     use "L3MON4D3/LuaSnip" -- snippet engine
     use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
 
-    -- Debugger
-    use "ravenxrz/DAPInstall.nvim" -- help us install several debuggers
-    use { "ravenxrz/nvim-dap", commit = "f9480362549e2b50a8616fe4530deaabbc4f889b" }
-    use "theHamsta/nvim-dap-virtual-text"
-    use "rcarriga/nvim-dap-ui"
-
     -- Git
     use { "lewis6991/gitsigns.nvim", tag = "v0.6" }
     use 'sindrets/diffview.nvim'
@@ -117,11 +110,9 @@ return packer.startup(function(use)
     -- UI
     -- Colorschemes
     use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
-
-
     use "norcalli/nvim-colorizer.lua" -- show color
     use "folke/trouble.nvim"
-    use "j-hui/fidget.nvim" -- show lsp progress
+    use {"j-hui/fidget.nvim", tag = "legacy"} -- show lsp progress
     use "sindrets/winshift.nvim" -- rerange window layout
     -- litee family
     use "ldelossa/litee.nvim"
@@ -131,17 +122,10 @@ return packer.startup(function(use)
     use { "loctvl842/monokai-pro.nvim" }
 
     -- tools
-    use "ravenxrz/neovim-cmake"
     use "voldikss/vim-translator"
     use "mtdl9/vim-log-highlighting"
     use "Pocco81/HighStr.nvim"
-    -- use "dstein64/vim-startuptime"
-    use "ravenxrz/vim-local-history"
     use "vim-test/vim-test"
-    use {
-        'michaelb/sniprun',
-        run = 'bash ./install.sh'
-    }
     -- use "ravenxrz/DoxygenToolkit.vim"
     use "Pocco81/auto-save.nvim"
     use "djoshea/vim-autoread"

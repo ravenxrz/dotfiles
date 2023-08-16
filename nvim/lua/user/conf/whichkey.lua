@@ -106,51 +106,9 @@ local mappings = {
     -- "<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>",
     "Find Symobls",
   },
-  ["p"] = { "<cmd>Telescope projects<cr>", "Projects" },
-
-  ["o"] = {
-    "<cmd>SymbolsOutline<CR>", "Outline"
-  },
 
   ["e"] = {
     "<cmd>NvimTreeToggle<CR>", "File Explorer"
-  },
-
-  c = {
-    name = "CMake",
-    g = {"<cmd>CMake configure<CR>", "Configure"},
-    t = {"<cmd>CMake select_target<CR>", "SelectTarget"},
-    T = {"<cmd>CMake select_build_type<CR>", "SelectBuildType"},
-    b = {"<cmd>CMake build<CR>", "BuildTarget"},
-    a = {"<cmd>CMake build_all<CR>", "BuildAll"},
-    r = {"<cmd>CMake build_and_run<CR>", "Run"},
-    d = {"<cmd>CMake build_and_debug<CR>", "DebugTarget"},
-    c = {"<cmd>CMake cancel<CR>", "Cancel"},
-    s = {"<cmd>CMake set_target_args<CR>", "SetArg"},
-  },
-
-  d = {
-    name = "Debug",
-    R = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run to Cursor" },
-    E = { "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", "Evaluate Input" },
-    X = { "<cmd>lua require'dap'.terminate()<cr>", "Terminate" },
-    -- C = { "<cmd>lua require'dap'.set_breakpoint(vim.fn.input '[Condition] > ')<cr>", "Conditional Breakpoint" },
-    T = { "<cmd>lua require'dapui'.toggle('sidebar')<cr>", "Toggle Sidebar" },
-    p = { "<cmd>lua require'dap'.pause()<cr>", "Pause" },
-    r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
-    q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
-
-    -- b = { "<cmd>lua require'dap'.step_back()<cr>", "Step Back" },
-    -- c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
-    -- d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
-    -- e = { "<cmd>lua require'dapui'.eval()<cr>", "Evaluate" },
-    -- g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
-    -- h = { "<cmd>lua require'dap.ui.widgets'.hover()<cr>", "Hover Variables" },
-    -- S = { "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", "Scopes" },
-    -- i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
-    -- o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
-    -- t = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
-    -- u = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
   },
 
   T = {
@@ -162,20 +120,6 @@ local mappings = {
     u = { "<cmd>Trouble lsp_references<cr>", "Usage"},
     g = { "<cmd>Gitsigns setloclist<cr>", "Open changed hunk" },
   },
-
-  -- g = {
-  --   name = "Git",
-  --   b = { "<cmd>VGit buffer_gutter_blame_preview<cr>", "File Blame" },
-  --   d = { "<cmd>VGit buffer_diff_preview<cr>", "Diff File" },
-  --   D = { "<cmd>VGit project_diff_preview<cr>", "Diff Project" },
-  --   s = { "<cmd>VGit buffer_stage<cr>", "Stage File" },
-  --   u = { "<cmd>VGit buffer_unstage<cr>", "Unstage File" },
-  --   r = { "<cmd>VGit buffer_reset<cr>", "Reset File" },
-  --   f = { "<cmd>VGit buffer_history_preview <cr>", "Reset File" },
-  --
-  --   B = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-  --   c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-  -- },
 
   g = {
      name = "Git",
@@ -245,17 +189,6 @@ local mappings = {
     },
   },
 
-  -- h = {
-  --   a = { "<cmd>HSHighlight 1<cr>", "Hightlight 1" },
-  --   b = { "<cmd>HSHighlight 2<cr>", "Hightlight 2" },
-  --   c = { "<cmd>HSHighlight 3<cr>", "Hightlight 3" },
-  --   d = { "<cmd>HSHighlight 4<cr>", "Hightlight 4" },
-  --   e = { "<cmd>HSHighlight 5<cr>", "Hightlight 5" },
-  --   f = { "<cmd>HSHighlight 6<cr>", "Hightlight 6" },
-  --   u = { "<cmd>HSRmHighlight<cr>", "RemoveHighlight" },
-  --   U = { "<cmd>HSRmHighlight rm_all<cr>", "RemoveAllHighlight" },
-  -- },
-
   h = {
     name = "Help",
     -- b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
@@ -268,17 +201,6 @@ local mappings = {
     C = { "<cmd>Telescope commands<cr>", "Commands" },
   },
 
-
-  -- t = {
-  --   name = "Terminal",
-  --   n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
-  --   u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
-  --   t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
-  --   p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
-  --   f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
-  --   h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
-  --   v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
-  -- },
 }
 
 which_key.setup(setup)
