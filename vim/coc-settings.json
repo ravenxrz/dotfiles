@@ -1,0 +1,7 @@
+{
+  "coc.preferences.useQuickfixForLocations": true,
+  "coc.preferences.extensionUpdateCheck": "never",
+  "explorer.file.showHiddenFiles": true,
+  "explorer.icon.enableNerdfont": true,
+  "snippets.ultisnips.pythonPrompt": false
+}

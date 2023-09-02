@@ -158,4 +158,4 @@ chrome() {
 # alias opencwd="explorer.exe ."
 # alias img="Honeyview.exe"
 # alias typora="Typora.exe"
-alias vim="lvim"
+# alias vim="lvim"
