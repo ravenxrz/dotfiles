@@ -69,13 +69,11 @@ call plug#begin('~/.vim/plugged')
       Plug 'joshdick/onedark.vim'
       Plug 'liuchengxu/vista.vim'
       Plug 'ap/vim-buftabline'
-      Plug 'xolox/vim-misc'
-      Plug 'xolox/vim-session'
 call plug#end()
 
 
 " theme
-colorscheme onedark
+" colorscheme onedark
 
 " vista
 let g:vista_default_executive = 'coc'
@@ -108,7 +106,7 @@ let g:auto_save_events = ["InsertLeave", "TextChanged"]
 
 " coc
 " coc plugins see:  https://www.npmjs.com/search?q=keywords%3Acoc.nvim
-" currently, I install coc-pyright, oc-explorer, coc-json, coc-lua,
+" currently, I install coc-pyright, coc-explorer, coc-json, coc-lua,
 " file explorer, coc-snippets, coc-clangd
 nnoremap <silent> <leader>e :CocCommand explorer<CR>
 autocmd BufEnter * if (&ft == 'coc-explorer' && winnr("$") == 1) | q | endif

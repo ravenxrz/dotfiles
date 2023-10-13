@@ -104,8 +104,6 @@ nnoremap <Leader>a :action $SelectAll<CR>
 nnoremap <Leader>f :action ReformatCode<CR>
 " New File
 nnoremap <Leader>n :action NewFile<CR>
-" 找到usage
-nnoremap <Leader>u :action FindUsages<CR>
 " go to class
 nnoremap <Leader>gc :action GotoClass<CR>
 " go to action
@@ -124,7 +122,8 @@ nnoremap <Leader>s :action SendLocation<CR>
 nnoremap <Space>f :action GotoFile<CR>
 " 查询Symbol
 nnoremap <Space>S :action GotoSymbol<CR>
-
+" 找到usage
+nnoremap <Leader>u :action FindUsages<CR>
 
 " 中英文自动切换
 set keep-english-in-normal
