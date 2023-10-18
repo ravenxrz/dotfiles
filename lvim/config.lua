@@ -14,7 +14,7 @@ lvim.format_on_save.enabled = false -- lvim.colorscheme = "lunar"
 -- themes: https://vimcolorschemes.com/
 
 -- lightscheme base16-atelier-seaside-light
-lvim.colorscheme = "tokyonight-night"
+lvim.colorscheme = "darkplus"
 -- lvim.colorscheme = "colorscheme rose-pine"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
@@ -26,75 +26,75 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
-lvim.leader                                           = "space"
+lvim.leader                                              = "space"
 -- add your own keymapping
-lvim.keys.normal_mode["<C-s>"]                        = ":w<cr>"
-lvim.keys.normal_mode["E"]                            = ":BufferLineCyclePrev<CR>"
-lvim.keys.normal_mode["R"]                            = ":BufferLineCycleNext<CR>"
-lvim.keys.normal_mode["H"]                            = "^"
-lvim.keys.normal_mode["L"]                            = "$"
-lvim.keys.normal_mode["Q"]                            = "q"
-lvim.keys.normal_mode["<leader>h"]                    = ":nohl<cr>"
-lvim.keys.normal_mode["<leader>j"]                    = ":ClangdSwitchSourceHeader<cr>"
-lvim.keys.normal_mode["<leader>H"]                    = ":ClangdTypeHierarchy<cr>"
-lvim.keys.normal_mode["<leader>o"]                    = ":Vista!!<cr>"
-lvim.keys.normal_mode["<leader>q"]                    = ":bd<cr>"
-lvim.keys.normal_mode["q"]                            = "<Nop>"
-lvim.keys.normal_mode["n"]                            = "nzzzv"
-lvim.keys.normal_mode["N"]                            = "Nzzzv"
-lvim.keys.normal_mode["J"]                            = "mzJ`z"
+lvim.keys.normal_mode["<C-s>"]                           = ":w<cr>"
+lvim.keys.normal_mode["E"]                               = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["R"]                               = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["H"]                               = "^"
+lvim.keys.normal_mode["L"]                               = "$"
+lvim.keys.normal_mode["Q"]                               = "q"
+lvim.keys.normal_mode["<leader>h"]                       = ":nohl<cr>"
+lvim.keys.normal_mode["<leader>j"]                       = ":ClangdSwitchSourceHeader<cr>"
+lvim.keys.normal_mode["<leader>H"]                       = ":ClangdTypeHierarchy<cr>"
+lvim.keys.normal_mode["<leader>o"]                       = ":Vista!!<cr>"
+lvim.keys.normal_mode["<leader>q"]                       = ":bd<cr>"
+lvim.keys.normal_mode["q"]                               = "<Nop>"
+lvim.keys.normal_mode["n"]                               = "nzzzv"
+lvim.keys.normal_mode["N"]                               = "Nzzzv"
+lvim.keys.normal_mode["J"]                               = "mzJ`z"
 
-lvim.keys.visual_mode["p"]                            = "P"
-lvim.keys.visual_mode["H"]                            = "^"
-lvim.keys.visual_mode["L"]                            = "$"
-lvim.keys.visual_mode["J"]                            = ":m '>+1<CR>gv=gv"
-lvim.keys.visual_mode["K"]                            = ":m '<-2<CR>gv=gv"
+lvim.keys.visual_mode["p"]                               = "P"
+lvim.keys.visual_mode["H"]                               = "^"
+lvim.keys.visual_mode["L"]                               = "$"
+lvim.keys.visual_mode["J"]                               = ":m '>+1<CR>gv=gv"
+lvim.keys.visual_mode["K"]                               = ":m '<-2<CR>gv=gv"
 
 -- lsp
 -- lvim.keys.normal_mode["<leader>in"]                   = ":lua vim.lsp.buf.incoming_calls()<cr>"
-lvim.keys.visual_mode["<leader>lf"]                   = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
-lvim.keys.normal_mode["<leader>ln"]                   = "<cmd>lua vim.lsp.buf.rename()<CR>"
-lvim.keys.normal_mode["<leader>r"]                    = ":FzfLua oldfiles<cr>"
+lvim.keys.visual_mode["<leader>lf"]                      = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
+lvim.keys.normal_mode["<leader>ln"]                      = "<cmd>lua vim.lsp.buf.rename()<CR>"
+lvim.keys.normal_mode["<leader>r"]                       = ":FzfLua oldfiles<cr>"
 
-lvim.builtin.which_key.mappings.f                     = nil
-lvim.builtin.which_key.mappings.s                     = nil
-lvim.builtin.which_key.mappings.d                     = nil
+lvim.builtin.which_key.mappings.f                        = nil
+lvim.builtin.which_key.mappings.s                        = nil
+lvim.builtin.which_key.mappings.d                        = nil
 
 -- FzfLua config
-lvim.keys.term_mode["<C-h>"]                          = false
-lvim.keys.term_mode["<C-j>"]                          = false
-lvim.keys.term_mode["<C-k>"]                          = false
-lvim.keys.term_mode["<C-l>"]                          = false
+lvim.keys.term_mode["<C-h>"]                             = false
+lvim.keys.term_mode["<C-j>"]                             = false
+lvim.keys.term_mode["<C-k>"]                             = false
+lvim.keys.term_mode["<C-l>"]                             = false
 -- rm lvim/config.lua gr shortcut first
-lvim.keys.normal_mode["gr"]                           = ":FzfLua lsp_references<cr>"
-lvim.keys.normal_mode["<leader>in"]                   = ":FzfLua lsp_incoming_calls<cr>"
-lvim.keys.normal_mode["<leader>s"]                    = ":FzfLua lsp_document_symbols<cr>"
-lvim.keys.normal_mode["<leader>S"]                    = ":FzfLua lsp_workspace_symbols<cr>"
-lvim.keys.normal_mode["<leader>ff"]                   = ":FzfLua files<cr>"
-lvim.keys.normal_mode["<leader>fg"]                   = ":FzfLua live_grep_glob<cr>"
-lvim.keys.normal_mode["<leader>fw"]                   = ":FzfLua grep_cword<cr>"
-lvim.keys.normal_mode["<leader>fb"]                   = ":FzfLua buffers<cr>"
-lvim.keys.normal_mode["<leader>fc"]                   = ":FzfLua colorschemes<cr>"
-lvim.keys.normal_mode["<leader>fr"]                   = ":FzfLua resume<cr>"
-lvim.keys.visual_mode["v"]                            = ":<c-u>FzfLua grep_visual<cr>"
+lvim.keys.normal_mode["gr"]                              = ":FzfLua lsp_references<cr>"
+lvim.keys.normal_mode["<leader>in"]                      = ":FzfLua lsp_incoming_calls<cr>"
+lvim.keys.normal_mode["<leader>s"]                       = ":FzfLua lsp_document_symbols<cr>"
+lvim.keys.normal_mode["<leader>S"]                       = ":FzfLua lsp_workspace_symbols<cr>"
+lvim.keys.normal_mode["<leader>ff"]                      = ":FzfLua files<cr>"
+lvim.keys.normal_mode["<leader>fg"]                      = ":FzfLua live_grep_glob<cr>"
+lvim.keys.normal_mode["<leader>fw"]                      = ":FzfLua grep_cword<cr>"
+lvim.keys.normal_mode["<leader>fb"]                      = ":FzfLua buffers<cr>"
+lvim.keys.normal_mode["<leader>fc"]                      = ":FzfLua colorschemes<cr>"
+lvim.keys.normal_mode["<leader>fr"]                      = ":FzfLua resume<cr>"
+lvim.keys.visual_mode["v"]                               = ":<c-u>FzfLua grep_visual<cr>"
 
 -- leap
-lvim.keys.normal_mode["t"]                            = "<Plug>(leap-forward-to)"
-lvim.keys.normal_mode["T"]                            = "<Plug>(leap-backward-to)"
+lvim.keys.normal_mode["t"]                               = "<Plug>(leap-forward-to)"
+lvim.keys.normal_mode["T"]                               = "<Plug>(leap-backward-to)"
 
 -- undo tree
-lvim.keys.normal_mode["<leader>u"]                    = ":UndotreeToggle<cr>"
+lvim.keys.normal_mode["<leader>u"]                       = ":UndotreeToggle<cr>"
 
 -- indentlines
-lvim.builtin.indentlines.options.use_treesitter       = true
-lvim.builtin.indentlines.options.show_current_context = true
+lvim.builtin.indentlines.options.use_treesitter          = true
+lvim.builtin.indentlines.options.show_current_context    = true
 
 -- lualine
 -- show file path
-lvim.builtin.lualine.sections.lualine_c               = { { 'filename', path = 1 } }
+lvim.builtin.lualine.sections.lualine_c                  = { { 'filename', path = 1 } }
 
 -- auto pairs
-lvim.builtin.autopairs.disable_filetype               = { "TelescopePrompt", "spectre_panel", "repl" }
+lvim.builtin.autopairs.disable_filetype                  = { "TelescopePrompt", "spectre_panel", "repl" }
 
 -- dap
 -- lvim.builtin.which_key.mappings.d                   = {
@@ -124,8 +124,8 @@ lvim.builtin.autopairs.disable_filetype               = { "TelescopePrompt", "sp
 
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
-local _, actions                                      = pcall(require, "telescope.actions")
-lvim.builtin.telescope.defaults.mappings              = {
+local _, actions                                         = pcall(require, "telescope.actions")
+lvim.builtin.telescope.defaults.mappings                 = {
   -- for input mode
   i = {
     ["<C-j>"] = actions.move_selection_next,
@@ -145,20 +145,21 @@ lvim.builtin.telescope.defaults.mappings              = {
 -- lvim.builtin.theme.options.style = "storm"
 
 -- Use which-key to add extra bindings with the leader-key prefix
-lvim.builtin.which_key.mappings["P"]                  = { "<cmd>SessionManager load_session<CR>", "Projects" }
+lvim.builtin.which_key.mappings["P"]                     = { "<cmd>SessionManager load_session<CR>", "Projects" }
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.alpha.active                             = false
-lvim.builtin.alpha.mode                               = "dashboard"
+lvim.builtin.alpha.active                                = false
+lvim.builtin.alpha.mode                                  = "dashboard"
 
-lvim.builtin.terminal.active                          = true
+lvim.builtin.terminal.active                             = true
 -- nvim tree
-lvim.builtin.nvimtree.setup.view.side                 = "right"
-lvim.builtin.nvimtree.setup.view.adaptive_size        = true
-lvim.builtin.nvimtree.setup.renderer.icons.show.git   = false
+lvim.builtin.nvimtree.setup.view.side                    = "left"
+lvim.builtin.nvimtree.setup.view.adaptive_size           = true
+lvim.builtin.nvimtree.setup.renderer.icons.show.git      = false
+lvim.builtin.nvimtree.setup.renderer.symlink_destination = false
 -- cmp
-lvim.builtin.cmp.cmdline.enable                       = true
+lvim.builtin.cmp.cmdline.enable                          = true
 table.insert(lvim.builtin.cmp.sources, {
   name = 'nvim_lsp_signature_help'
 });
@@ -286,6 +287,58 @@ end
 -- Additional Plugins
 lvim.plugins = {
   {
+    "aserowy/tmux.nvim",
+    config = function()
+      return require("tmux").setup(
+        {
+          copy_sync = {
+            -- enables copy sync. by default, all registers are synchronized.
+            -- to control which registers are synced, see the `sync_*` options.
+            enable = true,
+            -- ignore specific tmux buffers e.g. buffer0 = true to ignore the
+            -- first buffer or named_buffer_name = true to ignore a named tmux
+            -- buffer with name named_buffer_name :)
+            ignore_buffers = { empty = false },
+            -- TMUX >= 3.2: all yanks (and deletes) will get redirected to system
+            -- clipboard by tmux
+            redirect_to_clipboard = true,
+            -- offset controls where register sync starts
+            -- e.g. offset 2 lets registers 0 and 1 untouched
+            register_offset = 0,
+            -- overwrites vim.g.clipboard to redirect * and + to the system
+            -- clipboard using tmux. If you sync your system clipboard without tmux,
+            -- disable this option!
+            sync_clipboard = true,
+            -- synchronizes registers *, +, unnamed, and 0 till 9 with tmux buffers.
+            sync_registers = true,
+            -- syncs deletes with tmux clipboard as well, it is adviced to
+            -- do so. Nvim does not allow syncing registers 0 and 1 without
+            -- overwriting the unnamed register. Thus, ddp would not be possible.
+            sync_deletes = true,
+            -- syncs the unnamed register with the first buffer entry from tmux.
+            sync_unnamed = true,
+          },
+          navigation = {
+            -- cycles to opposite pane while navigating into the border
+            cycle_navigation = true,
+            -- enables default keybindings (C-hjkl) for normal mode
+            enable_default_keybindings = true,
+            -- prevents unzoom tmux when navigating beyond vim border
+            persist_zoom = false,
+          },
+          resize = {
+            -- enables default keybindings (A-hjkl) for normal mode
+            enable_default_keybindings = false,
+            -- sets resize steps for x axis
+            resize_step_x = 1,
+            -- sets resize steps for y axis
+            resize_step_y = 1,
+          }
+        }
+      )
+    end
+  },
+  {
     "mbbill/undotree",
     config = function()
     end
@@ -298,7 +351,7 @@ lvim.plugins = {
     "liuchengxu/vista.vim",
     config = function()
       vim.cmd([[
-      let g:vista_sidebar_position = 'vertical topleft'
+      let g:vista_sidebar_position = 'vertical botright'
       let g:vista_default_executive = 'nvim_lsp'
       ]])
     end
@@ -314,7 +367,7 @@ lvim.plugins = {
         },
         winopts = {
           preview = {
-            -- default     = 'bat',           -- override the default previewer?
+            default      = 'builtin',   -- override the default previewer?
             -- default uses the 'builtin' previewer
             border       = 'border',    -- border|noborder, applies only to
             -- native fzf previewers (bat/cat/git/etc)
@@ -330,11 +383,11 @@ lvim.plugins = {
             scrollbar    = 'float',     -- `false` or string:'float|border'
             -- float:  in-window floating border
             -- border: in-border chars (see below)
-            scrolloff    = '-2',        -- float scrollbar offset from right
+            scrolloff    = '-2', -- float scrollbar offset from right
             -- applies only when scrollbar = 'float'
             scrollchars  = { '█', '' }, -- scrollbar chars ({ <full>, <empty> }
             -- applies only when scrollbar = 'border'
-            delay        = 100,         -- delay(ms) displaying the preview
+            delay        = 100, -- delay(ms) displaying the preview
             -- prevents lag on fast scrolling
             winopts      = {
               -- builtin previewer window options
@@ -444,6 +497,9 @@ lvim.plugins = {
   },
   {
     "RRethy/nvim-base16"
+  },
+  {
+    "lunarvim/colorschemes"
   },
   {
     "folke/todo-comments.nvim",
@@ -590,17 +646,6 @@ lvim.plugins = {
   },
   {
     "hrsh7th/cmp-nvim-lsp-signature-help",
-  },
-  {
-    "sakhnik/nvim-gdb",
-    run = "./install.sh",
-    config = function()
-      -- set gdb window vertically
-      vim.cmd([[
-       let w:nvimgdb_termwin_command = "rightbelow vnew"
-       let w:nvimgdb_codewin_command = "vnew"
-      ]])
-    end
   }
   -- {
   --   "vim-scripts/LargeFile",
