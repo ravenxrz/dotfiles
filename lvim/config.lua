@@ -158,17 +158,26 @@ lvim.builtin.nvimtree.setup.view.side                    = "left"
 lvim.builtin.nvimtree.setup.view.adaptive_size           = true
 lvim.builtin.nvimtree.setup.renderer.icons.show.git      = false
 lvim.builtin.nvimtree.setup.renderer.symlink_destination = false
--- cmp
-lvim.builtin.cmp.cmdline.enable                          = true
-table.insert(lvim.builtin.cmp.sources, {
-  name = 'nvim_lsp_signature_help'
-});
+
+-- lvim.lsp.diagnostics.virtual_textmp
+vim.diagnostic.config(
+  {
+    virtual_text = false
+  }
+)
+
+
+lvim.builtin.cmp.cmdline.enable                                  = true
+-- table.insert(lvim.builtin.cmp.sources, {
+--   name = 'nvim_lsp_signature_help'
+-- });
+--
 -- gitsigns
-lvim.builtin.gitsigns.opts.current_line_blame = false
+lvim.builtin.gitsigns.opts.current_line_blame                    = false
 lvim.builtin.gitsigns.opts.current_line_blame_opts.virt_text_pos = "right_align"
-lvim.builtin.gitsigns.opts.current_line_blame_opts.delay = 200
+lvim.builtin.gitsigns.opts.current_line_blame_opts.delay         = 200
 -- buffer line
-lvim.builtin.bufferline.highlights.buffer_selected = {
+lvim.builtin.bufferline.highlights.buffer_selected               = {
   bold = true,
   fg = "#ffd43b"
 }
@@ -206,10 +215,10 @@ lvim.lsp.installer.setup.ensure_installed = {
 -- }
 
 -- ---@usage disable automatic installation of servers
-lvim.lsp.installer.setup.automatic_installation = false
+lvim.lsp.installer.setup.automatic_installation = true
 
 -- disable diagnostics which is super annoying in my case
-lvim.lsp.diagnostics.virtual_text = false
+-- lvim.diagnostic.config({ virtual_text = false })
 -- vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
@@ -643,10 +652,10 @@ lvim.plugins = {
         },
       }
     end
-  },
-  {
-    "hrsh7th/cmp-nvim-lsp-signature-help",
   }
+  -- {
+  --   "hrsh7th/cmp-nvim-lsp-signature-help",
+  -- }
   -- {
   --   "vim-scripts/LargeFile",
   --   config = function ()
@@ -715,7 +724,7 @@ function edit_file_with_linenumber(args)
 end
 
 vim.cmd([[
-:command! -nargs=1 E lua edit_file_with_linenumber(<f-args>)
+  :command! -nargs=1 E lua edit_file_with_linenumber(<f-args>)
 ]])
 
 vim.api.nvim_create_autocmd("FileType", {
