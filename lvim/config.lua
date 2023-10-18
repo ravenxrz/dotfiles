@@ -248,7 +248,7 @@ require("lvim.lsp.manager").setup("pyright", {
 -- -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
-  { command = "black", filetypes = { "python" } },
+  { command = "yapf", filetypes = { "python" } },
   -- { command = "isort", filetypes = { "python" } },
   -- {
   --   -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
@@ -301,7 +301,7 @@ lvim.plugins = {
             ignore_buffers = { empty = false },
             -- TMUX >= 3.2: all yanks (and deletes) will get redirected to system
             -- clipboard by tmux
-            redirect_to_clipboard = true,
+            redirect_to_clipboard = false,
             -- offset controls where register sync starts
             -- e.g. offset 2 lets registers 0 and 1 untouched
             register_offset = 0,
@@ -717,3 +717,8 @@ end
 vim.cmd([[
 :command! -nargs=1 E lua edit_file_with_linenumber(<f-args>)
 ]])
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  command = "set tabstop=2  shiftwidth=2 expandtab"
+})
