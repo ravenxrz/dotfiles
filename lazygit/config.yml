@@ -57,8 +57,8 @@ git:
     order: 'topo-order'
     # one of always, never, when-maximised
     # this determines whether the git graph is rendered in the commits panel
-    showGraph: 'always'
-    showWholeGraph: true
+    showGraph: 'never'
+    showWholeGraph: false
   skipHookPrefix: WIP
   autoFetch: true
   autoRefresh: true
