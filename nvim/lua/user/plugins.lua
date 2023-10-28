@@ -50,7 +50,6 @@ return packer.startup(function(use)
     use { "akinsho/toggleterm.nvim", commit = "2a787c426ef00cb3488c11b14f5dcf892bbd0bda" }
     use { "ahmedkhalf/project.nvim", commit = "628de7e433dd503e782831fe150bb750e56e55d6" }
     use { "lewis6991/impatient.nvim", commit = "b842e16ecc1a700f62adb9802f8355b99b52a5a6" }
-    use { "lukas-reineke/indent-blankline.nvim", commit = "db7cbcb40cc00fc5d6074d7569fb37197705e7f6" }
     use { "goolord/alpha-nvim", commit = "0bb6fc0646bcd1cdb4639737a1cee8d6e08bcc31" }
     use { "folke/which-key.nvim", commit = "16ed12a8493628c377606da2ebac50d80736ed37" }
 
@@ -65,7 +64,7 @@ return packer.startup(function(use)
     -- Treesittetr
     use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", commit = "4cccb6f494eb255b32a290d37c35ca12584c74d0" }
     use { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter", requires = "nvim-treesitter/nvim-treesitter", commit = "c81382328ad47c154261d1528d7c921acad5eae5"} -- enhance texetobject selection
-    use "romgrk/nvim-treesitter-context" -- show class/function at the top
+    use { "romgrk/nvim-treesitter-context", tag = "compat/0.7" } -- show class/function at the top
     use {"andymass/vim-matchup", tag = "v0.7.2"}
 
     use { "neovim/nvim-lspconfig", commit = "f11fdff7e8b5b415e5ef1837bdcdd37ea6764dda" } -- enable LSP
@@ -114,6 +113,8 @@ return packer.startup(function(use)
     use "folke/trouble.nvim"
     use {"j-hui/fidget.nvim", tag = "legacy"} -- show lsp progress
     use "sindrets/winshift.nvim" -- rerange window layout
+    use 'AlexvZyl/nordic.nvim'
+    use { "lukas-reineke/indent-blankline.nvim", tag = "v2.20.8" }
     -- litee family
     use "ldelossa/litee.nvim"
     use "ldelossa/litee-calltree.nvim"
