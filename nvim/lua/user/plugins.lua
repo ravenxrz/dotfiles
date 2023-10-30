@@ -62,10 +62,11 @@ return packer.startup(function(use)
     use "tom-anders/telescope-vim-bookmarks.nvim"
 
     -- Treesittetr
-    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", commit = "4cccb6f494eb255b32a290d37c35ca12584c74d0" }
-    use { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter", requires = "nvim-treesitter/nvim-treesitter", commit = "c81382328ad47c154261d1528d7c921acad5eae5"} -- enhance texetobject selection
+    use { "nvim-treesitter/nvim-treesitter", run = ":TSUpdate", tag = "v0.8.5.2" }
+    use { "nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter", requires = "nvim-treesitter/nvim-treesitter", commit="c813823"} -- enhance texetobject selection
     use { "romgrk/nvim-treesitter-context", tag = "compat/0.7" } -- show class/function at the top
     use {"andymass/vim-matchup", tag = "v0.7.2"}
+    use { "bfrg/vim-cpp-modern" }
 
     use { "neovim/nvim-lspconfig", commit = "f11fdff7e8b5b415e5ef1837bdcdd37ea6764dda" } -- enable LSP
     use { "williamboman/mason.nvim", commit = "c2002d7a6b5a72ba02388548cfaf420b864fbc12"} -- simple to use language server installer
@@ -73,13 +74,11 @@ return packer.startup(function(use)
 	use { "jose-elias-alvarez/null-ls.nvim", commit = "c0c19f32b614b3921e17886c541c13a72748d450" } -- for formatters and linters
     use { "RRethy/vim-illuminate", commit = "a2e8476af3f3e993bb0d6477438aad3096512e42" }
 
-
     use "ray-x/lsp_signature.nvim" -- show function signature when typing
     -- Editor enhance
     use "terrortylor/nvim-comment"  -- for comment
     use "preservim/nerdcommenter"
     use "Shatur/neovim-session-manager"
-    use 'Davonter/codeium.vim'      -- for completion by AI
     use { "enddeadroyal/symbols-outline.nvim", branch = "bugfix/symbol-hover-misplacement" }
 
     -- cmp plugins
