@@ -10,7 +10,7 @@ configs.setup {
   ignore_install = { "" }, -- List of parsers to ignore installing
   highlight = {
     enable = true, -- false will disable the whole extension
-    disable = { "cpp", "c" }, -- list of language that will be disabled
+    disable = {}, -- list of language that will be disabled
     additional_vim_regex_highlighting = false,
   },
   indent = { enable = false, disable = { "yaml" } },
@@ -120,11 +120,11 @@ configs.setup {
   autotag = { enable = false },
   -- matchup plugin
   -- https://github.com/andymass/vim-matchup
-  matchup = {
-    enable = false, -- mandatory, false will disable the whole extension
+  -- matchup = {
+    -- enable = false, -- mandatory, false will disable the whole extension
     -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
     -- [options]
-  },
+  -- },
   -- autopairs plugin
   autopairs = {
     enable = false,

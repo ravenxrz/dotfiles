@@ -25,7 +25,7 @@ keymap("n", "<C-l>", "<C-w>l", opts)
 -- NOTE: require winshit plugin
 keymap("n", "<C-W>m", ":WinShift<cr>", opts)
 
-
+keymap("n", "<S-Tab>", "<C-6>", opts)
 -- FileExpoler
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
 keymap("n", "<leader>f", ":NvimTreeFindFile<cr>", opts)
