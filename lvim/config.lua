@@ -26,35 +26,37 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
-lvim.leader                                              = "space"
+lvim.leader                        = "space"
 -- add your own keymapping
-lvim.keys.normal_mode["<C-s>"]                           = ":w<cr>"
-lvim.keys.normal_mode["E"]                               = ":BufferLineCyclePrev<CR>"
-lvim.keys.normal_mode["R"]                               = ":BufferLineCycleNext<CR>"
-lvim.keys.normal_mode["H"]                               = "^"
-lvim.keys.normal_mode["L"]                               = "$"
-lvim.keys.normal_mode["Q"]                               = "q"
-lvim.keys.normal_mode["<leader>h"]                       = ":nohl<cr>"
-lvim.keys.normal_mode["<leader>j"]                       = ":ClangdSwitchSourceHeader<cr>"
-lvim.keys.normal_mode["<leader>H"]                       = ":ClangdTypeHierarchy<cr>"
-lvim.keys.normal_mode["<leader>o"]                       = ":Vista!!<cr>"
-lvim.keys.normal_mode["<leader>q"]                       = ":bd<cr>"
-lvim.keys.normal_mode["q"]                               = "<Nop>"
+lvim.keys.normal_mode["<C-s>"]     = ":w<cr>"
+lvim.keys.normal_mode["E"]         = ":BufferLineCyclePrev<CR>"
+lvim.keys.normal_mode["R"]         = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["H"]         = "^"
+lvim.keys.normal_mode["L"]         = "$"
+lvim.keys.normal_mode["Q"]         = "q"
+lvim.keys.normal_mode["<leader>h"] = ":nohl<cr>"
+lvim.keys.normal_mode["<leader>j"] = ":ClangdSwitchSourceHeader<cr>"
+lvim.keys.normal_mode["<leader>H"] = ":ClangdTypeHierarchy<cr>"
+lvim.keys.normal_mode["<leader>o"] = ":Vista!!<cr>"
+lvim.keys.normal_mode["<leader>q"] = ":bd<cr>"
+lvim.keys.normal_mode["q"]         = "<Nop>"
 lvim.keys.normal_mode["n"]                               = "nzzzv"
 lvim.keys.normal_mode["N"]                               = "Nzzzv"
 lvim.keys.normal_mode["J"]                               = "mzJ`z"
 
-lvim.keys.visual_mode["p"]                               = "P"
-lvim.keys.visual_mode["H"]                               = "^"
-lvim.keys.visual_mode["L"]                               = "$"
-lvim.keys.visual_mode["J"]                               = ":m '>+1<CR>gv=gv"
-lvim.keys.visual_mode["K"]                               = ":m '<-2<CR>gv=gv"
+lvim.keys.visual_mode["p"]         = "P"
+lvim.keys.visual_mode["H"]         = "^"
+lvim.keys.visual_mode["L"]         = "$"
+-- lvim.keys.visual_mode["J"]         = ":m '>+1<CR>gv=gv"
+-- lvim.keys.visual_mode["K"]         = ":m '<-2<CR>gv=gv"
+
+
 
 -- lsp
 -- lvim.keys.normal_mode["<leader>in"]                   = ":lua vim.lsp.buf.incoming_calls()<cr>"
 lvim.keys.visual_mode["<leader>lf"]                      = "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>"
 lvim.keys.normal_mode["<leader>ln"]                      = "<cmd>lua vim.lsp.buf.rename()<CR>"
-lvim.keys.normal_mode["<leader>r"]                       = ":FzfLua oldfiles<cr>"
+lvim.keys.normal_mode["<leader>r"]                       = ":Telescope oldfiles<cr>"
 
 lvim.builtin.which_key.mappings.f                        = nil
 lvim.builtin.which_key.mappings.s                        = nil
@@ -65,18 +67,22 @@ lvim.keys.term_mode["<C-h>"]                             = false
 lvim.keys.term_mode["<C-j>"]                             = false
 lvim.keys.term_mode["<C-k>"]                             = false
 lvim.keys.term_mode["<C-l>"]                             = false
--- rm lvim/config.lua gr shortcut first
-lvim.keys.normal_mode["gr"]                              = ":FzfLua lsp_references<cr>"
-lvim.keys.normal_mode["<leader>in"]                      = ":FzfLua lsp_incoming_calls<cr>"
-lvim.keys.normal_mode["<leader>s"]                       = ":FzfLua lsp_document_symbols<cr>"
-lvim.keys.normal_mode["<leader>S"]                       = ":FzfLua lsp_workspace_symbols<cr>"
-lvim.keys.normal_mode["<leader>ff"]                      = ":FzfLua files<cr>"
-lvim.keys.normal_mode["<leader>fg"]                      = ":FzfLua live_grep_glob<cr>"
-lvim.keys.normal_mode["<leader>fw"]                      = ":FzfLua grep_cword<cr>"
-lvim.keys.normal_mode["<leader>fb"]                      = ":FzfLua buffers<cr>"
-lvim.keys.normal_mode["<leader>fc"]                      = ":FzfLua colorschemes<cr>"
-lvim.keys.normal_mode["<leader>fr"]                      = ":FzfLua resume<cr>"
-lvim.keys.visual_mode["v"]                               = ":<c-u>FzfLua grep_visual<cr>"
+
+-- TODO
+--  disable lvim builtin config
+--  ["gr"] = { "<cmd>lua vim.lsp.buf.references()<cr>", "Goto references" },
+lvim.keys.normal_mode["gr"]                              = ":Telescope lsp_references theme=get_ivy<cr>"
+lvim.keys.normal_mode["<leader>s"]                       = ":Telescope lsp_document_symbols theme=get_ivy<cr>"
+lvim.keys.normal_mode["<leader>S"]                       = ":Telescope lsp_workspace_symbols theme=get_ivy<cr>"
+lvim.keys.normal_mode["<leader>ff"]                      = ":Telescope find_files theme=dropdown<cr>"
+lvim.keys.normal_mode["<leader>fg"]                      = ":lua require('telescope').extensions.live_grep_args.live_grep_args(require('telescope.themes').get_ivy({}))<CR>"
+lvim.keys.normal_mode["<leader>fw"]                      = ":lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<CR>"
+lvim.keys.normal_mode["<leader>fb"]                      = ":Telescope buffers theme=get_ivy<cr>"
+lvim.keys.normal_mode["<leader>fc"]                      = ":Telescope colorscheme<cr>"
+lvim.keys.normal_mode["<leader>fr"]                      = ":Telescope resume<cr>"
+-- lvim.keys.normal_mode["<leader>in"]                      = ":FzfLua lsp_incoming_calls<cr>"
+-- lvim.keys.normal_mode["<leader>fw"]                      = ":FzfLua grep_cword<cr>"
+-- lvim.keys.visual_mode["v"]                               = ":<c-u>FzfLua grep_visual<cr>"
 
 -- leap
 lvim.keys.normal_mode["t"]                               = "<Plug>(leap-forward-to)"
@@ -138,6 +144,10 @@ lvim.builtin.telescope.defaults.mappings                 = {
     ["<C-j>"] = actions.move_selection_next,
     ["<C-k>"] = actions.move_selection_previous,
   },
+}
+lvim.builtin.telescope.pickers.find_files                = {
+  find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+  hidden = true
 }
 
 -- Change theme settings
@@ -201,7 +211,7 @@ lvim.builtin.treesitter.highlight.enable = true
 
 -- -- make sure server will always be installed even if the server is in skipped_servers list
 lvim.lsp.installer.setup.ensure_installed = {
-  "clangd",
+  -- "clangd",
   "pyright",
 }
 
@@ -366,121 +376,7 @@ lvim.plugins = {
     end
   },
   {
-    'ibhagwan/fzf-lua',
-    config = function()
-      require 'fzf-lua'.setup {
-        "fzf-native",
-        grep = {
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096",
-          rg_glob = true,
-        },
-        winopts = {
-          preview = {
-            default      = 'builtin',   -- override the default previewer?
-            -- default uses the 'builtin' previewer
-            border       = 'border',    -- border|noborder, applies only to
-            -- native fzf previewers (bat/cat/git/etc)
-            wrap         = 'wrap',      -- wrap|nowrap
-            hidden       = 'nohidden',  -- hidden|nohidden
-            vertical     = 'down:45%',  -- up|down:size
-            horizontal   = 'right:40%', -- right|left:size
-            layout       = 'vertical',  -- horizontal|vertical|flex
-            flip_columns = 120,         -- #cols to switch to horizontal on flex
-            -- Only used with the builtin previewer:
-            title        = true,        -- preview border title (file/buf)?
-            title_align  = "left",      -- left|center|right, title alignment
-            scrollbar    = 'float',     -- `false` or string:'float|border'
-            -- float:  in-window floating border
-            -- border: in-border chars (see below)
-            scrolloff    = '-2', -- float scrollbar offset from right
-            -- applies only when scrollbar = 'float'
-            scrollchars  = { '█', '' }, -- scrollbar chars ({ <full>, <empty> }
-            -- applies only when scrollbar = 'border'
-            delay        = 100, -- delay(ms) displaying the preview
-            -- prevents lag on fast scrolling
-            winopts      = {
-              -- builtin previewer window options
-              number         = true,
-              relativenumber = false,
-              cursorline     = true,
-              cursorlineopt  = 'both',
-              cursorcolumn   = false,
-              signcolumn     = 'no',
-              list           = false,
-              foldenable     = false,
-              foldmethod     = 'manual',
-            },
-          },
-          on_create = function()
-            vim.keymap.set("t", "<C-j>", "<Down>", { silent = true, buffer = true })
-            vim.keymap.set("t", "<C-k>", "<Up>", { silent = true, buffer = true })
-          end,
-        }
-      }
-    end
-  },
-  {
     "Shatur/neovim-session-manager"
-  },
-  {
-    "ldelossa/litee.nvim",
-    config = function()
-      require("litee.lib").setup({})
-    end
-  },
-  {
-    -- calltree
-    "ldelossa/litee-calltree.nvim",
-    config = function()
-      require("litee.calltree").setup({
-        -- When retrieving Call Hierarchy items some language servers will respond with
-        -- different symbol names then when a document symbol or workspace symbol request
-        -- is made.
-        --
-        -- To unify the experience `litee-calltree.nvim` can collect symbol details for
-        -- each Call Hierarhcy item, providing a more accurate display of symbol details
-        -- in the Calltree UI window.
-        --
-        -- This takes a little longer, but is also async, and will not block Neovim.
-        resolve_symbols = true,
-        -- the jump_mode used for jumping from
-        -- calltree node to source code line.
-        -- "invoking" will use the last window that invoked the calltree (feels natural)
-        -- "neighbor" will use the closest neighbor opposite to the panel orientation
-        -- (if panel is left, uses window to the right.)
-        jump_mode = "invoking",
-        -- enables hiding the cursor inside the Calltree UI.
-        hide_cursor = true,
-        -- Maps arrow keys to resizing the Calltree UI within the `litee.nvim` Panel.
-        map_resize_keys = true,
-        -- Disables all highlighting.
-        no_hls = false,
-        -- Determines if initial creation of a calltree opens in the
-        -- Panel or in a Popout window. Options are "panel" or "popout"
-        on_open = "panel",
-        -- If true, disable all keymaps
-        disable_keymaps = false,
-        -- The default keymaps. Users can provide overrides
-        -- to these mappings via the setup function.
-        keymaps = {
-          expand = "zo",
-          collapse = "zc",
-          collapse_all = "zM",
-          jump = "<CR>",
-          jump_split = "s",
-          jump_vsplit = "v",
-          jump_tab = "t",
-          hover = "i",
-          details = "d",
-          close = "X",
-          close_panel_pop_out = "<Esc>",
-          help = "?",
-          hide = "H",
-          switch = "S",
-          focus = "f"
-        },
-      })
-    end
   },
   {
     "ggandor/leap.nvim",
@@ -652,18 +548,13 @@ lvim.plugins = {
         },
       }
     end
+  },
+  {
+    "nvim-telescope/telescope-live-grep-args.nvim",
+    config = function()
+      require("telescope").load_extension("live_grep_args")
+    end
   }
-  -- {
-  --   "hrsh7th/cmp-nvim-lsp-signature-help",
-  -- }
-  -- {
-  --   "vim-scripts/LargeFile",
-  --   config = function ()
-  --     vim.cmd([[
-  --     let g:LargeFile=3
-  --     ]])
-  --   end
-  -- }
 }
 
 vim.cmd([[
