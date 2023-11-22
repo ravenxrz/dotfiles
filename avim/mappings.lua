@@ -16,8 +16,7 @@ return {
       function() require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end,
       desc = "Next buffer",
     },
-    ["E"] = {
-      function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
+    ["E"] = { function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
       desc = "Previous buffer",
     },
     -- line naviate
@@ -63,6 +62,8 @@ return {
     -- leap
     ["t"] = { "<Plug>(leap-forward-to)", desc = "Leap forward to" },
     ["T"] = { "<Plug>(leap-backward-to)", desc = "leap backward to" },
+    --  current file history
+    ["<leader>gD"] = { "<cmd>DiffviewFileHistory %<cr>", desc = "Current File Git History" },
   },
   t = {
     -- setting a mapping to false will disable it
