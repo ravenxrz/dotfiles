@@ -64,6 +64,10 @@ return {
     ["T"] = { "<Plug>(leap-backward-to)", desc = "leap backward to" },
     --  current file history
     ["<leader>gD"] = { "<cmd>DiffviewFileHistory %<cr>", desc = "Current File Git History" },
+    -- clangd switch
+    ["<leader>j"] = { "<cmd>ClangdSwitchSourceHeader<cr>", desc = "C/Cpp Switch Header" },
+    -- nohl
+    ["<leader>h"] = { "<cmd>nohl<cr>", desc = "No highlight" },
   },
   t = {
     -- setting a mapping to false will disable it
