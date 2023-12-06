@@ -3,7 +3,7 @@ gui:
   showIcons: true
   scrollHeight: 2 # how many lines you scroll by
   scrollPastBottom: true # enable scrolling past the bottom
-  sidePanelWidth: 0.3333 # number from 0 to 1
+  sidePanelWidth: 0.15 # number from 0 to 1
   expandFocusedSidePanel: false
   mainPanelSplitMode: 'flexible' # one of 'horizontal' | 'flexible' | 'vertical'
   language: 'en' # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
@@ -42,7 +42,7 @@ git:
   paging:
     colorArg: always
     useConfig: false
-    pager: delta --dark --line-numbers --paging=never
+    pager: delta --dark --line-numbers --paging=never --side-by-side
   commit:
     signOff: false
   merging:
@@ -70,7 +70,7 @@ git:
   diffContextSize: 3 # how many lines of context are shown around a change in diffs
 os:
   editCommand: '' # see 'Configuring File Editing' section
-  editCommandTemplate: 'lvim {{filename}}'
+  editCommandTemplate: 'nvim {{filename}}'
   openCommand: ''
 refresher:
   refreshInterval: 10 # File/submodule refresh interval in seconds. Auto-refresh can be disabled via option 'git.autoRefresh'.
