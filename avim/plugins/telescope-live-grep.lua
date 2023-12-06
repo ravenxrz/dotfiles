@@ -3,6 +3,6 @@ return {
   -- dependencies = {
   --   { "nvim-telescope/telescope.nvim" },
   -- },
-  cmd = "Telescope",
+  lazy = false,
   config = function() require("telescope").load_extension "live_grep_args" end,
 }

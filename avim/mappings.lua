@@ -16,7 +16,8 @@ return {
       function() require("astronvim.utils.buffer").nav(vim.v.count > 0 and vim.v.count or 1) end,
       desc = "Next buffer",
     },
-    ["E"] = { function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
+    ["E"] = {
+      function() require("astronvim.utils.buffer").nav(-(vim.v.count > 0 and vim.v.count or 1)) end,
       desc = "Previous buffer",
     },
     -- line naviate
@@ -68,6 +69,8 @@ return {
     ["<leader>j"] = { "<cmd>ClangdSwitchSourceHeader<cr>", desc = "C/Cpp Switch Header" },
     -- nohl
     ["<leader>h"] = { "<cmd>nohl<cr>", desc = "No highlight" },
+    -- reset git hunk
+    ["<leader>gr"] = { function() require("gitsigns").reset_hunk() end, desc = "Reset Git hunk" },
   },
   t = {
     -- setting a mapping to false will disable it
