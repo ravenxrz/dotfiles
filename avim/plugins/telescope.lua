@@ -40,6 +40,12 @@ return {
           },
         },
       },
+      pickers = {
+        find_files = {
+          cmd = "rg --files | rg ",
+          hidden = false
+        }
+      }
     }
   end,
   config = require "plugins.configs.telescope",
