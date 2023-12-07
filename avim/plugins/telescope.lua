@@ -12,7 +12,8 @@ return {
         git_worktrees = vim.g.git_worktrees,
         prompt_prefix = get_icon("Selected", 1),
         selection_caret = get_icon("Selected", 1),
-        path_display = { "smart" },
+        path_display = { "truncate" },
+        file_ignore_patterns = { "third_party" },
         sorting_strategy = "ascending",
         wrap_result = true,
         layout_config = {
@@ -40,12 +41,11 @@ return {
           },
         },
       },
-      pickers = {
-        find_files = {
-          cmd = "rg --files | rg ",
-          hidden = false
-        }
-      }
+      -- pickers = {
+      --   find_files = {
+      --     cmd = "rg --files | rg ",
+      --   }
+      -- }
     }
   end,
   config = require "plugins.configs.telescope",
