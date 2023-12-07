@@ -82,5 +82,6 @@ return {
   v = {
     ["H"] = { "^", desc = "Next buffer" },
     ["L"] = { "$", desc = "Previous buffer" },
+    ["p"] = { "\"_dP", desc = "Paste" },
   },
 }
