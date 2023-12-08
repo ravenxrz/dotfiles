@@ -1,4 +1,6 @@
+-- enable mouse scroll in iterm2: https://apple.stackexchange.com/questions/440527/scrolling-issue-in-vim-after-switch-to-iterm2
 -- set vim options here (vim.<first_key>.<second_key> = value)
+-- enable mouse location in iterm2: profiles->terminal->enable mouse reporting
 return {
   opt = {
     -- set to true or false etc.
