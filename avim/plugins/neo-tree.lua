@@ -124,6 +124,7 @@ return {
           h = "parent_or_close",
           l = "child_or_open",
           o = "open_with_window_picker",
+          z = "noop",
           ["<cr>"] = "open",
         },
         fuzzy_finder_mappings = { -- define keymaps for filter popup window in fuzzy_finder_mode
