@@ -5,3 +5,5 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 else
   path_prepend "$HOME/.dotfiles/bin/linux/"
 fi
+
+path_prepend "$HOME/.dotfiles/remote_dev/"
