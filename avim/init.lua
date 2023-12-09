@@ -51,7 +51,17 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      "clangd",
+    },
+    config = {
+      clangd = function()
+        return {
+          cmd = {
+            "clangd",
+            "--function-arg-placeholders=false",
+          },
+        }
+      end,
     },
   },
 
