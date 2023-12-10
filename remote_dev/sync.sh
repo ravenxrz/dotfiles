@@ -2,6 +2,7 @@
 
 # 
 # use fswatch + rsync to sync project
+# NOTE: install rsync in both local & remote side
 #
 
 # remember then last /

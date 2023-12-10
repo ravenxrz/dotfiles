@@ -36,10 +36,6 @@ return {
       end,
       desc = "Search symbols",
     },
-    ["<leader>S"] = {
-      "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>",
-      desc = "Search symbols",
-    },
     -- outline
     -- ["<F7>"] = { function() require("aerial").toggle() end, desc = "Symbols outline" },
     -- focuse current file
@@ -73,6 +69,13 @@ return {
     ["<leader>gr"] = { function() require("gitsigns").reset_hunk() end, desc = "Reset Git hunk" },
     -- lazygit
     ["<leader>gg"] = { "<cmd>LazyGitCurrentFile<cr>", desc = "Reset Git hunk" },
+    -- resize buf
+    ["<c-e>"] = { "<cmd>lua require('smart-splits').start_resize_mode()<cr>", desc = "Enter resize mode" },
+    -- swap buf
+    ["<leader><leader>h"] = { "<cmd>lua require('smart-splits').swap_buf_left()<cr>", desc = "Swap buf left" },
+    ["<leader><leader>l"] = { "<cmd>lua require('smart-splits').swap_buf_right()<cr>", desc = "Swap buf right" },
+    ["<leader><leader>j"] = { "<cmd>lua require('smart-splits').swap_buf_down()<cr>", desc = "Swap buf down" },
+    ["<leader><leader>k"] = { "<cmd>lua require('smart-splits').swap_buf_up()<cr>", desc = "Swap buf up" },
   },
   t = {
     -- setting a mapping to false will disable it
@@ -82,6 +85,6 @@ return {
   v = {
     ["H"] = { "^", desc = "Next buffer" },
     ["L"] = { "$", desc = "Previous buffer" },
-    ["p"] = { "\"_dP", desc = "Paste" },
+    ["p"] = { '"_dP', desc = "Paste" },
   },
 }
