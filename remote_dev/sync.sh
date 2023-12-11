@@ -32,5 +32,6 @@ eval $SYNC_CMD
 while true; do
 	fswatch -1 ${LOCAL_REPO_PATH} >/dev/null
 	eval $SYNC_CMD
+	date
 	sleep 1
 done
