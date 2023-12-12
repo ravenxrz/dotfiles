@@ -6,7 +6,7 @@ return {
 
   -- { import = "astrocommunity.colorscheme.catppuccin" },
   -- { import = "astrocommunity.completion.copilot-lua-cmp" },
-  { import = "astrocommunity.lsp.lsp-inlayhints-nvim" },
+  -- { import = "astrocommunity.lsp.lsp-inlayhints-nvim" },
   { import = "astrocommunity.lsp.lsp-signature-nvim" },
   -- { import = "astrocommunity.motion.leap-nvim" },
 }
