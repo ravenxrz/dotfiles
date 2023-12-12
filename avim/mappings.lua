@@ -69,8 +69,6 @@ return {
     ["<leader>gr"] = { function() require("gitsigns").reset_hunk() end, desc = "Reset Git hunk" },
     -- lazygit
     ["<leader>gg"] = { "<cmd>LazyGitCurrentFile<cr>", desc = "Reset Git hunk" },
-    -- resize buf
-    ["<c-e>"] = { "<cmd>lua require('smart-splits').start_resize_mode()<cr>", desc = "Enter resize mode" },
     -- swap buf
     ["<leader><leader>h"] = { "<cmd>lua require('smart-splits').swap_buf_left()<cr>", desc = "Swap buf left" },
     ["<leader><leader>l"] = { "<cmd>lua require('smart-splits').swap_buf_right()<cr>", desc = "Swap buf right" },
