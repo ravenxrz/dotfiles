@@ -25,6 +25,7 @@
     ~/.ipython/profile_default/startup/disable_warnings.py: ipython/disable_warnings.py
     ~/.pythonrc:
     ~/.rtorrent.rc:
+    ~/.ripgreprc:
     ~/.shell:
     ~/.config/tmux: tmux
     ~/.tmux.conf: tmux/tmux.conf

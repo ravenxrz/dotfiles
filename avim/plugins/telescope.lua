@@ -13,7 +13,6 @@ return {
         prompt_prefix = get_icon("Selected", 1),
         selection_caret = get_icon("Selected", 1),
         path_display = { "truncate" },
-        file_ignore_patterns = { "third_party" },
         sorting_strategy = "ascending",
         wrap_result = true,
         layout_config = {

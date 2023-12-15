@@ -9,3 +9,6 @@ export PYTHONSTARTUP=$HOME/.pythonrc
 
 # Vagrant
 VAGRANT_DISABLE_VBOXSYMLINKCREATE=1
+
+# Ripgep
+export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
