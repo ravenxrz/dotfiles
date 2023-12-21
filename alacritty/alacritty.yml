@@ -1,9 +1,12 @@
 live_config_reload: true
 
+env:
+  TERM: xterm-256color
+
 shell:
- program: /bin/zsh
- args:
-   - --login
+  program: /bin/zsh
+  args:
+    - --login
 
 window:
   opacity: 1.0
@@ -17,7 +20,7 @@ font:
     family: JetBrainsMono Nerd Font
     style: Regular
   bold:
-    family:  JetBrainsMono Nerd Font
+    family: JetBrainsMono Nerd Font
     style: Bold
   italic:
     family: JetBrainsMono Nerd Font
@@ -30,3 +33,6 @@ font:
 import:
   # uncomment the flavour you want below:
   - ~/.config/alacritty/theme/monokai-pro-alacritty.yml
+
+key_bindings:
+  - { key: Return, mods: Command|Shift, action: ToggleFullscreen }
