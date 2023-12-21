@@ -35,4 +35,5 @@ import:
   - ~/.config/alacritty/theme/monokai-pro-alacritty.yml
 
 key_bindings:
-  - { key: Return, mods: Command|Shift, action: ToggleFullscreen }
+  - { key: Return, mods: Command, action: ToggleFullscreen }
+  - { key: N, mods: Command, action: SpawnNewInstance }
