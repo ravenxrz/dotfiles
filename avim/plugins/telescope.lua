@@ -5,6 +5,11 @@ return {
   },
   cmd = "Telescope",
   opts = function()
+    local my_actions = {}
+    my_actions.top = function(prompt_bufnr) vim.cmd ":normal! zt" end
+    local transform_mod = require("telescope.actions.mt").transform_mod
+    my_actions = transform_mod(my_actions)
+
     local actions = require "telescope.actions"
     local get_icon = require("astronvim.utils").get_icon
     return {
@@ -30,6 +35,9 @@ return {
             ["<C-p>"] = actions.cycle_history_prev,
             ["<C-j>"] = actions.move_selection_next,
             ["<C-k>"] = actions.move_selection_previous,
+            ["<C-h>"] = actions.select_horizontal + my_actions.top,
+            ["<C-v>"] = actions.select_vertical + my_actions.top,
+            ["<CR>"] = actions.select_default + my_actions.top,
           },
           n = {
             q = actions.close,
@@ -37,6 +45,9 @@ return {
             ["<C-p>"] = actions.cycle_history_prev,
             ["<C-j>"] = actions.move_selection_next,
             ["<C-k>"] = actions.move_selection_previous,
+            ["<C-h>"] = actions.select_horizontal + my_actions.top,
+            ["<C-v>"] = actions.select_vertical + my_actions.top,
+            ["<CR>"] = actions.select_default + my_actions.top,
           },
         },
       },

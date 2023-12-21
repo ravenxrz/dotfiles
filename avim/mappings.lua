@@ -89,5 +89,9 @@ return {
     ["H"] = { "^", desc = "Next buffer" },
     ["L"] = { "$", desc = "Previous buffer" },
     ["p"] = { '"_dP', desc = "Paste" },
+    ["<leader>fw"] = {
+      "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({ postfix =  ' -w -F ' })<CR>",
+      desc = "Search current word",
+    },
   },
 }

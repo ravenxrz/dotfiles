@@ -9,6 +9,7 @@ return {
     spell = false, -- sets vim.opt.spell
     signcolumn = "yes", -- sets vim.opt.signcolumn to auto
     wrap = true, -- sets vim.opt.wrap
+    scrolloff = 8,
   },
   g = {
     inlay_hints_enabled = true, -- enable or disable LSP inlay hints on startup (Neovim v0.10 only)
