@@ -74,6 +74,8 @@ return {
     ["<leader><leader>l"] = { "<cmd>lua require('smart-splits').swap_buf_right()<cr>", desc = "Swap buf right" },
     ["<leader><leader>j"] = { "<cmd>lua require('smart-splits').swap_buf_down()<cr>", desc = "Swap buf down" },
     ["<leader><leader>k"] = { "<cmd>lua require('smart-splits').swap_buf_up()<cr>", desc = "Swap buf up" },
+    -- spectre: find & replace
+    ["<leader>F"] = { "<cmd>lua require('spectre').toggle()<cr>", desc = "Toggle Spectre" },
   },
   t = {
     -- setting a mapping to false will disable it
