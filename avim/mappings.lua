@@ -45,7 +45,7 @@ return {
     },
     -- search
     ["<leader>fw"] = {
-      "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<CR>",
+      "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({ postfix =  ' -w -F ' })<CR>",
       desc = "Search current word",
     },
     ["<leader>fg"] = {
@@ -75,7 +75,10 @@ return {
     ["<leader><leader>j"] = { "<cmd>lua require('smart-splits').swap_buf_down()<cr>", desc = "Swap buf down" },
     ["<leader><leader>k"] = { "<cmd>lua require('smart-splits').swap_buf_up()<cr>", desc = "Swap buf up" },
     -- spectre: find & replace
-    ["<leader>F"] = { "<cmd>lua require('spectre').toggle()<cr>", desc = "Toggle Spectre" },
+    ["<leader>F"] = {
+      "<cmd>lua require('spectre').open_file_search({select_word=true})<cr><cr>",
+      desc = "Toggle Spectre",
+    },
   },
   t = {
     -- setting a mapping to false will disable it
