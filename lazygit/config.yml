@@ -42,6 +42,7 @@ git:
     paging:
         colorArg: always
         useConfig: false
+        # need install git-delta. on macos, use brew install git-delta
         pager: delta --dark --line-numbers --paging=never --side-by-side
     commit:
         signOff: false
@@ -184,8 +185,8 @@ keybinding:
         markCommitAsFixup: 'f'
         createFixupCommit: 'F' # create fixup commit for this commit
         squashAboveCommits: 'S'
-        moveDownCommit: '<c-j>' # move commit down one
-        moveUpCommit: '<c-k>' # move commit up one
+        moveDownCommit: 'J' # move commit down one
+        moveUpCommit: 'K' # move commit up one
         amendToCommit: 'A'
         pickCommit: 'p' # pick commit (when mid-rebase)
         revertCommit: 't'
