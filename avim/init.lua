@@ -80,6 +80,20 @@ return {
         }
       end,
     },
+    mappings = {
+      n = {
+        ["gr"] = {
+          "<cmd>Glance references<cr>",
+          desc = "Glance References",
+        },
+        ["gR"] = {
+          -- we can also use require("telescope.builtin").lsp_references()
+          -- but i think qf with nvim-bqf is much better than telescope ref
+          function() vim.lsp.buf.references() end,
+          desc = "Goto References",
+        },
+      },
+    },
   },
 
   -- Configure require("lazy").setup() options
