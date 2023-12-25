@@ -62,6 +62,7 @@ return {
             "clangd",
             "--function-arg-placeholders=false",
           },
+          filetypes = { "c", "cpp", "cc", "objc", "objcpp" },
         }
       end,
       pyright = function()

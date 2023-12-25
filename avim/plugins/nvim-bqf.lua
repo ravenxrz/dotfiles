@@ -8,6 +8,7 @@ return {
       preview = {
         win_height = 30,
         win_vheight = 30,
+        winblend = 0,
         delay_syntax = 80,
         border = { "┏", "━", "┓", "┃", "┛", "━", "┗", "┃" },
         show_title = false,
