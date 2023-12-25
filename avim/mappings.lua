@@ -93,5 +93,13 @@ return {
       "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({ postfix =  ' -w -F ' })<CR>",
       desc = "Search current word",
     },
+    ["<leader>hh"] = {
+      ":<c-u>HSHighlight<CR>",
+      desc = "Highlight",
+    },
+    ["<leader>hr"] = {
+      ":<c-u>HSRmHighlight<cr>",
+      desc = "Rm Highlight",
+    },
   },
 }
