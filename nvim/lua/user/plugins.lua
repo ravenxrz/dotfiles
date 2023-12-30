@@ -112,14 +112,13 @@ return packer.startup(function(use)
     use "folke/trouble.nvim"
     use {"j-hui/fidget.nvim", tag = "legacy"} -- show lsp progress
     use "sindrets/winshift.nvim" -- rerange window layout
-    use 'AlexvZyl/nordic.nvim'
+    use 'EdenEast/nightfox.nvim'
     -- use { "lukas-reineke/indent-blankline.nvim", tag = "v3.3.7" }
     -- litee family
     use "ldelossa/litee.nvim"
     use "ldelossa/litee-calltree.nvim"
 
     use {"cpea2506/one_monokai.nvim"}
-    use { "loctvl842/monokai-pro.nvim" }
 
     -- tools
     use "voldikss/vim-translator"

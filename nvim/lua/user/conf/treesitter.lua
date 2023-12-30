@@ -14,7 +14,7 @@ configs.setup {
     additional_vim_regex_highlighting = false,
   },
   indent = { enable = false, disable = { "yaml" } },
-  context_commentstring = {
+  ts_context_commentstring = {
     enable = true,
     config = {
       -- Languages that have a single comment style

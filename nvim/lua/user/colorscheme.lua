@@ -1,8 +1,5 @@
 -- cursor color: #61AFEF
-local colorscheme = "one_monokai"
--- local colorscheme = "darkplus"
--- local colorscheme = "github_light"
--- require "user.conf.github-nvim-theme"
+local colorscheme = "nightfox"
 
 local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
 if not status_ok then
