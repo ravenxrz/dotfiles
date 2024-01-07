@@ -3,7 +3,7 @@
 		"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
 	},
 	"[cpp]": {
-		"editor.defaultFormatter": "xaver.clang-format"
+		"editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
 	},
 	"[go]": {
 		"editor.defaultFormatter": "golang.go"
@@ -51,7 +51,6 @@
 		"--header-insertion-decorators",
 		"-j=12",
 		"--pretty",
-		"--inlay-hints=true"
 		// 建议排序模型
 	],
 	"cmake.cmakePath": "cmake",
@@ -62,15 +61,13 @@
 	"debug.console.fontSize": 12,
 	"diffEditor.maxComputationTime": 0,
 	"diffEditor.wordWrap": "off",
-	"diffEditor.ignoreTrimWhitespace": false,
-	"doxdocgen.generic.authorEmail": "zhang.xingrui@foxmail.com",
-	"doxdocgen.generic.authorName": "raven",
+	"doxdocgen.generic.authorEmail": "zhangxingrui.leo@bytedance.com",
+	"doxdocgen.generic.authorName": "zhangxingrui.leo",
 	"editor.smoothScrolling": false,
 	"editor.cursorSurroundingLines": 8,
 	"editor.cursorBlinking": "solid",
 	"editor.cursorStyle": "line",
 	"editor.fontFamily": "JetBrainsMono Nerd Font Mono",
-	"editor.fontSize": 12,
 	"editor.formatOnSaveMode": "modifications",
 	"editor.inlineSuggest.enabled": true,
 	"editor.insertSpaces": false,
@@ -99,18 +96,19 @@
 		"**/.factorypath": true,
 		"**/.project": true,
 		"**/.settings": true,
-		"**/*INFO*": true
+		"**/*INFO*": false
 	},
 	"git.autofetch": true,
 	"git.suggestSmartCommit": false,
 	"github.copilot.enable": {
 		"*": true,
+		"yaml": false,
+		"plaintext": true,
+		"markdown": false,
+		"scminput": false,
 		"c": true,
 		"cpp": true,
-		"go": true,
-		"markdown": false,
-		"plaintext": false,
-		"yaml": false
+		"go": true
 	},
 	"go.autocompleteUnimportedPackages": true,
 	"go.buildOnSave": "off",
@@ -398,8 +396,9 @@
 				"f",
 				"w"
 			],
+			// need install https://marketplace.visualstudio.com/items?itemName=kylpo.vscode-find-in-files-with-selection extension
 			"commands": [
-				"extension.searchUnderCursor",
+				"extension.findInFilesWithSelection",
 			]
 		},
 		// gg and G jump mark
@@ -542,7 +541,7 @@
 	"workbench.panel.defaultLocation": "bottom",
 	"workbench.startupEditor": "newUntitledFile",
 	"go.enableCodeLens": {},
-	"hexeditor.columnWidth": 16,
+	"hexeditor.columnWidth": 8,
 	"hexeditor.showDecodedText": true,
 	"hexeditor.defaultEndianness": "little",
 	"hexeditor.inspectorType": "aside",
@@ -565,7 +564,11 @@
 		"wuli100": "linux",
 		"wuli38": "linux",
 		"wuli24": "linux",
-		"wuli53": "linux"
+		"wuli53": "linux",
+		"wuli149": "linux",
+		"wuli72": "linux",
+		"commander": "linux",
+		"local": "linux"
 	},
 	"terminal.integrated.defaultProfile.osx": "zsh",
 	"gnuGlobal.gtagsForceCpp": "Enabled",
@@ -573,7 +576,6 @@
 		"editor.defaultFormatter": "redhat.java"
 	},
 	"Lua.telemetry.enable": false,
-	"workbench.colorTheme": "Visual Studio Dark - C++",
 	"editor.stickyScroll.enabled": true,
 	"editor.inlayHints.enabled": "on",
 	"editor.inlayHints.padding": false,
@@ -599,7 +601,6 @@
 	"C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": false,
 	"C_Cpp.autocomplete": "disabled",
 	"C_Cpp.codeFolding": "disabled",
-	"C_Cpp.intelliSenseEngine": "disabled",
 	"vsicons.presets.jsOfficial": true,
 	"extensions.supportUntrustedWorkspaces": {
 		"byted-ide.dev-environment-manager": {
@@ -619,4 +620,26 @@
 	"terminal.external.linuxExec": "zsh",
 	"markdown.editor.drop.enabled": false,
 	"git.confirmSync": false,
+	"commentAnchors.epic.provideAutoCompletion": false,
+	"gitlens.graph.minimap.enabled": false,
+	"gitlens.graph.minimap.additionalTypes": [
+		"localBranches"
+	],
+	"cSpell.userWords": [
+		"explaination"
+	],
+	"workbench.colorTheme": "Visual Studio Light - C++",
+	"editor.fontSize": 13,
+	"diffEditor.ignoreTrimWhitespace": false,
+	"extensions.experimental.affinity": {
+		"asvetliakov.vscode-neovim": 1
+	},
+	"vscode-neovim.completionDelay": 1000,
+	"vscode-neovim.logLevel": "debug",
+	"vscode-neovim.logPath": "~/.local/log/vscode-nvim.log",
+	"vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
+	"vscode-neovim.neovimInitVimPaths.darwin": "/Users/leo/.config/nvim/init.lua",
+	"cmake.options.statusBarVisibility": "compact",
+	"redhat.telemetry.enabled": false,
 }
+
