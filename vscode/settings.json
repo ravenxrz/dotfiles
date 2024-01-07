@@ -440,7 +440,18 @@
 			"commands": [
 				"editor.action.outdentLines"
 			]
-		}
+		},
+		{
+			"before": [
+				"<leader>",
+				"f",
+				"w"
+			],
+			// need install https://marketplace.visualstudio.com/items?itemName=kylpo.vscode-find-in-files-with-selection extension
+			"commands": [
+				"extension.findInFilesWithSelection",
+			]
+		},
 	],
 	"vim.visualModeKeyBindingsNonRecursive": [
 		{
@@ -642,4 +653,3 @@
 	"cmake.options.statusBarVisibility": "compact",
 	"redhat.telemetry.enabled": false,
 }
-
