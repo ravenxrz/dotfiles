@@ -19,7 +19,7 @@ return {
 
   -- Set colorscheme to use
   -- colorscheme = "astrodark",
-  colorscheme = "everforest",
+  colorscheme = "visual_studio_code",
 
   -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
   diagnostics = {
