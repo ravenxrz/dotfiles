@@ -639,7 +639,6 @@
 	"cSpell.userWords": [
 		"explaination"
 	],
-	"workbench.colorTheme": "Visual Studio Light - C++",
 	"editor.fontSize": 13,
 	"diffEditor.ignoreTrimWhitespace": false,
 	"extensions.experimental.affinity": {
@@ -652,4 +651,8 @@
 	"vscode-neovim.neovimInitVimPaths.darwin": "/Users/leo/.config/nvim/init.lua",
 	"cmake.options.statusBarVisibility": "compact",
 	"redhat.telemetry.enabled": false,
+	"explorer.autoReveal": true,
+	"search.followSymlinks": false,
+	"cmake.showOptionsMovedNotification": false,
+	"terminal.integrated.gpuAcceleration": "off",
 }
