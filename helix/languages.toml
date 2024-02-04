@@ -1,0 +1,23 @@
+# LSP:
+# clangd
+# pylsp: pip3 install python-lsp-server
+# cmake-lang: pip3 install cmake-language-server==0.1.4
+# bash: npm i -g bash-language-server
+# all lsp: https://github.com/helix-editor/helix/wiki/How-to-install-the-default-language-servers
+
+[[language]]
+name = "python"
+language-servers = ["pylsp"]
+auto-format = false
+
+[language-server.pylsp.config.pylsp.plugins]
+flake8 = {enabled = true, ignore = ["E501"]}
+autopep8 = {enabled = false}
+mccabe = {enabled = false}
+pycodestyle = {enabled = false}
+pyflakes = {enabled = false}
+pylint = {enabled = false}
+yapf = {enabled = false}
+ruff = { enabled = false}
+
+
