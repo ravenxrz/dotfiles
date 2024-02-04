@@ -43,6 +43,8 @@
     ~/.zsh:
     ~/.zshrc:
     ~/.shell_local_before:
+    ~/.config/helix/config.toml: helix/config.toml
+    ~/.config/helix/languages.toml: helix/languages.toml
     ~/Library/Preferences/clangd: clangd  # macos
     ~/.config/clangd: clangd  # macos
     # ~/.zfunctions/prompt_spaceship_setup: zsh/prompt/spaceship-prompt/spaceship.zsh
