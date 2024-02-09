@@ -1,10 +1,12 @@
+# light: modus_operandi_tinted
+# dark: dracula
 theme = "dracula"
 
 [editor]
 true-color = true
 color-modes = true
 auto-save	= true
-cursorline = true # 光标 行高亮
+cursorline = true
 idle-timeout = 40
 bufferline = "always"
 
@@ -18,6 +20,7 @@ enable = true
 display-messages = true
 auto-signature-help	= true
 display-inlay-hints	= true
+inline-diagnostics = { "other-lines" = [], "cursor-line" = [], "max-diagnostics" = 0}
 
 [editor.indent-guides]
 render = true
@@ -35,10 +38,15 @@ select = "underline"
 [keys.normal]
 C-s = ":write-all"
 C-q = ":write-quit-all!"
+C-r = "redo"
 K = "hover"
 A-k = "keep_selections"
+A-s = "save_selection"
 g = { c = { c = "toggle_comments"}}
+S = ["goto_first_nonwhitespace", "extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
 # C-c = "collapse_selection"
+# C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
+
 
 # Some nice Helix stuff
 A-h = "select_prev_sibling"
@@ -50,10 +58,9 @@ L = "goto_line_end"
 G = "goto_file_end"
 "%" = "match_brackets"
 V = ["select_mode", "extend_to_line_bounds"]
-# C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
 x = "delete_selection"
-# p = ["paste_clipboard_after", "collapse_selection"]
-# P = ["paste_clipboard_before", "collapse_selection"]
+p = ["paste_clipboard_after", "collapse_selection"]
+P = ["paste_clipboard_before", "collapse_selection"]
 
 # Uncanny valley stuff, this makes w and b behave as they do Vim
 w = ["move_next_word_start", "move_char_right", "collapse_selection"]
@@ -149,3 +156,4 @@ g = { c = "toggle_comments"}
 
 [keys.normal.space]
 d = ":buffer-close"
+D = "diagnostics_picker"
