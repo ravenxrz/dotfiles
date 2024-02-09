@@ -20,7 +20,6 @@ enable = true
 display-messages = true
 auto-signature-help	= true
 display-inlay-hints	= true
-inline-diagnostics = { "other-lines" = [], "cursor-line" = [], "max-diagnostics" = 0}
 
 [editor.indent-guides]
 render = true
@@ -157,3 +156,5 @@ g = { c = "toggle_comments"}
 [keys.normal.space]
 d = ":buffer-close"
 D = "diagnostics_picker"
+e = [":new", ":insert-output lf-pick", "split_selection_on_newline", "goto_file", "goto_last_modification", "goto_last_modified_file", ":buffer-close!", ":theme nord", ":theme onelight"]
+
