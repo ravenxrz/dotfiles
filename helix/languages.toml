@@ -1,10 +1,10 @@
 # LSP:
 # clangd
-# pylsp: pip3 install python-lsp-server
 # cmake-lang: pip3 install cmake-language-server==0.1.4
 # bash: npm i -g bash-language-server
 # all lsp: https://github.com/helix-editor/helix/wiki/How-to-install-the-default-language-servers
 
+# pylsp: pip3 install python-lsp-server
 [[language]]
 name = "python"
 language-servers = ["pylsp"]
@@ -22,3 +22,8 @@ ruff = { enabled = false}
 [[languages]]
 name = "go"
 # formatter = { command = "goimports" }
+
+# cargo install taplo-cli --locked --features lsp
+[[language]]
+name = "toml"
+formatter = { command = "taplo", args = ["fmt", "-"] }
