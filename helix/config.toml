@@ -1,6 +1,6 @@
-# light: modus_operandi_tinted
+# light: modus_operandi_tinted | onelight
 # dark: dracula
-theme = "dracula"
+theme = "modus_operandi_tinted"
 
 [editor]
 true-color = true
@@ -9,6 +9,7 @@ auto-save	= true
 cursorline = true
 idle-timeout = 40
 bufferline = "always"
+auto-format	= false
 
 [editor.statusline]
 left = ["mode", "spinner", "version-control","file-name"]
@@ -45,7 +46,8 @@ g = { c = { c = "toggle_comments"}}
 S = ["goto_first_nonwhitespace", "extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
 # C-c = "collapse_selection"
 # C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
-
+"]" = { f = [ "goto_next_function", "match_brackets"]}
+"[" = { f = [ "goto_prev_function", "match_brackets"]}
 
 # Some nice Helix stuff
 A-h = "select_prev_sibling"
@@ -156,5 +158,7 @@ g = { c = "toggle_comments"}
 [keys.normal.space]
 d = ":buffer-close"
 D = "diagnostics_picker"
-e = [":new", ":insert-output lf-pick", "split_selection_on_newline", "goto_file", "goto_last_modification", "goto_last_modified_file", ":buffer-close!", ":theme nord", ":theme onelight"]
+e = [":new", ":insert-output lf-pick", "split_selection_on_newline", "goto_file", "goto_last_modification", "goto_last_modified_file", ":buffer-close!", ":theme nord", ":theme modus_operandi_tinted ", ":redraw"]
+q = ":quit"
+l = { f = ":format"}
 
