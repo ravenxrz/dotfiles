@@ -10,14 +10,14 @@ name = "python"
 language-servers = ["pylsp"]
 
 [language-server.pylsp.config.pylsp.plugins]
-flake8 = {enabled = true, ignore = ["E501"]}
-autopep8 = {enabled = false}
-mccabe = {enabled = false}
-pycodestyle = {enabled = false}
-pyflakes = {enabled = false}
-pylint = {enabled = false}
-yapf = {enabled = false}
-ruff = { enabled = false}
+flake8 = { enabled = true, ignore = ["E501"] }
+autopep8 = { enabled = false }
+mccabe = { enabled = false }
+pycodestyle = { enabled = false }
+pyflakes = { enabled = false }
+pylint = { enabled = false }
+yapf = { enabled = false }
+ruff = { enabled = false }
 
 [[languages]]
 name = "go"

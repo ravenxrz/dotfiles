@@ -5,22 +5,29 @@ theme = "modus_operandi_tinted"
 [editor]
 true-color = true
 color-modes = true
-auto-save	= true
+auto-save = true
 cursorline = true
 idle-timeout = 40
 bufferline = "always"
-auto-format	= false
+auto-format = false
 
 [editor.statusline]
-left = ["mode", "spinner", "version-control","file-name"]
+left = ["mode", "spinner", "version-control", "file-name"]
 # center = ["file-name"]
-right = ["diagnostics", "file-type", "position","total-line-numbers", "file-encoding", "file-line-ending"]
+right = [
+  "diagnostics",
+  "file-type",
+  "position",
+  "total-line-numbers",
+  "file-encoding",
+  "file-line-ending",
+]
 
 [editor.lsp]
 enable = true
 display-messages = true
-auto-signature-help	= true
-display-inlay-hints	= true
+auto-signature-help = true
+display-inlay-hints = true
 
 [editor.indent-guides]
 render = true
@@ -42,16 +49,22 @@ C-r = "redo"
 K = "hover"
 A-k = "keep_selections"
 A-s = "save_selection"
-g = { c = { c = "toggle_comments"}}
-S = ["goto_first_nonwhitespace", "extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
+g = { c = { c = "toggle_comments" } }
+S = [
+  "goto_first_nonwhitespace",
+  "extend_to_line_end",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+  "insert_mode",
+]
 C-h = "jump_view_left"
 C-j = "jump_view_down"
 C-k = "jump_view_up"
 C-l = "jump_view_right"
 # C-c = "collapse_selection"
 # C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
-"]" = { f = [ "goto_next_function", "match_brackets"]}
-"[" = { f = [ "goto_prev_function", "match_brackets"]}
+"]" = { f = ["goto_next_function", "match_brackets"] }
+"[" = { f = ["goto_prev_function", "match_brackets"] }
 
 # Some nice Helix stuff
 A-h = "select_prev_sibling"
@@ -83,37 +96,164 @@ u = ["undo", "collapse_selection"]
 esc = ["collapse_selection", "keep_primary_selection", ":update"]
 
 # Search for word under cursor
-"*" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_next"]
-"#" = ["move_char_right", "move_prev_word_start", "move_next_word_end", "search_selection", "search_prev"]
+"*" = [
+  "move_char_right",
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "search_next",
+]
+"#" = [
+  "move_char_right",
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "search_prev",
+]
 
 # Extend and select commands that expect a manual input can't be chained
 # I've kept d[X] commands here because it's better to at least have the stuff you want to delete
 # selected so that it's just a keystroke away to delete
 [keys.normal.d]
-d = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "delete_selection"]
+d = [
+  "extend_to_line_bounds",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+]
 # t = ["extend_till_char"]
 # s = ["surround_delete"]
 # i = ["select_textobject_inner"]
 # a = ["select_textobject_around"]
-j = ["select_mode", "extend_to_line_bounds", "extend_line_below", "yank_main_selection_to_clipboard", "delete_selection", "normal_mode"]
-k = ["select_mode", "extend_to_line_bounds", "extend_line_above", "yank_main_selection_to_clipboard", "delete_selection", "normal_mode"]
-G = ["select_mode", "extend_to_line_bounds", "goto_last_line", "extend_to_line_bounds", "yank_main_selection_to_clipboard", "delete_selection", "normal_mode"]
-w = ["move_next_word_start", "yank_main_selection_to_clipboard", "delete_selection"]
-W = ["move_next_long_word_start", "yank_main_selection_to_clipboard", "delete_selection"]
-g = { g = ["select_mode", "extend_to_line_bounds", "goto_file_start", "extend_to_line_bounds", "yank_main_selection_to_clipboard", "delete_selection", "normal_mode"] }
-down = ["select_mode", "extend_to_line_bounds", "extend_line_below", "yank_main_selection_to_clipboard", "delete_selection", "normal_mode"]
-up = ["select_mode", "extend_to_line_bounds", "extend_line_above", "yank_main_selection_to_clipboard", "delete_selection", "normal_mode"]
+j = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_below",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+  "normal_mode",
+]
+k = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_above",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+  "normal_mode",
+]
+G = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "goto_last_line",
+  "extend_to_line_bounds",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+  "normal_mode",
+]
+w = [
+  "move_next_word_start",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+]
+W = [
+  "move_next_long_word_start",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+]
+g = { g = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "goto_file_start",
+  "extend_to_line_bounds",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+  "normal_mode",
+] }
+down = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_below",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+  "normal_mode",
+]
+up = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_above",
+  "yank_main_selection_to_clipboard",
+  "delete_selection",
+  "normal_mode",
+]
 
 [keys.normal.y]
-y = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "normal_mode", "collapse_selection"]
-j = ["select_mode", "extend_to_line_bounds", "extend_line_below", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
-k = ["select_mode", "extend_to_line_bounds", "extend_line_above", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
-G = ["select_mode", "extend_to_line_bounds", "goto_last_line", "extend_to_line_bounds", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
-w = ["move_next_word_start", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
-W = ["move_next_long_word_start", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
-g = { g = ["select_mode", "extend_to_line_bounds", "goto_file_start", "extend_to_line_bounds", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"] }
-down = ["select_mode", "extend_to_line_bounds", "extend_line_below", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
-up = ["select_mode", "extend_to_line_bounds", "extend_line_above", "yank_main_selection_to_clipboard", "collapse_selection", "normal_mode"]
+y = [
+  "extend_to_line_bounds",
+  "yank_main_selection_to_clipboard",
+  "normal_mode",
+  "collapse_selection",
+]
+j = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_below",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+]
+k = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_above",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+]
+G = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "goto_last_line",
+  "extend_to_line_bounds",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+]
+w = [
+  "move_next_word_start",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+]
+W = [
+  "move_next_long_word_start",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+]
+g = { g = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "goto_file_start",
+  "extend_to_line_bounds",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+] }
+down = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_below",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+]
+up = [
+  "select_mode",
+  "extend_to_line_bounds",
+  "extend_line_above",
+  "yank_main_selection_to_clipboard",
+  "collapse_selection",
+  "normal_mode",
+]
 
 [keys.insert]
 # Escape the madness! No more fighting with the cursor! Or with multiple cursors!
@@ -130,7 +270,7 @@ G = "goto_file_end"
 D = ["extend_to_line_bounds", "delete_selection", "normal_mode"]
 C = ["goto_line_start", "extend_to_line_bounds", "change_selection"]
 "%" = "match_brackets"
-S = "surround_add" # Basically 99% of what I use vim-surround for
+S = "surround_add"                                                   # Basically 99% of what I use vim-surround for
 u = ["switch_to_lowercase", "collapse_selection", "normal_mode"]
 U = ["switch_to_uppercase", "collapse_selection", "normal_mode"]
 
@@ -139,7 +279,10 @@ i = "select_textobject_inner"
 a = "select_textobject_around"
 
 # Some extra binds to allow us to insert/append in select mode because it's nice with multiple cursors
-tab = ["insert_mode", "collapse_selection"] # tab is read by most terminal editors as "C-i"
+tab = [
+  "insert_mode",
+  "collapse_selection",
+] # tab is read by most terminal editors as "C-i"
 C-a = ["append_mode", "collapse_selection"]
 
 # Make selecting lines in visual mode behave sensibly
@@ -149,20 +292,41 @@ j = ["extend_line_down", "extend_to_line_bounds"]
 # Clipboards over registers ye ye
 d = ["yank_main_selection_to_clipboard", "delete_selection"]
 x = ["yank_main_selection_to_clipboard", "delete_selection"]
-y = ["yank_main_selection_to_clipboard", "normal_mode", "flip_selections", "collapse_selection"]
-Y = ["extend_to_line_bounds", "yank_main_selection_to_clipboard", "goto_line_start", "collapse_selection", "normal_mode"]
+y = [
+  "yank_main_selection_to_clipboard",
+  "normal_mode",
+  "flip_selections",
+  "collapse_selection",
+]
+Y = [
+  "extend_to_line_bounds",
+  "yank_main_selection_to_clipboard",
+  "goto_line_start",
+  "collapse_selection",
+  "normal_mode",
+]
 p = "replace_selections_with_clipboard" # No life without this
 P = "paste_clipboard_before"
 
 
 # Escape the madness! No more fighting with the cursor! Or with multiple cursors!
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode", ":update"]
-g = { c = "toggle_comments"}
+g = { c = "toggle_comments" }
 
 [keys.normal.space]
 d = ":buffer-close"
 D = "diagnostics_picker"
-e = [":new", ":insert-output lf-pick", "split_selection_on_newline", "goto_file", "goto_last_modification", "goto_last_modified_file", ":buffer-close!", ":theme nord", ":theme modus_operandi_tinted ", ":redraw"]
+e = [
+  ":new",
+  ":insert-output lf-pick",
+  "split_selection_on_newline",
+  "goto_file",
+  "goto_last_modification",
+  "goto_last_modified_file",
+  ":buffer-close!",
+  ":theme nord",
+  ":theme modus_operandi_tinted ",
+  ":redraw",
+]
 q = ":quit"
-l = { f = ":format"}
-
+l = { f = ":format" }
