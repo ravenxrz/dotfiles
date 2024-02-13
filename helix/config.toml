@@ -63,8 +63,22 @@ C-k = "jump_view_up"
 C-l = "jump_view_right"
 # C-c = "collapse_selection"
 # C = ["extend_to_line_end", "yank_main_selection_to_clipboard", "delete_selection", "insert_mode"]
-"]" = { f = ["goto_next_function", "match_brackets"] }
-"[" = { f = ["goto_prev_function", "match_brackets"] }
+"]" = { f = [
+  "goto_next_function",
+  "match_brackets",
+  "goto_line_start",
+], t = [
+  "goto_next_class",
+  "match_brackets",
+  "goto_line_start",
+] }
+"[" = { f = [
+  "goto_prev_function",
+  "collapse_selection",
+], t = [
+  "goto_prev_class",
+  "goto_line_start",
+] }
 
 # Some nice Helix stuff
 A-h = "select_prev_sibling"
