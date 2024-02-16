@@ -4,13 +4,24 @@
 # bash: npm i -g bash-language-server
 # all lsp: https://github.com/helix-editor/helix/wiki/How-to-install-the-default-language-servers
 
+# I dont't those grammer
+use-grammars = { except = ["gemini", "wren"] }
+
 # pylsp: pip3 install python-lsp-server
 [[language]]
 name = "python"
 language-servers = ["pylsp"]
 
+[language.formatter]
+command = "black"
+args = [
+  "-",                # stdin
+  "--quiet",
+  "--line-length=79",
+]
+
 [language-server.pylsp.config.pylsp.plugins]
-flake8 = { enabled = true, ignore = ["E501"] }
+flake8 = { enabled = true, ignore = ["E501", "E111"] }
 autopep8 = { enabled = false }
 mccabe = { enabled = false }
 pycodestyle = { enabled = false }
