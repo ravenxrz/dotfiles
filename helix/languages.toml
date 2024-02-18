@@ -21,7 +21,7 @@ args = [
 ]
 
 [language-server.pylsp.config.pylsp.plugins]
-flake8 = { enabled = true, ignore = ["E501", "E111"] }
+flake8 = { enabled = true, ignore = ["E501", "E111", "E231", "E302", "E211", "E114", "E265"] }
 autopep8 = { enabled = false }
 mccabe = { enabled = false }
 pycodestyle = { enabled = false }
