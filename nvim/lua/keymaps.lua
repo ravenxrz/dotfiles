@@ -57,5 +57,17 @@ keymap("n", "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>", opts)
 keymap("n", "]g", "<cmd>Gitsigns next_hunk<cr>", opts)
 keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
 
+-- Telescope
+keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
+keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
+keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
+keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files <cr>", opts)
+keymap("n", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<cr>", opts)
+keymap("v", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<cr>", opts)
+keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
+keymap("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", opts)
+keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
+keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
+
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
