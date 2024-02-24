@@ -1,12 +1,5 @@
 return {
   {
-    "miikanissi/modus-themes.nvim",
-    priority = 1000,
-    config = function()
-      vim.cmd([[colorscheme modus_operandi]])
-    end
-  },
-  {
     "nvim-tree/nvim-tree.lua",
     lazy = false,
     config = function()

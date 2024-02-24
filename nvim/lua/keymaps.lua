@@ -52,6 +52,7 @@ keymap("n", "<leader>d", "<cmd>bd<cr>", opts)
 keymap("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", opts)
 keymap("n", "<leader>gr", "<cmd>Gitsigns reset_hunk<cr>", opts)
 keymap("n", "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>", opts)
+keymap("n", "<leader>gl", "<cmd>Gitsigns blame_line<cr>", opts)
 keymap("n", "]g", "<cmd>Gitsigns next_hunk<cr>", opts)
 keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
 
