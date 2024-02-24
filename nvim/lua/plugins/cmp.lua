@@ -13,6 +13,7 @@ return {
     dependencies = {
       'hrsh7th/cmp-nvim-lsp',
       'neovim/nvim-lspconfig',
+      "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
       local lspconfig = require('lspconfig')
@@ -67,6 +68,8 @@ return {
         }),
         sources = {
           { name = 'nvim_lsp' },
+          { name = 'nvim_lsp_signature_help' },
+          { name = 'luasnip' },
         },
       }
     end
