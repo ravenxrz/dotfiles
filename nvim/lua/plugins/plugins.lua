@@ -281,10 +281,33 @@ return {
         },
         sections = {
           lualine_a = { 'mode' },
-          lualine_b = { 'branch', 'diff', 'diagnostics' },
-          lualine_c = { 'filename' },
-          lualine_x = { 'encoding', 'fileformat', 'filetype' },
-          lualine_y = { 'progress' },
+          lualine_b = { 'branch' },
+          lualine_c = {
+            { 'filename',
+              path = 1, -- 0: Just the filename
+              -- 1: Relative path
+              -- 2: Absolute path
+              -- 3: Absolute path, with tilde as the home directory
+              -- 4: Filename and parent dir, with tilde as the home directory
+            },
+          },
+          lualine_x = {
+            {
+              "navic",
+              -- Component specific options
+              color_correction = nil, -- Can be nil, "static" or "dynamic". This option is useful only when you have highlights enabled.
+              -- Many colorschemes don't define same backgroud for nvim-navic as their lualine statusline backgroud.
+              -- Setting it to "static" will perform a adjustment once when the component is being setup. This should
+              --   be enough when the lualine section isn't changing colors based on the mode.
+              -- Setting it to "dynamic" will keep updating the highlights according to the current modes colors for
+              --   the current section.
+              navic_opts = nil -- lua table with same format as setup's option. All options except "lsp" options take effect when set here.
+            },
+            --[[ 'diff', ]]
+            'diagnostics',
+            'encoding', 'fileformat' },
+          lualine_y = {
+          },
           lualine_z = { 'location' }
         },
         inactive_sections = {
@@ -296,15 +319,7 @@ return {
           lualine_z = {}
         },
         tabline = {},
-        winbar = {
-          lualine_c = {
-            {
-              "navic",
-              color_correction = nil,
-              navic_opts = nil
-            }
-          }
-        },
+        winbar = {},
         inactive_winbar = {},
         extensions = {}
       }
@@ -356,5 +371,38 @@ return {
         return text
       end,
     }
+  },
+  {
+    "okuuva/auto-save.nvim",
+    cmd = "ASToggle",                         -- optional for lazy loading on command
+    event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
+    config = function()
+      require("auto-save").setup {
+        enabled = true,  -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
+        execution_message = {
+          enabled = false,
+          message = function() -- message to print on save
+            return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
+          end,
+          dim = 0.18,                              -- dim the color of `message`
+          cleaning_interval = 1250,                -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
+        },
+        trigger_events = {                         -- See :h events
+          immediate_save = { "BufLeave", "FocusLost" }, -- vim events that trigger an immediate save
+          defer_save = { "InsertLeave", "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
+          cancel_defered_save = { "InsertEnter" }, -- vim events that cancel a pending deferred save
+        },
+        -- function that takes the buffer handle and determines whether to save the current buffer or not
+        -- return true: if buffer is ok to be saved
+        -- return false: if it's not ok to be saved
+        -- if set to `nil` then no specific condition is applied
+        condition = nil,
+        write_all_buffers = false, -- write all buffers when the current one meets `condition`
+        noautocmd = false,   -- do not execute autocmds when saving
+        debounce_delay = 1000, -- delay after which a pending save is executed
+        -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
+        debug = false,
+      }
+    end
   }
 }
