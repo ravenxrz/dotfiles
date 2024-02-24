@@ -39,11 +39,12 @@ keymap("v", "p", '"_dP', opts)
 
 -- Nvim tree
 keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
-keymap("n", "<leader>o", "<cmd>NvimTreeFocus<cr>", opts)
+keymap("n", "<leader>o", "<cmd>NvimTreeFindFile<cr>", opts)
 
 -- Buffer
-keymap("n", "E", "<cmd>bn<cr>", opts)
-keymap("n", "R", "<cmd>bp<cr>", opts)
+keymap("n", "E", "<cmd>BufferLineCyclePrev<cr>", opts)
+keymap("n", "R", "<cmd>BufferLineCycleNext<cr>", opts)
+keymap("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", opts)
 keymap("n", "<leader>d", "<cmd>bd<cr>", opts)
 
 -- Gitsigns
@@ -59,6 +60,7 @@ keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
+keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
 keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files <cr>", opts)
 keymap("n", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<cr>", opts)
 keymap("v", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<cr>", opts)
@@ -66,6 +68,7 @@ keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_ar
 keymap("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", opts)
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
+keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
 -- outline
 keymap("n", "<leader>lo", "<cmd>Outline<cr>", opts)
