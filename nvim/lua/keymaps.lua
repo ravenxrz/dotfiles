@@ -1,5 +1,3 @@
-local utils = require("utils")
-
 local opts = { noremap = true, silent = true }
 
 local term_opts = { silent = true }
@@ -71,6 +69,9 @@ keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 
 -- outline
 keymap("n", "<leader>lo", "<cmd>Outline<cr>", opts)
+
+-- lazygit
+keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
