@@ -69,5 +69,8 @@ keymap("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", opts)
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 
+-- outline
+keymap("n", "<leader>lo", "<cmd>Outline<cr>", opts)
+
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
