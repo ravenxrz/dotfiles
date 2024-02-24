@@ -31,15 +31,30 @@ keymap("v", ">", ">gv", opts)
 -- no highlight
 keymap("n", "<leader>h", ":nohl<cr>", opts)
 
--- save buffer
-keymap("n", "<leader>w", ":w<cr>", opts)
+-- save all buffer
+keymap("n", "<leader>w", "<cmd>wa<cr>", opts)
 -- exit cur window
-keymap("n", "<leader>q", ":q<cr>", opts)
+keymap("n", "<leader>q", "<cmd>q<cr>", opts)
+-- exit all
+keymap("n", "<C-q>", "<cmd>wqa!<cr>", opts)
 
--- Code --
+-- p does not replace reigster
+keymap("v", "p", '"_dP', opts)
+
 -- Nvim tree
 keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
 keymap("n", "<leader>o", "<cmd>NvimTreeFocus<cr>", opts)
+
+-- Buffer
+keymap("n", "E", "<cmd>bn<cr>", opts)
+keymap("n", "R", "<cmd>bp<cr>", opts)
+keymap("n", "<leader>d", "<cmd>bd<cr>", opts)
+
+-- Gitsigns
+keymap("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", opts)
+keymap("n", "<leader>gr", "<cmd>Gitsigns reset_hunk<cr>", opts)
+keymap("n", "]g", "<cmd>Gitsigns next_hunk<cr>", opts)
+keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)

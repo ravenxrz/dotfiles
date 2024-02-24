@@ -43,7 +43,7 @@ return {
     vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
     vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
     vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-    vim.keymap.set('n', '<c-q>', vim.diagnostic.setloclist)
+    -- vim.keymap.set('n', '<c-q>', vim.diagnostic.setloclist)
     -- vim.keymap.set("n", "<leader>lf", "vim.lsp.buf.formatting")
     -- vim.keymap.set('v', '<leader>lf', "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>")
 
