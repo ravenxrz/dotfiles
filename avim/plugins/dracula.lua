@@ -1,0 +1,3 @@
+return {
+  "Mofiqul/dracula.nvim"
+}
