@@ -16,7 +16,6 @@ return {
       "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     config = function()
-      local lspconfig = require('lspconfig')
       local luasnip = require 'luasnip'
       local cmp = require 'cmp'
       local select_next = cmp.mapping(function(fallback)

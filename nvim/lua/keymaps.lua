@@ -74,5 +74,8 @@ keymap("n", "<leader>lo", "<cmd>Outline<cr>", opts)
 -- lazygit
 keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
+-- spectre config
+keymap("n", "<leader>F", "<cmd>lua require('spectre').open_file_search({select_word=true})<cr>", opts)
+
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
