@@ -45,7 +45,8 @@ keymap("n", "<leader>o", "<cmd>NvimTreeFindFile<cr>", opts)
 keymap("n", "E", "<cmd>BufferLineCyclePrev<cr>", opts)
 keymap("n", "R", "<cmd>BufferLineCycleNext<cr>", opts)
 keymap("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", opts)
-keymap("n", "<leader>d", "<cmd>bd<cr>", opts)
+-- buffer delete
+keymap("n", "<leader>d", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
 
 -- Gitsigns
 keymap("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", opts)
