@@ -3,18 +3,43 @@ return {
     "nvim-tree/nvim-tree.lua",
     lazy = false,
     config = function()
+      local function custom_keymaps(bufnr)
+        local api = require "nvim-tree.api"
+        local function opts(desc)
+          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+        -- default mappings
+        -- api.config.mappings.default_on_attach(bufnr)
+        -- custom mappings
+        vim.keymap.set('n', '.', api.tree.change_root_to_node, opts("CD"))
+        vim.keymap.set('n', '<BS>', api.tree.change_root_to_parent, opts('Up'))
+        vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts("Close Dir"))
+        vim.keymap.set('n', '<C-h>', api.node.open.horizontal, opts("HSplit"))
+        vim.keymap.set('n', 'l', api.node.open.edit, opts("Edit"))
+        vim.keymap.set('n', 'o', api.node.open.edit, opts("Edit"))
+        vim.keymap.set('n', '<CR>', api.node.open.edit, opts("Edit"))
+      end
+
       require("nvim-tree").setup({
+        on_attach = custom_keymaps,
         sort = {
           sorter = "case_sensitive",
         },
         view = {
           width = 30,
+          side = "left",
         },
         renderer = {
           group_empty = true,
         },
         filters = {
           dotfiles = true,
+        },
+        diagnostics = {
+          enable = false,
+        },
+        git = {
+          enable = false,
         },
       })
     end
@@ -146,7 +171,13 @@ return {
     "kdheepak/lazygit.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
-    }
+    },
+    config = function()
+      vim.cmd([[
+        let g:lazygit_floating_window_scaling_factor = 1.0
+    ]])
+    end
+
   },
   {
     'windwp/nvim-autopairs',
@@ -255,6 +286,7 @@ return {
   },
   {
     'nvim-lualine/lualine.nvim',
+    enabled = false,
     dependencies = {
       'nvim-tree/nvim-web-devicons',
       'arkav/lualine-lsp-progress',
@@ -328,6 +360,7 @@ return {
   },
   {
     "SmiteshP/nvim-navic",
+    enabled = false,
     opts = {
       icons = {
         File          = "󰈙 ",
