@@ -38,8 +38,8 @@ keymap("n", "<C-q>", "<cmd>wqa!<cr>", opts)
 keymap("v", "p", '"_dP', opts)
 
 -- Nvim tree
-keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
-keymap("n", "<leader>o", "<cmd>NvimTreeFindFile<cr>", opts)
+keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", opts)
+keymap("n", "<leader>o", "<cmd>Neotree reveal<cr>", opts)
 
 -- Buffer
 keymap("n", "E", "<cmd>BufferLineCyclePrev<cr>", opts)

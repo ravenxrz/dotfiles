@@ -1,45 +1,69 @@
 return {
   {
-    "nvim-tree/nvim-tree.lua",
-    lazy = false,
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
     config = function()
-      local function custom_keymaps(bufnr)
-        local api = require "nvim-tree.api"
-        local function opts(desc)
-          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-        end
-        -- default mappings
-        -- api.config.mappings.default_on_attach(bufnr)
-        -- custom mappings
-        vim.keymap.set('n', '.', api.tree.change_root_to_node, opts("CD"))
-        vim.keymap.set('n', '<BS>', api.tree.change_root_to_parent, opts('Up'))
-        vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts("Close Dir"))
-        vim.keymap.set('n', '<C-h>', api.node.open.horizontal, opts("HSplit"))
-        vim.keymap.set('n', 'l', api.node.open.edit, opts("Edit"))
-        vim.keymap.set('n', 'o', api.node.open.edit, opts("Edit"))
-        vim.keymap.set('n', '<CR>', api.node.open.edit, opts("Edit"))
-      end
-
-      require("nvim-tree").setup({
-        on_attach = custom_keymaps,
-        sort = {
-          sorter = "case_sensitive",
-        },
-        view = {
-          width = 30,
-          side = "left",
-        },
-        renderer = {
-          group_empty = true,
-        },
-        filters = {
-          dotfiles = true,
-        },
-        diagnostics = {
-          enable = false,
-        },
-        git = {
-          enable = false,
+      require("neo-tree").setup({
+        close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
+        enable_git_status = false,
+        enable_diagnostics = false,
+        enable_normal_mode_for_inputs = false,                             -- Enable normal mode for input dialogs.
+        open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
+        sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
+        window = {
+          position = "left",
+          width = 40,
+          mapping_options = {
+            noremap = true,
+            nowait = true,
+          },
+          mappings = {
+            ["<cr>"] = "open",
+            ["o"] = "open",
+            ["l"] = "open",
+            ["<esc>"] = "cancel", -- close preview or floating neo-tree window
+            -- Read `# Preview Mode` for more information
+            ["<C-h>"] = "open_split",
+            ["<C-v>"] = "open_vsplit",
+            ["h"] = "close_node",
+            -- ['C'] = 'close_all_subnodes',
+            ["z"] = "close_all_nodes",
+            --["Z"] = "expand_all_nodes",
+            ["a"] = {
+              "add",
+              -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
+              -- some commands may take optional config options, see `:h neo-tree-mappings` for details
+              config = {
+                show_path = "none" -- "none", "relative", "absolute"
+              }
+            },
+            ["A"] = "add_directory", -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
+            ["d"] = "delete",
+            ["r"] = "rename",
+            ["y"] = "copy_to_clipboard",
+            ["x"] = "cut_to_clipboard",
+            ["p"] = "paste_from_clipboard",
+            ["c"] = "copy", -- takes text input for destination, also accepts the optional config.show_path option like "add":
+            -- ["c"] = {
+            --  "copy",
+            --  config = {
+            --    show_path = "none" -- "none", "relative", "absolute"
+            --  }
+            --}
+            ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
+            ["q"] = "close_window",
+            ["R"] = "refresh",
+            ["g?"] = "show_help",
+            ["<"] = "prev_source",
+            [">"] = "next_source",
+            ["i"] = "show_file_details",
+          }
         },
       })
     end
