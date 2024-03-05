@@ -63,6 +63,8 @@ return {
             ["<"] = "prev_source",
             [">"] = "next_source",
             ["i"] = "show_file_details",
+            ["/"] = "noop",
+            ["?"] = "noop",
           }
         },
       })
