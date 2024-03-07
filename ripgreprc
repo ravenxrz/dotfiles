@@ -1,2 +1,2 @@
---glob=!.git
---glob=!third_party
+# Exclude directories.
+--glob=!{.git,.svn,node_modules,tealdeer,Trash,vendor,build,.cache,.tmp,third_party}
