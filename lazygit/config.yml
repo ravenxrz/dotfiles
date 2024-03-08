@@ -1,3 +1,4 @@
+# lazygit relies on "tig" and "delta", install them first
 gui:
     # stuff relating to the UI
     showIcons: true
@@ -70,9 +71,7 @@ git:
     parseEmoji: false
     diffContextSize: 3 # how many lines of context are shown around a change in diffs
 os:
-    editCommand: '' # see 'Configuring File Editing' section
-    editCommandTemplate: 'nvim {{filename}}'
-    openCommand: ''
+    open: 'nvim {{filename}}'
 refresher:
     refreshInterval: 10 # File/submodule refresh interval in seconds. Auto-refresh can be disabled via option 'git.autoRefresh'.
     fetchInterval: 60 # Re-fetch interval in seconds. Auto-fetch can be disabled via option 'git.autoFetch'.
@@ -212,3 +211,34 @@ keybinding:
         init: 'i'
         update: 'u'
         bulkMenu: 'b'
+customCommands:
+  - key: 'f'
+    command: "git difftool -y {{.SelectedLocalCommit.Sha}} -- {{.SelectedCommitFile.Name}}"
+    context: 'commitFiles'
+    description: 'Compare (difftool) with local copy'
+    subprocess: yes
+  - key: t
+    command: "tig {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}"
+    context: commitFiles
+    description: tig file (history of commits affecting file)
+    subprocess: yes
+  - key: t
+    command: "tig -- {{.SelectedFile.Name}}"
+    context: files
+    description: tig file (history of commits affecting file)
+    subprocess: yes
+  - key: b
+    command: "tig blame -- {{.SelectedFile.Name}}"
+    context: files
+    description: blame file at tree
+    subprocess: yes
+  - key: b
+    command: "tig blame {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}"
+    context: commitFiles
+    description: blame file at revision
+    subprocess: yes
+  - key: B
+    command: "tig blame -- {{.SelectedCommitFile.Name}}"
+    context: commitFiles
+    description: blame file at tree
+    subprocess: yes

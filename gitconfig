@@ -60,11 +60,6 @@
 [init]
 	defaultBranch = master
 
-[diff]
-	mnemonicPrefix = true
-	wordRegex = "[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"
-	compactionHeuristic = true
-
 [color]
 	ui = auto
 
@@ -80,10 +75,6 @@
 [pretty]
 	line = "%C(auto)%h %<|(60,trunc)%s %C(green)%ad%C(auto)%d"
 	detail = "%C(auto)%h %s%n  %C(yellow)by %C(blue)%an %C(magenta)<%ae> [%G?] %C(green)%ad%n %C(auto)%d%n"
-
-[merge]
-	defaultToUpstream = true
-	tool = vimdiff
 
 [pull]
 	ff = only
@@ -117,7 +108,6 @@
 [https]
   ; proxy = socks5://127.0.0.1:7890
 
-
 [core]
 	excludesfile = ~/.gitignore_global
 	quotepath = false
@@ -125,24 +115,44 @@
 	autocrlf = input
 	trustctime = false
 	attributesfile = ~/.attributes_global
-	editor = hx
+	editor = nvim
+  pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+    side-by-side = true
+
+[merge]
+    conflictstyle = diff3
+ 	  defaultToUpstream = true
+ 	  tool = nvimdiff
+
+[diff]
+    colorMoved = default
+    tool = nvimdiff
 
 # Allow local customizations in the .gitconfig_local file
 [include]
 	path = ~/.gitconfig_local
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[diff "text"]
-	textconv = cat
+
 [lfs]
 	concurrenttransfers = 32
 	fetchrecentrefsdays = 0
 	pruneoffsetdays = 0
+
 [rebase]
 	backend = apply
+
 [protocol]
 	version = 1
 
