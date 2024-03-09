@@ -45,6 +45,7 @@ keymap("n", "<leader>o", "<cmd>Neotree reveal<cr>", opts)
 keymap("n", "E", "<cmd>BufferLineCyclePrev<cr>", opts)
 keymap("n", "R", "<cmd>BufferLineCycleNext<cr>", opts)
 keymap("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", opts)
+keymap("n", "<leader>bb", "<cmd>BufferLinePick<cr>", opts)
 -- buffer delete
 keymap("n", "<leader>d", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
 
@@ -76,14 +77,13 @@ keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 keymap("n", "<leader>lo", "<cmd>Outline<cr>", opts)
 
 -- lazygit
-keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
+-- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
 -- spectre config
 keymap("n", "<leader>F", "<cmd>lua require('spectre').open_file_search({select_word=true})<cr>", opts)
 
 -- session manager
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
-
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)

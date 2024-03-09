@@ -193,17 +193,61 @@ return {
       position = 'right',
     }
   },
+  -- {
+  --   "kdheepak/lazygit.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --   },
+  --   config = function()
+  --     vim.cmd([[
+  --       let g:lazygit_floating_window_scaling_factor = 1.0
+  --   ]])
+  --   end
+  -- },
   {
-    "kdheepak/lazygit.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
+    'akinsho/toggleterm.nvim',
+    version = "*",
     config = function()
-      vim.cmd([[
-        let g:lazygit_floating_window_scaling_factor = 1.0
-    ]])
+      require("toggleterm").setup({
+        size = 40,
+        open_mapping = [[<c-\>]],
+        hide_numbers = false,
+        shade_filetypes = {},
+        shade_terminals = true,
+        shading_factor = 3,
+        start_in_insert = true,
+        insert_mappings = true,
+        persist_size = true,
+        direction = "float",
+        close_on_exit = true,
+        shell = vim.o.shell,
+        float_opts = {
+          border = "curved",
+          winblend = 3,
+          border = 'single',
+          width = 300,
+          height = 100,
+          highlights = {
+            border = "Normal",
+            background = "Normal",
+          },
+        },
+      })
+      -- toggleterm
+      -- lazygit and tig
+      local Terminal = require('toggleterm.terminal').Terminal
+      local lazygit  = Terminal:new({
+        cmd = "lazygit",
+        direction = "float",
+      })
+      function _lazygit_toggle()
+        lazygit:toggle()
+      end
+      vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("n", "<leader>gt", "<cmd>TermExec cmd='tig %' go_back=1 direction=float<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("n", "<leader>gb", "<cmd>TermExec cmd='tig blame %' go_back=1 direction=float<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('t', '<c-q>', "<cmd>bd!<cr>", { noremap = true, silent = true })
     end
-
   },
   {
     'windwp/nvim-autopairs',
@@ -486,12 +530,8 @@ return {
       }
     end
   },
-  {
-    "famiu/bufdelete.nvim"
-  },
-  {
-    "simeji/winresizer"
-  },
+  { "famiu/bufdelete.nvim" },
+  { "simeji/winresizer" },
   {
     "Shatur/neovim-session-manager",
     config = function()
@@ -501,17 +541,17 @@ return {
         sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'), -- The directory where the session files will be saved.
         -- session_filename_to_dir = session_filename_to_dir,     -- Function that replaces symbols into separators and colons to transform filename into a session directory.
         -- dir_to_session_filename = dir_to_session_filename,     -- Function that replaces separators and colons into special symbols to transform session directory into a filename. Should use `vim.loop.cwd()` if the passed `dir` is `nil`.
-        autoload_mode = config.AutoloadMode.LastSession,       -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-        autosave_last_session = true,                          -- Automatically save last session on exit and on session switch.
-        autosave_ignore_not_normal = true,                     -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-        autosave_ignore_dirs = {},                             -- A list of directories where the session will not be autosaved.
-        autosave_ignore_filetypes = {                          -- All buffers of these file types will be closed before the session is saved.
+        autoload_mode = config.AutoloadMode.LastSession, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
+        autosave_last_session = true,                    -- Automatically save last session on exit and on session switch.
+        autosave_ignore_not_normal = true,               -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+        autosave_ignore_dirs = {},                       -- A list of directories where the session will not be autosaved.
+        autosave_ignore_filetypes = {                    -- All buffers of these file types will be closed before the session is saved.
           'gitcommit',
           'gitrebase',
         },
-        autosave_ignore_buftypes = {}, -- All buffers of these bufer types will be closed before the session is saved.
+        autosave_ignore_buftypes = {},    -- All buffers of these bufer types will be closed before the session is saved.
         autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-        max_path_length = 80,       -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+        max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
     end
   }

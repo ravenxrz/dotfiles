@@ -44,7 +44,7 @@ git:
         colorArg: always
         useConfig: false
         # need install git-delta. on macos, use brew install git-delta
-        pager: delta --dark --line-numbers --paging=never --side-by-side
+        pager: delta --light --line-numbers --paging=never --side-by-side
     commit:
         signOff: false
     merging:
@@ -212,11 +212,6 @@ keybinding:
         update: 'u'
         bulkMenu: 'b'
 customCommands:
-  - key: 'f'
-    command: "git difftool -y {{.SelectedLocalCommit.Sha}} -- {{.SelectedCommitFile.Name}}"
-    context: 'commitFiles'
-    description: 'Compare (difftool) with local copy'
-    subprocess: yes
   - key: t
     command: "tig {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}"
     context: commitFiles
@@ -233,12 +228,7 @@ customCommands:
     description: blame file at tree
     subprocess: yes
   - key: b
-    command: "tig blame {{.SelectedSubCommit.Sha}} -- {{.SelectedCommitFile.Name}}"
+    command: "tig blame  {{.SelectedCommitFile.Name}}"
     context: commitFiles
     description: blame file at revision
-    subprocess: yes
-  - key: B
-    command: "tig blame -- {{.SelectedCommitFile.Name}}"
-    context: commitFiles
-    description: blame file at tree
     subprocess: yes
