@@ -172,7 +172,7 @@ return {
       {
         "nvim-telescope/telescope-live-grep-args.nvim",
         version = "^1.0.0",
-      }
+      },
     },
     config = function()
       local telescope = require("telescope")
@@ -257,7 +257,7 @@ return {
     event = "InsertEnter",
     config = function()
       require('nvim-autopairs').setup({
-        disable_filetype = { "TelescopePrompt", "vim", "spectre_panel" },
+        disable_filetype = { "TelescopePrompt", "vim", "spectre_panel", "dap-repl" },
       })
       -- add auto pair when auto completion down
       local cmp_autopairs = require('nvim-autopairs.completion.cmp')
