@@ -223,7 +223,7 @@ return {
         shell = vim.o.shell,
         float_opts = {
           border = "curved",
-          winblend = 3,
+          winblend = 0,
           border = 'single',
           width = 300,
           height = 100,
@@ -243,9 +243,12 @@ return {
       function _lazygit_toggle()
         lazygit:toggle()
       end
+
       vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("n", "<leader>gt", "<cmd>TermExec cmd='tig %' go_back=1 direction=float<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("n", "<leader>gb", "<cmd>TermExec cmd='tig blame %' go_back=1 direction=float<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("n", "<leader>gt", "<cmd>TermExec cmd='tig %' go_back=1 direction=float<CR>",
+        { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("n", "<leader>gb", "<cmd>TermExec cmd='tig blame %' go_back=1 direction=float<CR>",
+        { noremap = true, silent = true })
       vim.api.nvim_set_keymap('t', '<c-q>', "<cmd>bd!<cr>", { noremap = true, silent = true })
     end
   },
@@ -554,5 +557,35 @@ return {
         max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
     end
+  },
+  { "s1n7ax/nvim-window-picker" },
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {
+      highlight = {
+        -- show a backdrop with hl FlashBackdrop
+        backdrop = true,
+        -- Highlight the search matches
+        matches = true,
+        -- extmark priority
+        priority = 5000,
+        groups = {
+          match = "FlashMatch",
+          current = "FlashCurrent",
+          backdrop = "FlashBackdrop",
+          label = "Cursor",
+        },
+      },
+    },
+    -- sFylua: ignore
+    keys = {
+      -- { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      -- { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      -- { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+      -- { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      -- { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+    },
   }
 }

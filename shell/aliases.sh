@@ -150,7 +150,7 @@ alias lazygit="lazygit -ucd ~/.config/lazygit/"
 
 myssh() {
    /usr/bin/kinit -kt ~/.ssh/keytab zhangxingrui.leo@BYTEDANCE.COM
-   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $1
+   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $@
 }
 
 mykinit() {

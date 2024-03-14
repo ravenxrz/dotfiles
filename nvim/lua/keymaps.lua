@@ -86,16 +86,16 @@ keymap("n", "<leader>F", "<cmd>lua require('spectre').open_file_search({select_w
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
 
 -- dap
-keymap("n", "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", opts)
-keymap("n", "<leader>dB", "<cmd>lua require('dapui').float_element('breakpoints', {})<cr>", opts)
-keymap("n", "<leader>dT", "<cmd>lua require('dapui').float_element('stacks', {})<cr>", opts)
-keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)
-keymap("n", "<leader>dc", "<cmd>lua require'dap'.continue()<cr>", opts)
-keymap("n", "<leader>dn", "<cmd>lua require'dap'.step_over()<cr>", opts)
-keymap("n", "<leader>ds", "<cmd>lua require'dap'.step_into()<cr>", opts)
-keymap("n", "<leader>df", "<cmd>lua require'dap'.step_out()<cr>", opts)
-keymap("n", "<leader>dk", "<cmd>lua require'dap'.terminate()<cr>", opts)
-keymap("n", "<leader>d<cr>", "<cmd>lua require'dap'.run_last()<cr>", opts)
+-- keymap("n", "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", opts)
+-- keymap("n", "<leader>dB", "<cmd>lua require('dapui').float_element('breakpoints', {})<cr>", opts)
+-- keymap("n", "<leader>dT", "<cmd>lua require('dapui').float_element('stacks', {})<cr>", opts)
+-- keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)
+-- keymap("n", "<leader>dc", "<cmd>lua require'dap'.continue()<cr>", opts)
+-- keymap("n", "<leader>dn", "<cmd>lua require'dap'.step_over()<cr>", opts)
+-- keymap("n", "<leader>ds", "<cmd>lua require'dap'.step_into()<cr>", opts)
+-- keymap("n", "<leader>df", "<cmd>lua require'dap'.step_out()<cr>", opts)
+-- keymap("n", "<leader>dk", "<cmd>lua require'dap'.terminate()<cr>", opts)
+-- keymap("n", "<leader>d<cr>", "<cmd>lua require'dap'.run_last()<cr>", opts)
 
 
 -- cppp header/source switch
