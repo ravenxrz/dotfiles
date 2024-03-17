@@ -171,12 +171,12 @@ return {
       'nvim-lua/plenary.nvim',
       {
         "nvim-telescope/telescope-live-grep-args.nvim",
-        version = "^1.0.0",
+        version = "^1.0.0"
       },
     },
     config = function()
       local telescope = require("telescope")
-      telescope.load_extension("live_grep_args")
+      local lga_actions = require("telescope-live-grep-args.actions")
       telescope.setup {
         defaults = {
           sorting_strategy = "ascending", -- display results top->bottom
@@ -185,6 +185,7 @@ return {
           },
         },
       }
+      telescope.load_extension("live_grep_args")
     end
   },
   {
@@ -193,17 +194,6 @@ return {
       position = 'right',
     }
   },
-  -- {
-  --   "kdheepak/lazygit.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --   },
-  --   config = function()
-  --     vim.cmd([[
-  --       let g:lazygit_floating_window_scaling_factor = 1.0
-  --   ]])
-  --   end
-  -- },
   {
     'akinsho/toggleterm.nvim',
     version = "*",
@@ -558,34 +548,5 @@ return {
       })
     end
   },
-  { "s1n7ax/nvim-window-picker" },
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    ---@type Flash.Config
-    opts = {
-      highlight = {
-        -- show a backdrop with hl FlashBackdrop
-        backdrop = true,
-        -- Highlight the search matches
-        matches = true,
-        -- extmark priority
-        priority = 5000,
-        groups = {
-          match = "FlashMatch",
-          current = "FlashCurrent",
-          backdrop = "FlashBackdrop",
-          label = "Cursor",
-        },
-      },
-    },
-    -- sFylua: ignore
-    keys = {
-      -- { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-      -- { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
-      -- { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
-      -- { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-      -- { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
-    },
-  }
+  { "s1n7ax/nvim-window-picker" }
 }

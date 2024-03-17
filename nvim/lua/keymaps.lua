@@ -63,11 +63,15 @@ keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
-keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files <cr>", opts)
-keymap("n", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<cr>", opts)
-keymap("v", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor()<cr>", opts)
+keymap("n", "<leader>fw",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>", opts)
+keymap("v", "<leader>fw",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>", opts)
 keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
--- TODO: add telescope raw live_grep shortucts
+-- no ignore, no config
+keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files,--no-config<cr>", opts)
+keymap("n", "<leader>fW", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=' --no-ignore --no-config'})<cr>", opts)
+keymap("v", "<leader>fW", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=' --no-ignore --no-config'})<cr>", opts)
 keymap("n", "<leader>s", "<cmd>Telescope lsp_document_symbols<cr>", opts)
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
@@ -80,7 +84,8 @@ keymap("n", "<leader>lo", "<cmd>Outline<cr>", opts)
 -- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
 -- spectre config
-keymap("n", "<leader>F", "<cmd>lua require('spectre').open_file_search({select_word=true})<cr>", opts)
+keymap("n", "<leader>Fw", "<cmd>lua require('spectre').open_file_search({select_word=true})<cr>", opts)
+keymap("n", "<leader>Ff", "<cmd>lua require('spectre').toggle()<CR>", opts)
 
 -- session manager
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
