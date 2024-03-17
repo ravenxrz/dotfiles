@@ -175,8 +175,14 @@ return {
       },
     },
     config = function()
+      local function filename_first(_, path)
+        local tail = vim.fs.basename(path)
+        local parent = vim.fs.dirname(path)
+        if parent == "." then return tail end
+        return string.format("%s\t\t%s", tail, parent)
+      end
+
       local telescope = require("telescope")
-      local lga_actions = require("telescope-live-grep-args.actions")
       telescope.setup {
         defaults = {
           sorting_strategy = "ascending", -- display results top->bottom
@@ -184,8 +190,23 @@ return {
             prompt_position = "top",
           },
         },
+        pickers = {
+          find_files = {
+            path_display = filename_first,
+          }
+        },
       }
       telescope.load_extension("live_grep_args")
+      -- for file dir highlighting
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "TelescopeResults",
+        callback = function(ctx)
+          vim.api.nvim_buf_call(ctx.buf, function()
+            vim.fn.matchadd("TelescopeParent", "\t\t.*$")
+            vim.api.nvim_set_hl(0, "TelescopeParent", { link = "Comment" })
+          end)
+        end,
+      })
     end
   },
   {
