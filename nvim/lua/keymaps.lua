@@ -71,7 +71,7 @@ keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore
 keymap("n", "<leader>fW", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=' --no-ignore --no-config'})<cr>", opts)
 keymap("v", "<leader>fW", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=' --no-ignore --no-config'})<cr>", opts)
 keymap("n", "<leader>s", "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 55, fname_width = 25})<cr>", opts)
-keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols path_display={\"tail\"}<cr>", opts)
+keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
