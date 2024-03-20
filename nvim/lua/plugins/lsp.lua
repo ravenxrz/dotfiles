@@ -5,6 +5,8 @@ return {
       'hrsh7th/cmp-nvim-lsp', -- LSP source for nvim-cmp
     },
     config = function()
+      -- vim.lsp.set_log_level("error")
+      vim.lsp.set_log_level("off")
       -- setup lsp
       -- see: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
       -- for supported languages
