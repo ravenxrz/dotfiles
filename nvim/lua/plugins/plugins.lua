@@ -3,6 +3,17 @@ return {
     "stevearc/dressing.nvim"
   },
   {
+    "lukas-reineke/indent-blankline.nvim",
+    tag = "v2.20.8",
+    config = function()
+      require("indent_blankline").setup {
+        buftype_exclude = { "terminal", "nowrite", "help" },
+        show_trailing_blankline_indent = false,
+        show_end_of_line = false,
+      }
+    end
+  },
+  {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
     dependencies = {
