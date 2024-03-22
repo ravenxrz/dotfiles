@@ -88,6 +88,9 @@ keymap("n", "<leader>Ff", "<cmd>lua require('spectre').toggle()<CR>", opts)
 -- session manager
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
 
+-- lsp
+keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts)
+
 -- dap
 -- keymap("n", "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", opts)
 -- keymap("n", "<leader>dB", "<cmd>lua require('dapui').float_element('breakpoints', {})<cr>", opts)

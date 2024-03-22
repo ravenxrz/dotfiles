@@ -104,4 +104,37 @@ return {
       }
     end
   },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      {
+        "jose-elias-alvarez/null-ls.nvim",
+      },
+    },
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        debug = false,
+        sources = {
+          null_ls.builtins.diagnostics.cpplint.with({
+            -- override args completely to make sure ordering is correct
+            args = { "--filter=-legal/copyright,-build/include_subdir,-whitespace/line_length", "$FILENAME" },
+          },
+          null_ls.builtins.code_actions.cpplint
+          )
+        }
+      })
+      require("mason-null-ls").setup({
+        automatic_setup = true,
+        ensure_installed = {
+          "isort@5.11.5",
+          "cpplint",
+          "shfmt"
+        },
+        handlers = {},
+      })
+    end,
+  }
 }
