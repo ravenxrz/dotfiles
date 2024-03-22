@@ -119,10 +119,10 @@ return {
         debug = false,
         sources = {
           null_ls.builtins.diagnostics.cpplint.with({
-            -- override args completely to make sure ordering is correct
-            args = { "--filter=-legal/copyright,-build/include_subdir,-whitespace/line_length", "$FILENAME" },
-          },
-          null_ls.builtins.code_actions.cpplint
+              -- override args completely to make sure ordering is correct
+              args = { "--filter=-legal/copyright,-build/include_subdir,-whitespace/line_length,-readability/casting", "$FILENAME" },
+            },
+            null_ls.builtins.code_actions.cpplint
           )
         }
       })
