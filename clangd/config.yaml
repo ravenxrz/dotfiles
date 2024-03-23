@@ -3,4 +3,4 @@ CompileFlags:                     # Tweak the parse settings
   Add: [ --include-directory=/usr/local/include ]
 
 Diagnostics:
-  Suppress: [init_conversion_failed, member_function_call_bad_type]
+  Suppress: [init_conversion_failed, member_function_call_bad_type, typecheck_convert_incompatible_pointer]
