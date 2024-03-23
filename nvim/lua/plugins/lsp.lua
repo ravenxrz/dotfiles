@@ -92,7 +92,7 @@ return {
                 "--header-insertion-decorators",
                 "-j=12",
                 "--pretty",
-                 "--offset-encoding=utf-16",
+                "--offset-encoding=utf-16",
               },
               capabilities = require("cmp_nvim_lsp").default_capabilities()
             }
@@ -125,7 +125,8 @@ return {
             },
             null_ls.builtins.code_actions.cpplint
           )
-        }
+        },
+        temp_dir = os.tmpname(),
       })
       require("mason-null-ls").setup({
         automatic_setup = true,
