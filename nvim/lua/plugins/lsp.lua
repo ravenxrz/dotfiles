@@ -92,6 +92,7 @@ return {
                 "--header-insertion-decorators",
                 "-j=12",
                 "--pretty",
+                 "--offset-encoding=utf-16",
               },
               capabilities = require("cmp_nvim_lsp").default_capabilities()
             }
