@@ -228,6 +228,7 @@ return {
         return string.format("%s\t\t%s", tail, parent)
       end
 
+      local actions = require "telescope.actions"
       local telescope = require("telescope")
       telescope.setup {
         defaults = {
@@ -241,6 +242,16 @@ return {
             if parent == "." then return tail end
             return string.format("%s (%s)", tail, parent)
           end,
+          mappings = {
+            i = {
+              ["<C-j>"] = actions.cycle_history_next,
+              ["<C-k>"] = actions.cycle_history_prev,
+            },
+            n = {
+              ["<C-j>"] = actions.cycle_history_next,
+              ["<C-k>"] = actions.cycle_history_prev,
+            },
+          },
         },
       }
       telescope.load_extension("live_grep_args")
