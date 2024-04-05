@@ -39,29 +39,16 @@ return {
               local label_fn = function(exec_file)
                 return string.format("%s", exec_file)
               end
-              find_executables = function(directory)
-                local lfs = require("lfs")
-                local executables = {} -- 存储可执行文件路径的 table
-                -- 遍历指定目录下的所有文件和子目录
-                for entry in lfs.dir(directory) do
-                  if entry ~= "." and entry ~= ".." then
-                    local path = directory .. "/" .. entry -- 获取文件或目录的完整路径
-                    local attr = lfs.attributes(path)      -- 获取文件或目录的属性
-                    if attr.mode == "file" and string.find(attr.permissions, 'x') ~= nil then
-                      -- 如果是可执行文件，则将其路径添加到 table 中
-                      table.insert(executables, path)
-                    elseif attr.mode == "directory" then
-                      -- 如果是子目录，则递归遍历该目录
-                      local sub_executables = find_executables(path)
-                      for _, sub_path in ipairs(sub_executables) do
-                        table.insert(executables, sub_path)
-                      end
-                    end
-                  end
-                end
-                return executables -- 返回包含可执行文件路径的 table
+              -- 执行 find 命令并获取结果
+              local command = "find " .. vim.fn.getcwd() .. " -type d -name '.git' -prune -o -type f -executable | grep -vE 'third_party|thirdparty|3rdparty'"
+              local handle = io.popen(command)
+              local result = handle:read("*a")
+              handle:close()
+              -- 将结果分割成文件路径
+              local files = {}
+              for path in result:gmatch("[^\n]+") do
+                table.insert(files, path)
               end
-              local files = find_executables(vim.fn.getcwd())
               -- 去除文件路径中的 vim.fn.getcwd() 前缀
               local relative_files = {}
               local cwd_length = string.len(vim.fn.getcwd()) + 1
@@ -205,20 +192,12 @@ return {
             elements = {
               {
                 id = "scopes",
-                size = 0.5,
+                size = 0.6,
               },
               {
-                id = "stacks",
-                size = 0.4,
-              },
-              {
-                id = "breakpoints",
-                size = 0.1,
-              },
-              -- {
-              --   id = "watches",
-              --   size = 0.25
-              -- }
+                id = "watches",
+                size = 0.4
+              }
             },
             position = "left",
             size = 40,
@@ -226,12 +205,26 @@ return {
           {
             elements = {
               {
+                id = "stacks",
+                size = 0.7,
+              },
+              {
+                id = "breakpoints",
+                size = 0.3,
+              },
+            },
+            position = "right",
+            size = 40,
+          },
+          {
+            elements = {
+              {
                 id = "repl",
-                size = 0.9,
+                size = 0.7,
               },
               {
                 id = "console",
-                size = 0.1,
+                size = 0.3,
               },
             },
             position = "bottom",
