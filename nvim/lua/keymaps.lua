@@ -101,6 +101,7 @@ keymap("n", "<leader>dn", "<cmd>lua require'dap'.step_over()<cr>", opts)
 keymap("n", "<leader>ds", "<cmd>lua require'dap'.step_into()<cr>", opts)
 keymap("n", "<leader>df", "<cmd>lua require'dap'.step_out()<cr>", opts)
 keymap("n", "<leader>dk", "<cmd>lua require'dap'.terminate()<cr>", opts)
+keymap("n", "<leader>de", "<cmd>lua require('dapui').eval()<cr>", opts)
 keymap("n", "<leader>d<cr>", "<cmd>lua require'dap'.run_last()<cr>", opts)
 
 

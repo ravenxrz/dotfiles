@@ -27,7 +27,6 @@ return {
         close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
         enable_git_status = false,
         enable_diagnostics = false,
-        enable_normal_mode_for_inputs = false,                             -- Enable normal mode for input dialogs.
         open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
         sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
         window = {
@@ -683,6 +682,19 @@ return {
         should_enable = function(bufnr) return true end,
         -- case_insensitive_regex: sets regex case sensitivity
         case_insensitive_regex = false,
+      })
+    end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      local configs = require("nvim-treesitter.configs")
+      configs.setup({
+        ensure_installed = { "cpp", "python" },
+        sync_install = false,
+        highlight = { enable = false },
+        indent = { enable = false },
       })
     end
   }
