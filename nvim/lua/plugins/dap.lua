@@ -26,14 +26,25 @@ return {
         -- ['kotlin'] = 'kotlin-debug-adapter',
         -- ['dart'] = 'dart-debug-adapter',
         -- ['haskell'] = 'haskell-debug-adapter',
-        ensure_installed = { "cppdbg" },
+        ensure_installed = { "cppdbg", 'python' },
         handlers = {
-          -- function(config)
-          --   -- all sources with no handler get passed here
-          --
-          --   -- Keep original functionality
-          --   require('mason-nvim-dap').default_setup(config)
-          -- end,
+          function(config)
+            -- all sources with no handler get passed here
+
+            -- Keep original functionality
+            require('mason-nvim-dap').default_setup(config)
+          end,
+          python = function(config)
+            config.adapters = {
+              type = "executable",
+              command = "/usr/bin/python3",
+              args = {
+                "-m",
+                "debugpy.adapter",
+              },
+            }
+            require('mason-nvim-dap').default_setup(config) -- don't forget this!
+          end,
           cppdbg = function(config)
             local pick_file = function()
               local label_fn = function(exec_file)
@@ -97,6 +108,9 @@ return {
                 type = "cppdbg",
                 request = "attach",
                 processId = require("dap.utils").pick_process,
+                program = function()
+                  return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                end,
                 cwd = "${workspaceFolder}",
                 setupCommands = {
                   {
@@ -276,9 +290,9 @@ return {
         highlight_changed_variables = true, -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
         highlight_new_as_changed = false,   -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
         show_stop_reason = true,            -- show stop reason when stopped for exceptions
-        commented = false,                   -- prefix virtual text with comment string
+        commented = false,                  -- prefix virtual text with comment string
         only_first_definition = false,      -- only show virtual text at first definition (if there are multiple)
-        all_references = true,             -- show virtual text on all all references of the variable (not only definitions)
+        all_references = true,              -- show virtual text on all all references of the variable (not only definitions)
         clear_on_continue = false,          -- clear virtual text on "continue" (might cause flickering when stepping)
         --- A callback that determines how a variable is displayed or whether it should be omitted
         --- @param variable Variable https://microsoft.github.io/debug-adapter-protocol/specification#Types_Variable
