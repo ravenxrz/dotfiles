@@ -58,7 +58,7 @@ return {
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<CR>'] = cmp.mapping.confirm {
             select = true,
-            behavior = cmp.ConfirmBehavior.Replace,
+            behavior = cmp.ConfirmBehavior.Insert,
           },
           ['<C-n>'] = select_next,
           ['<C-p>'] = select_prev,

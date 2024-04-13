@@ -93,9 +93,9 @@ keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts)
 
 -- dap
 keymap("n", "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", opts)
-keymap("n", "<leader>dB", "<cmd>lua require('dapui').float_element('breakpoints', {})<cr>", opts)
 keymap("n", "<leader>dT", "<cmd>lua require('dapui').float_element('stacks', {})<cr>", opts)
 keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)
+keymap("n", "<leader>dB", "<cmd>lua require'dap'.toggle_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>", opts)
 keymap("n", "<leader>dc", "<cmd>lua require'dap'.continue()<cr>", opts)
 keymap("n", "<leader>dn", "<cmd>lua require'dap'.step_over()<cr>", opts)
 keymap("n", "<leader>ds", "<cmd>lua require'dap'.step_into()<cr>", opts)
