@@ -104,6 +104,10 @@ keymap("n", "<leader>dk", "<cmd>lua require'dap'.terminate()<cr>", opts)
 keymap("n", "<leader>de", "<cmd>lua require('dapui').eval()<cr>", opts)
 keymap("n", "<leader>d<cr>", "<cmd>lua require'dap'.run_last()<cr>", opts)
 
+-- quickfix
+keymap("n", "]c", "<cmd>cn<cr>", opts)
+keymap("n", "[c", "<cmd>cp<cr>", opts)
+
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)

@@ -691,10 +691,10 @@ return {
     config = function()
       local configs = require("nvim-treesitter.configs")
       configs.setup({
-        ensure_installed = { "cpp", "python" },
+        ensure_installed = { "cpp", "python", "markdown", "json", "yaml", "xml", "c", "bash", "lua", "vim" },
         sync_install = false,
-        highlight = { enable = false },
-        indent = { enable = false },
+        highlight = { enable = true },
+        indent = { enable = true },
       })
     end
   }
