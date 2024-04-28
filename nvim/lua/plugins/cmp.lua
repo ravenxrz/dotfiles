@@ -69,7 +69,6 @@ return {
           { name = 'nvim_lsp' },
           { name = 'nvim_lsp_signature_help' },
           { name = 'luasnip' },
-          { name = "codeverse" },
         },
       }
     end
@@ -81,16 +80,6 @@ return {
         sources = {
           { name = "dap" },
         },
-      })
-    end
-  },
-  { -- refs: https://bytedance.larkoffice.com/docx/QElUdgFmaovaAcxmYfnc4PyhnCh
-    "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
-    dependencies = {
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require("codeverse").setup({
       })
     end
   }
