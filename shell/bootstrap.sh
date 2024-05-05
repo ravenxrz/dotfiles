@@ -1,4 +1,5 @@
 path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/.local/share/bob/nvim-bin"
 
 if [[ $OSTYPE == 'darwin'* ]]; then
   path_prepend "$HOME/.dotfiles/bin/macos"
