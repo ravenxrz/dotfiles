@@ -32,7 +32,8 @@ return {
 
           -- Buffer local mappings.
           -- See `:help vim.lsp.*` for documentation on any of the below functions
-          local opts = { buffer = ev.buf }
+          local buffer = ev.buf
+          local opts = { buffer = buffer }
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
           -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
           vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
@@ -50,6 +51,12 @@ return {
           vim.keymap.set({ "n", "v" }, "<leader>lf", function()
             vim.lsp.buf.format({ async = true })
           end, opts)
+
+          -- inlay hints
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
+            vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+          end
         end,
       })
     end,
