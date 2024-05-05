@@ -55,7 +55,9 @@ return {
           -- inlay hints
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
           if client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
-            vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+            if vim.lsp.inlay_hint then -- I don't know why somehow vim.lsp.inlay_hint is nil, so do this check befre enable inlayhint
+              vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
+            end
           end
         end,
       })
@@ -179,6 +181,7 @@ return {
   },
   {
     "jay-babu/mason-null-ls.nvim",
+    commit = "e270134d83ba59425edc53356c6fd337b61bb8dd",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
