@@ -14,6 +14,7 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       'neovim/nvim-lspconfig',
       "hrsh7th/cmp-nvim-lsp-signature-help",
+      "hrsh7th/cmp-path"
     },
     config = function()
       local luasnip = require 'luasnip'
@@ -68,6 +69,7 @@ return {
         sources = {
           { name = 'nvim_lsp' },
           { name = 'nvim_lsp_signature_help' },
+          { name = 'path' },
           { name = 'luasnip' },
         },
       }
