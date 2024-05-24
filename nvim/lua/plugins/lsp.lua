@@ -116,9 +116,32 @@ return {
               filetypes = { 'python' },
               settings = {
                 python = {
-                  autoSearchPaths = true,
-                  diagnosticMode = "openFilesOnly",
-                  useLibraryCodeForTypes = true
+                  analysis = {
+                    autoImportCompletions = true,
+                    autoSearchPaths = true,
+                    diagnosticMode = "openFilesOnly",
+                    -- These diagnostics are useless, therefore disable them.
+                    diagnosticSeverityOverrides = {
+                      reportArgumentType = "none",
+                      reportAttributeAccessIssue = "none",
+                      reportCallIssue = "none",
+                      reportFunctionMemberAccess = "none",
+                      reportGeneralTypeIssues = "none",
+                      reportIncompatibleMethodOverride = "none",
+                      reportIncompatibleVariableOverride = "none",
+                      reportIndexIssue = "none",
+                      reportOptionalMemberAccess = "none",
+                      reportOptionalSubscript = "none",
+                      reportPrivateImportUsage = "none",
+                    },
+                    indexing = true,
+                    inlayHints = {
+                      functionReturnTypes = true,
+                      variableTypes = true,
+                    },
+                    typeCheckingMode = "standard",
+                    useLibraryCodeForTypes = true,
+                  },
                 }
               },
               single_file_support = true
