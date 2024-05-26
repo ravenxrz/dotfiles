@@ -3,6 +3,13 @@ return {
     "stevearc/dressing.nvim"
   },
   {
+    "ggandor/leap.nvim",
+    config = function()
+      -- require('leap').create_default_mappings()
+      require('leap').init_highlight(true)
+    end
+  },
+  {
     "lukas-reineke/indent-blankline.nvim",
     tag = "v2.20.8",
     config = function()

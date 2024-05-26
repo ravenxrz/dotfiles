@@ -104,6 +104,11 @@ keymap("n", "<leader>dk", "<cmd>lua require'dap'.terminate()<cr>", opts)
 keymap("n", "<leader>de", "<cmd>lua require('dapui').eval()<cr>", opts)
 keymap("n", "<leader>d<cr>", "<cmd>lua require'dap'.run_last()<cr>", opts)
 
+-- leap
+keymap("n", "t", "<Plug>(leap-forward)", opts)
+keymap("n", "T", "<Plug>(leap-backward)", opts)
+keymap("n", "gs", "<Plug>(leap-from-window)", opts)
+
 -- quickfix
 keymap("n", "]c", "<cmd>cn<cr>", opts)
 keymap("n", "[c", "<cmd>cp<cr>", opts)
