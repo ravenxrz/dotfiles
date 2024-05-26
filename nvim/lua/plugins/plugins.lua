@@ -267,7 +267,23 @@ return {
   {
     "hedyhli/outline.nvim",
     opts = {
-      position = 'right',
+      outline_window = {
+        -- Where to open the split window: right/left
+        position = 'right',
+      },
+      symbol_folding = {
+        -- Depth past which nodes will be folded by default. Set to false to unfold all on open.
+        autofold_depth = 4,
+        -- When to auto unfold nodes
+        auto_unfold = {
+          -- Auto unfold currently hovered symbol
+          hovered = true,
+          -- Auto fold when the root level only has this many nodes.
+          -- Set true for 1 node, false for 0.
+          only = true,
+        },
+        markers = { '', '' },
+      },
     }
   },
   {
@@ -793,7 +809,7 @@ return {
     build = "cd app && npm install",
     init = function()
       vim.g.mkdp_filetypes = { "markdown" }
-      vim.g.mkdp_auto_close = 0
+      vim.g.mkdp_auto_close = 1
       vim.g.mkdp_command_for_global = 1
       vim.g.mkdp_combine_preview = 1
 
