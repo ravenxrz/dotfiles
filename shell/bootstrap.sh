@@ -1,5 +1,4 @@
 path_prepend "$HOME/.local/bin"
-path_prepend "$HOME/.local/share/bob/nvim-bin"
 
 if [[ $OSTYPE == 'darwin'* ]]; then
   path_prepend "$HOME/.dotfiles/bin/macos"
@@ -8,3 +7,7 @@ else
 fi
 
 path_prepend "$HOME/.dotfiles/remote_dev/"
+
+# set zsh term color
+export TERM=xterm-256color
+
