@@ -233,6 +233,7 @@ return {
           "isort@5.11.5",
           "cpplint",
           "shfmt",
+          "markdown_oxide"
         },
         handlers = {},
       })
