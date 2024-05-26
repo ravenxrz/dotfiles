@@ -1,2 +1,2 @@
-' keep cursor in the middle
-setlocal scrolloff=9999
+" keep cursor in the middle
+setlocal scrolloff=999
