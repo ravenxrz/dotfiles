@@ -239,10 +239,10 @@ return {
       local telescope = require("telescope")
       telescope.setup {
         defaults = {
-          sorting_strategy = "ascending", -- display results top->bottom
-          layout_config = {
-            prompt_position = "top",
-          },
+          -- sorting_strategy = "ascending", -- display results top->bottom
+          -- layout_config = {
+          --   prompt_position = "top",
+          -- },
           path_display = function(opts, path)
             local tail = vim.fs.basename(path)
             local parent = vim.fs.dirname(path)
