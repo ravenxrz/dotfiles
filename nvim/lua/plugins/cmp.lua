@@ -1,15 +1,19 @@
 return {
   {
-    'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+    'saadparwaiz1/cmp_luasnip', -- Snippets source for nvim-cmp
+    event = "InsertEnter"
   },
   {
-    'L3MON4D3/LuaSnip' -- Snippets plugin
+    'L3MON4D3/LuaSnip', -- Snippets plugin
+    event = "InsertEnter"
   },
   {
-    'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+    'hrsh7th/cmp-nvim-lsp', -- LSP source for nvim-cmp
+    event = "InsertEnter"
   },
   {
     'hrsh7th/nvim-cmp', -- Autocompletion plugin
+    event = "InsertEnter",
     dependencies = {
       'hrsh7th/cmp-nvim-lsp',
       'neovim/nvim-lspconfig',
@@ -79,6 +83,7 @@ return {
   },
   {
     "rcarriga/cmp-dap",
+    event = "InsertEnter",
     config = function()
       require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
         sources = {

@@ -1,6 +1,7 @@
 return {
   {
     "jay-babu/mason-nvim-dap.nvim",
+    event = "VeryLazy",
     dependencies = {
       "mfussenegger/nvim-dap",
       "williamboman/mason.nvim",
@@ -168,6 +169,7 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
+    keys = { "<leader>dr" },
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
@@ -278,6 +280,7 @@ return {
   },
   {
     "theHamsta/nvim-dap-virtual-text",
+    keys = { "<leader>dr" },
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-treesitter/nvim-treesitter",
@@ -285,7 +288,7 @@ return {
     config = function()
       local dap_virtual_text = require("nvim-dap-virtual-text")
       dap_virtual_text.setup({
-        enabled = false,                     -- enable this plugin (the default)
+        enabled = false,                    -- enable this plugin (the default)
         enabled_commands = true,            -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
         highlight_changed_variables = true, -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
         highlight_new_as_changed = false,   -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
