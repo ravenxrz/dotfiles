@@ -10,13 +10,13 @@
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
 [submodule "zsh/plugins/zsh-completions"]
 	path = zsh/plugins/zsh-completions
-	url = https://github.com/zsh-users/zsh-completions
-[submodule "zsh/plugins/zsh-autosuggestions"]
-	path = zsh/plugins/zsh-autosuggestions
-	url = https://github.com/zsh-users/zsh-autosuggestions
+	url = https://github.com/ravenxrz/zsh-autosuggestions.git
 [submodule "tmux/tpm"]
 	path = tmux/tpm
 	url = https://github.com/tmux-plugins/tpm
 [submodule "zsh/plugins/agkozak-zsh-prompt"]
 	path = zsh/plugins/agkozak-zsh-prompt
 	url = https://github.com/agkozak/agkozak-zsh-prompt.git
+[submodule "zsh/plugins/zsh-autosuggestions"]
+	path = zsh/plugins/zsh-autosuggestions
+	url = https://github.com/cattokomo/zsh-autosuggestions.git
