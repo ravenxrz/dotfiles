@@ -11,14 +11,21 @@ return {
   },
   {
     "lukas-reineke/indent-blankline.nvim",
-    tag = "v2.20.8",
-    config = function()
-      require("indent_blankline").setup {
-        buftype_exclude = { "terminal", "nowrite", "help" },
-        show_trailing_blankline_indent = false,
-        show_end_of_line = false,
-      }
-    end
+    main = "ibl",
+    opts = {
+      indent = { char = "│" },
+      whitespace = { highlight = { "Whitespace", "NonText" } },
+      scope = { show_start = false, show_end = false },
+    }
+    -- config = function()
+    --   require("ibl").setup()
+
+    -- require("indent_blankline").setup { -- for version2
+    --   buftype_exclude = { "terminal", "nowrite", "help" },
+    --   show_trailing_blankline_indent = false,
+    --   show_end_of_line = false,
+    -- }
+    -- end
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
