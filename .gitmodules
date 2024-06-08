@@ -19,4 +19,4 @@
 	url = https://github.com/agkozak/agkozak-zsh-prompt.git
 [submodule "zsh/plugins/zsh-autosuggestions"]
 	path = zsh/plugins/zsh-autosuggestions
-	url = https://github.com/cattokomo/zsh-autosuggestions.git
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
