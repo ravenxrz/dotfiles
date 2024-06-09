@@ -845,5 +845,14 @@ return {
         -- Configuration here, or leave empty to use defaults
       })
     end
+  },
+  {
+    'keaising/im-select.nvim',
+    enabled = vim.loop.os_uname().sysname == "Darwin", -- only works on macos
+    config = function()
+      require('im_select').setup {
+        default_im_select = "com.apple.keylayout.ABC"
+      }
+    end
   }
 }
