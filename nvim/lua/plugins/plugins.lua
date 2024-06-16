@@ -272,26 +272,12 @@ return {
     end
   },
   {
-    "hedyhli/outline.nvim",
-    opts = {
-      outline_window = {
-        -- Where to open the split window: right/left
-        position = 'right',
-      },
-      symbol_folding = {
-        -- Depth past which nodes will be folded by default. Set to false to unfold all on open.
-        autofold_depth = 4,
-        -- When to auto unfold nodes
-        auto_unfold = {
-          -- Auto unfold currently hovered symbol
-          hovered = true,
-          -- Auto fold when the root level only has this many nodes.
-          -- Set true for 1 node, false for 0.
-          only = true,
-        },
-        markers = { '', '' },
-      },
-    }
+    'stevearc/aerial.nvim',
+    opts = {},
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons"
+    },
   },
   {
     'akinsho/toggleterm.nvim',
@@ -726,7 +712,12 @@ return {
         ensure_installed = { "cpp", "python", "markdown", "json", "yaml", "xml", "c", "bash", "lua", "vim", "vimdoc" },
         sync_install = false,
         highlight = { enable = true },
-        indent = { enable = true },
+        indent = {
+          enable = true,
+          -- disable = {
+          --   "python"
+          -- }
+        },
       })
     end
   },

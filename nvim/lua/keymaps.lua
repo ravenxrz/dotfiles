@@ -76,7 +76,7 @@ keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
 -- outline
-keymap("n", "<leader>lo", "<cmd>Outline<cr>", opts)
+keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
 
 -- lazygit
 -- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)

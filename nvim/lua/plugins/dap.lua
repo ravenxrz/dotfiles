@@ -169,7 +169,7 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
-    keys = { "<leader>dr" },
+    -- keys = { "<leader>dc" },
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
@@ -280,7 +280,7 @@ return {
   },
   {
     "theHamsta/nvim-dap-virtual-text",
-    keys = { "<leader>dr" },
+    -- keys = { "<leader>dc" },
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-treesitter/nvim-treesitter",
