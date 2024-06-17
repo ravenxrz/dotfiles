@@ -81,9 +81,8 @@ keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
 -- lazygit
 -- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
--- spectre config
-keymap("n", "<leader>Fw", "<cmd>lua require('spectre').open_file_search({select_word=true})<cr>", opts)
-keymap("n", "<leader>Ff", "<cmd>lua require('spectre').toggle()<CR>", opts)
+-- search & replace config
+keymap("n", "<leader>fr", "<cmd>GrugFar<cr>", opts)
 
 -- session manager
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
