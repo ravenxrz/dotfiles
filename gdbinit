@@ -44,3 +44,22 @@ document md5m
   Usage: md5_memory <start address> <end address>
 end
 
+define export_deltas
+	if $argc != 1
+		echo "input delta size"
+	end
+	set $i = 0	
+	while ($i < $arg0)
+	    set $lsn = deltas[i].lsn
+	    set $buffer = (char *)(deltas[i]).buffer
+	    set $len = (deltas[i]).len
+	    eval "dump binary memory %lu %p %p", deltas[$i].lsn, deltas[$i].buffer, deltas[$i].buffer + deltas[$i].len
+	    set $i = $i + 1
+	end
+end
+
+document export_deltas
+  Export delta buffers, file_name is lsn
+  Usage: export_deltas <delta_num>
+end
+
