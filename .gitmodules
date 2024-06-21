@@ -14,9 +14,9 @@
 [submodule "tmux/tpm"]
 	path = tmux/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "zsh/plugins/agkozak-zsh-prompt"]
-	path = zsh/plugins/agkozak-zsh-prompt
-	url = https://github.com/agkozak/agkozak-zsh-prompt.git
 [submodule "zsh/plugins/zsh-autosuggestions"]
 	path = zsh/plugins/zsh-autosuggestions
 	url = https://github.com/ravenxrz/zsh-autosuggestions
+[submodule "zsh/plugins/spaceship-prompt"]
+	path = zsh/plugins/spaceship-prompt
+	url = https://github.com/spaceship-prompt/spaceship-prompt
