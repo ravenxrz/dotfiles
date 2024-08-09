@@ -41,7 +41,7 @@ return {
               command = "/usr/bin/python3",
               args = {
                 "-m",
-                "debugpy.adapter",
+                "debugpy.adapter"
               },
             }
             require('mason-nvim-dap').default_setup(config) -- don't forget this!

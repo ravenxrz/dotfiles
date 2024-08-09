@@ -31,3 +31,6 @@ require("lazy").setup("plugins", {
     },
   }
 )
+
+-- color scheme
+vim.cmd.colorscheme "modus_operandi"

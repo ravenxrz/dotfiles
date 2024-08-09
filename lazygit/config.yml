@@ -7,7 +7,7 @@ gui:
     sidePanelWidth: 0.2 # number from 0 to 1
     expandFocusedSidePanel: false
     mainPanelSplitMode: 'flexible' # one of 'horizontal' | 'flexible' | 'vertical'
-    enlargedSideViewLocation: 'top' # one of 'left' | 'top'
+    enlargedSideViewLocation: 'left' # one of 'left' | 'top'
     language: 'en' # one of 'auto' | 'en' | 'zh' | 'pl' | 'nl'
     theme:
         lightTheme: false # For terminals with a light background
