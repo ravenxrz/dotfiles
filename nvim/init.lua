@@ -1,6 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
+if not vim.loop.fs_stat(lazypath) then vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
@@ -33,4 +32,5 @@ require("lazy").setup("plugins", {
 )
 
 -- color scheme
-vim.cmd.colorscheme "modus_operandi"
+-- vim.cmd.colorscheme "modus_operandi"
+vim.cmd.colorscheme "eldritch"

@@ -4,6 +4,16 @@ return {
     priority = 1000,
   },
   {
+    "sainnhe/sonokai",
+    priority = 1000,
+  },
+  {
+    "eldritch-theme/eldritch.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
+  {
     "miikanissi/modus-themes.nvim",
     priority = 1000,
     config = function()
@@ -23,7 +33,6 @@ return {
           variables = {},
         },
       })
-      vim.cmd([[colorscheme modus_operandi]])
     end
-  },
+  }
 }
