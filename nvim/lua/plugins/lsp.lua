@@ -20,7 +20,7 @@ return {
       -- vim.keymap.set('v', '<leader>lf', "<ESC><cmd>lua vim.lsp.buf.range_formatting()<CR>")
 
       -- diagnostic
-      vim.diagnostic.config({ virtual_text = false })
+      vim.diagnostic.config({ virtual_text = false, underline = false })
 
       -- Use LspAttach autocommand to only map the following keys
       -- after the language server attaches to the current buffer
@@ -217,13 +217,13 @@ return {
       null_ls.setup({
         debug = false,
         sources = {
-          null_ls.builtins.diagnostics.cpplint.with({
-            -- override args completely to make sure ordering is correct
-            args = {
-              "--filter=-legal/copyright,-build/include_subdir,-whitespace/line_length,-readability/casting",
-              "$FILENAME",
-            },
-          }, null_ls.builtins.code_actions.cpplint),
+          -- null_ls.builtins.diagnostics.cpplint.with({
+          --   -- override args completely to make sure ordering is correct
+          --   args = {
+          --     "--filter=-legal/copyright,-build/include_subdir,-whitespace/line_length,-readability/casting",
+          --     "$FILENAME",
+          --   },
+          -- }, null_ls.builtins.code_actions.cpplint),
         },
         temp_dir = '/tmp',
       })
@@ -231,7 +231,7 @@ return {
         automatic_setup = true,
         ensure_installed = {
           "isort@5.11.5",
-          "cpplint",
+          -- "cpplint",
           "shfmt",
           "markdown_oxide"
         },
