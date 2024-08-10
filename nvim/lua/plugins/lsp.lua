@@ -54,7 +54,9 @@ return {
 
           -- inlay hints
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
-          if client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
+          if
+              client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider
+          then
             if vim.lsp.inlay_hint then -- I don't know why somehow vim.lsp.inlay_hint is nil, so do this check befre enable inlayhint
               vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
             end
@@ -87,7 +89,7 @@ return {
               cmd = {
                 "clangd",
                 "--background-index", -- 后台建立索引，并持久化到disk
-                "--clang-tidy",       -- 开启clang-tidy
+                "--clang-tidy", -- 开启clang-tidy
                 -- 指定clang-tidy的检查参数， 摘抄自cmu15445. 全部参数可参考 https://clang.llvm.org/extra/clang-tidy/checks
                 "--clang-tidy-checks=bugprone-*, clang-analyzer-*, google-*, modernize-*, performance-*, portability-*, readability-*, -bugprone-too-small-loop-variable, -clang-analyzer-cplusplus.NewDelete, -clang-analyzer-cplusplus.NewDeleteLeaks, -modernize-use-nodiscard, -modernize-avoid-c-arrays, -readability-magic-numbers, -bugprone-branch-clone, -bugprone-signed-char-misuse, -bugprone-unhandled-self-assignment, -clang-diagnostic-implicit-int-float-conversion, -modernize-use-auto, -modernize-use-trailing-return-type, -readability-convert-member-functions-to-static, -readability-make-member-function-const, -readability-qualified-auto, -readability-redundant-access-specifiers,",
                 "--completion-style=detailed",
@@ -113,7 +115,7 @@ return {
               fallbackFlags = { "-std=c++20" },
             },
             pyright = {
-              filetypes = { 'python' },
+              filetypes = { "python" },
               settings = {
                 python = {
                   analysis = {
@@ -142,12 +144,12 @@ return {
                     typeCheckingMode = "standard",
                     useLibraryCodeForTypes = true,
                   },
-                }
+                },
               },
-              single_file_support = true
+              single_file_support = true,
             },
             pylyzer = { -- doesn't work for me
-              filetypes = { 'python' },
+              filetypes = { "python" },
               root_dir = function(fname)
                 local root_files = {
                   "pyproject.toml",
@@ -165,10 +167,10 @@ return {
                   checkOnType = false,
                   diagnostics = false,
                   inlayHints = true,
-                  smartCompletion = true
-                }
+                  smartCompletion = true,
+                },
               },
-              single_file_support = true
+              single_file_support = true,
             },
             lua_ls = {
               settings = {
@@ -188,11 +190,9 @@ return {
           }
           if opts[server_name] then
             local server_opt = opts[server_name]
-            require("lspconfig")[server_name].setup(
-              vim.tbl_deep_extend("force", {
-                capabilities = require("cmp_nvim_lsp").default_capabilities(),
-              }, server_opt)
-            )
+            require("lspconfig")[server_name].setup(vim.tbl_deep_extend("force", {
+              capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            }, server_opt))
           else
             require("lspconfig")[server_name].setup({
               capabilities = require("cmp_nvim_lsp").default_capabilities(),
@@ -225,7 +225,7 @@ return {
           --   },
           -- }, null_ls.builtins.code_actions.cpplint),
         },
-        temp_dir = '/tmp',
+        temp_dir = "/tmp",
       })
       require("mason-null-ls").setup({
         automatic_setup = true,
@@ -233,21 +233,23 @@ return {
           "isort@5.11.5",
           -- "cpplint",
           "shfmt",
-          "markdown_oxide"
+          "markdown_oxide",
         },
         handlers = {},
       })
     end,
   },
   {
-    'Wansmer/symbol-usage.nvim',
-    event = 'LspAttach', -- need run before LspAttach if you use nvim 0.9. On 0.10 use 'LspAttach'
+    "Wansmer/symbol-usage.nvim",
+    event = "LspAttach", -- need run before LspAttach if you use nvim 0.9. On 0.10 use 'LspAttach'
     config = function()
-      require('symbol-usage').setup({
+      require("symbol-usage").setup({
         ---@type 'above'|'end_of_line'|'textwidth'|'signcolumn' `above` by default
-        vt_position = 'end_of_line',
-      }
-      )
-    end
-  }
+        vt_position = "end_of_line",
+        disable = { lsp = {}, filetypes = {
+          "python" -- symbol usage case pyright too slow
+        }, cond = {} },
+      })
+    end,
+  },
 }
