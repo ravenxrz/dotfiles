@@ -2,7 +2,6 @@ return {
 	{
 		"stevearc/dressing.nvim",
 	},
-	-- Lua
 	{
 		"folke/zen-mode.nvim",
 		opts = {
@@ -185,9 +184,6 @@ return {
 					relative = "cursor",
 					row = 0,
 					col = 1,
-				},
-				yadm = {
-					enable = false,
 				},
 			})
 		end,
