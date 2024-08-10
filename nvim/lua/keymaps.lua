@@ -112,6 +112,9 @@ keymap("n", "gs", "<Plug>(leap-from-window)", opts)
 keymap("n", "]c", "<cmd>cn<cr>", opts)
 keymap("n", "[c", "<cmd>cp<cr>", opts)
 
+-- zenmode
+keymap("n", "<leader>z", "<cmd>ZenMode<cr>", opts)
+
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
