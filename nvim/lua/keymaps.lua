@@ -115,6 +115,9 @@ keymap("n", "[c", "<cmd>cp<cr>", opts)
 -- zenmode
 keymap("n", "<leader>z", "<cmd>ZenMode<cr>", opts)
 
+-- neogen
+keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
+
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
