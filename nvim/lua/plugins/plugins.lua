@@ -1,22 +1,26 @@
 return {
   {
-    "stevearc/dressing.nvim"
+    "stevearc/dressing.nvim",
   },
   {
     "ggandor/leap.nvim",
     config = function()
       -- require('leap').create_default_mappings()
-      require('leap').init_highlight(true)
-    end
+      require("leap").init_highlight(true)
+    end,
   },
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
     opts = {
-      indent = { char = "│" },
+      indent = {
+        char = {
+          "│",
+        },
+      },
       whitespace = { highlight = { "Whitespace", "NonText" } },
       scope = { show_start = false, show_end = false },
-    }
+    },
     -- config = function()
     --   require("ibl").setup()
 
@@ -42,7 +46,7 @@ return {
         enable_git_status = false,
         enable_diagnostics = false,
         open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
-        sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
+        sort_case_insensitive = false,                                 -- used when sorting files and directories in the tree
         window = {
           position = "left",
           width = 40,
@@ -67,8 +71,8 @@ return {
               -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
               -- some commands may take optional config options, see `:h neo-tree-mappings` for details
               config = {
-                show_path = "none" -- "none", "relative", "absolute"
-              }
+                show_path = "none", -- "none", "relative", "absolute"
+              },
             },
             ["A"] = "add_directory", -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
             ["d"] = "delete",
@@ -92,7 +96,7 @@ return {
             ["i"] = "show_file_details",
             ["/"] = "noop",
             ["?"] = "noop",
-            ['Y'] = function(state)
+            ["Y"] = function(state)
               -- NeoTree is based on [NuiTree](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/tree)
               -- The node is based on [NuiNode](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/tree#nuitreenode)
               local node = state.tree:get_node()
@@ -102,80 +106,82 @@ return {
 
               local results = {
                 filepath,
-                modify(filepath, ':.'),
-                modify(filepath, ':~'),
+                modify(filepath, ":."),
+                modify(filepath, ":~"),
                 filename,
-                modify(filename, ':r'),
-                modify(filename, ':e'),
+                modify(filename, ":r"),
+                modify(filename, ":e"),
               }
 
               vim.ui.select({
-                '1. Absolute path: ' .. results[1],
-                '2. Path relative to CWD: ' .. results[2],
-                '3. Path relative to HOME: ' .. results[3],
-                '4. Filename: ' .. results[4],
-                '5. Filename without extension: ' .. results[5],
-                '6. Extension of the filename: ' .. results[6],
-              }, { prompt = 'Choose to copy to clipboard:' }, function(choice)
-                if choice == nil then return end
+                "1. Absolute path: " .. results[1],
+                "2. Path relative to CWD: " .. results[2],
+                "3. Path relative to HOME: " .. results[3],
+                "4. Filename: " .. results[4],
+                "5. Filename without extension: " .. results[5],
+                "6. Extension of the filename: " .. results[6],
+              }, { prompt = "Choose to copy to clipboard:" }, function(choice)
+                if choice == nil then
+                  return
+                end
                 local i = tonumber(choice:sub(1, 1))
                 local result = results[i]
-                vim.fn.setreg('*', result)
-                vim.notify('Copied: ' .. result)
+                vim.fn.setreg("*", result)
+                vim.notify("Copied: " .. result)
               end)
-            end
-          }
+            end,
+          },
         },
       })
-    end
+    end,
   },
   {
-    'lewis6991/gitsigns.nvim',
+    "lewis6991/gitsigns.nvim",
     config = function()
-      require('gitsigns').setup {
-        signs                        = {
-          add          = { text = '│' },
-          change       = { text = '│' },
-          delete       = { text = '_' },
-          topdelete    = { text = '‾' },
-          changedelete = { text = '~' },
-          untracked    = { text = '┆' },
+      require("gitsigns").setup({
+        signs = {
+          add = { text = "│" },
+          change = { text = "│" },
+          delete = { text = "_" },
+          topdelete = { text = "‾" },
+          changedelete = { text = "~" },
+          untracked = { text = "┆" },
         },
-        signcolumn                   = true,  -- Toggle with `:Gitsigns toggle_signs`
-        numhl                        = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl                       = false, -- Toggle with `:Gitsigns toggle_linehl`
-        word_diff                    = false, -- Toggle with `:Gitsigns toggle_word_diff`
-        watch_gitdir                 = {
-          follow_files = true
+        signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+        word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+        watch_gitdir = {
+          follow_files = true,
         },
-        auto_attach                  = true,
-        attach_to_untracked          = false,
-        current_line_blame           = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
-        current_line_blame_opts      = {
+        auto_attach = true,
+        attach_to_untracked = false,
+        current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
+        current_line_blame_opts = {
           virt_text = true,
-          virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+          virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
           delay = 1000,
           ignore_whitespace = false,
           virt_text_priority = 100,
         },
-        current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
-        sign_priority                = 6,
-        update_debounce              = 100,
-        status_formatter             = nil,   -- Use default
-        max_file_length              = 40000, -- Disable if file is longer than this (in lines)
-        preview_config               = {
+        current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+        sign_priority = 6,
+        update_debounce = 100,
+        status_formatter = nil, -- Use default
+        max_file_length = 40000, -- Disable if file is longer than this (in lines)
+        preview_config = {
           -- Options passed to nvim_open_win
-          border = 'single',
-          style = 'minimal',
-          relative = 'cursor',
+          border = "single",
+          style = "minimal",
+          relative = "cursor",
           row = 0,
-          col = 1
+          col = 1,
         },
-        yadm                         = {
-          enable = false
+        yadm = {
+          enable = false,
         },
-      }
-    end
+      })
+    end,
   },
   {
     "numToStr/Comment.nvim",
@@ -189,25 +195,25 @@ return {
       ---LHS of toggle mappings in NORMAL mode
       toggler = {
         ---Line-comment toggle keymap
-        line = 'gcc',
+        line = "gcc",
         ---Block-comment toggle keymap
-        block = 'gbc',
+        block = "gbc",
       },
       ---LHS of operator-pending mappings in NORMAL and VISUAL mode
       opleader = {
         ---Line-comment keymap
-        line = 'gc',
+        line = "gc",
         ---Block-comment keymap
-        block = 'gb',
+        block = "gb",
       },
       ---LHS of extra mappings
       extra = {
         ---Add comment on the line above
-        above = 'gcO',
+        above = "gcO",
         ---Add comment on the line below
-        below = 'gco',
+        below = "gco",
         ---Add comment at the end of line
-        eol = 'gcA',
+        eol = "gcA",
       },
       ---Enable keybindings
       ---NOTE: If given `false` then the plugin won't create any mappings
@@ -221,30 +227,32 @@ return {
       pre_hook = nil,
       ---Function to call after (un)comment
       post_hook = nil,
-    }
+    },
   },
   {
     "nvim-telescope/telescope.nvim",
     commit = "d90956833d7c27e73c621a61f20b29fdb7122709",
     -- tag = '0.1.6',
     dependencies = {
-      'nvim-lua/plenary.nvim',
+      "nvim-lua/plenary.nvim",
       {
         "nvim-telescope/telescope-live-grep-args.nvim",
-        version = "^1.0.0"
+        version = "^1.0.0",
       },
     },
     config = function()
       local function filename_first(_, path)
         local tail = vim.fs.basename(path)
         local parent = vim.fs.dirname(path)
-        if parent == "." then return tail end
+        if parent == "." then
+          return tail
+        end
         return string.format("%s\t\t%s", tail, parent)
       end
 
-      local actions = require "telescope.actions"
+      local actions = require("telescope.actions")
       local telescope = require("telescope")
-      telescope.setup {
+      telescope.setup({
         defaults = {
           -- sorting_strategy = "ascending", -- display results top->bottom
           -- layout_config = {
@@ -253,7 +261,9 @@ return {
           path_display = function(opts, path)
             local tail = vim.fs.basename(path)
             local parent = vim.fs.dirname(path)
-            if parent == "." then return tail end
+            if parent == "." then
+              return tail
+            end
             return string.format("%s (%s)", tail, parent)
           end,
           mappings = {
@@ -267,20 +277,20 @@ return {
             },
           },
         },
-      }
+      })
       telescope.load_extension("live_grep_args")
-    end
+    end,
   },
   {
-    'stevearc/aerial.nvim',
+    "stevearc/aerial.nvim",
     opts = {},
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons"
+      "nvim-tree/nvim-web-devicons",
     },
   },
   {
-    'akinsho/toggleterm.nvim',
+    "akinsho/toggleterm.nvim",
     version = "*",
     config = function()
       require("toggleterm").setup({
@@ -299,7 +309,7 @@ return {
         float_opts = {
           border = "curved",
           winblend = 0,
-          border = 'single',
+          border = "single",
           width = 300,
           height = 100,
           highlights = {
@@ -310,8 +320,8 @@ return {
       })
       -- toggleterm
       -- lazygit and tig
-      local Terminal = require('toggleterm.terminal').Terminal
-      local lazygit  = Terminal:new({
+      local Terminal = require("toggleterm.terminal").Terminal
+      local lazygit = Terminal:new({
         cmd = "lazygit",
         direction = "float",
       })
@@ -319,64 +329,74 @@ return {
         lazygit:toggle()
       end
 
-      vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("n", "<leader>gt", "<cmd>TermExec cmd='tig %' go_back=1 direction=float<CR>",
-        { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("n", "<leader>gb", "<cmd>TermExec cmd='tig blame %' go_back=1 direction=float<CR>",
-        { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('t', '<c-q>', "<cmd>bd!<cr>", { noremap = true, silent = true })
-    end
+      vim.api.nvim_set_keymap(
+        "n",
+        "<leader>gg",
+        "<cmd>lua _lazygit_toggle()<CR>",
+        { noremap = true, silent = true }
+      )
+      vim.api.nvim_set_keymap(
+        "n",
+        "<leader>gt",
+        "<cmd>TermExec cmd='tig %' go_back=1 direction=float<CR>",
+        { noremap = true, silent = true }
+      )
+      vim.api.nvim_set_keymap(
+        "n",
+        "<leader>gb",
+        "<cmd>TermExec cmd='tig blame %' go_back=1 direction=float<CR>",
+        { noremap = true, silent = true }
+      )
+      vim.api.nvim_set_keymap("t", "<c-q>", "<cmd>bd!<cr>", { noremap = true, silent = true })
+    end,
   },
   {
-    'windwp/nvim-autopairs',
+    "windwp/nvim-autopairs",
     dependencies = {
-      'hrsh7th/nvim-cmp', -- Autocompletion plugin
+      "hrsh7th/nvim-cmp", -- Autocompletion plugin
     },
     event = "InsertEnter",
     config = function()
-      require('nvim-autopairs').setup({
+      require("nvim-autopairs").setup({
         disable_filetype = { "TelescopePrompt", "vim", "spectre_panel", "dap-repl" },
       })
       -- add auto pair when auto completion down
-      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-      local cmp = require('cmp')
-      cmp.event:on(
-        'confirm_done',
-        cmp_autopairs.on_confirm_done()
-      )
-    end
+      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      local cmp = require("cmp")
+      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    end,
   },
   {
-    'MagicDuck/grug-far.nvim',
+    "MagicDuck/grug-far.nvim",
     config = function()
-      require('grug-far').setup({
+      require("grug-far").setup({
         -- ... options, see Configuration section below ...
         -- ... there are no required options atm...
-      });
-    end
+      })
+    end,
   },
   {
-    'akinsho/bufferline.nvim',
+    "akinsho/bufferline.nvim",
     version = "*",
-    dependencies = 'nvim-tree/nvim-web-devicons',
+    dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
       require("bufferline").setup()
-    end
+    end,
   },
   {
-    'nvim-lualine/lualine.nvim',
+    "nvim-lualine/lualine.nvim",
     enabled = true,
     dependencies = {
-      'nvim-tree/nvim-web-devicons',
-      'arkav/lualine-lsp-progress',
+      "nvim-tree/nvim-web-devicons",
+      "arkav/lualine-lsp-progress",
     },
     config = function()
-      require('lualine').setup {
+      require("lualine").setup({
         options = {
           icons_enabled = true,
-          theme = 'auto',
-          component_separators = { left = '', right = '' },
-          section_separators = { left = '', right = '' },
+          theme = "auto",
+          component_separators = { left = "", right = "" },
+          section_separators = { left = "", right = "" },
           disabled_filetypes = {
             statusline = {},
             winbar = {},
@@ -388,36 +408,44 @@ return {
             statusline = 1000,
             tabline = 1000,
             winbar = 1000,
-          }
+          },
         },
         sections = {
-          lualine_a = { 'mode' },
-          lualine_b = { 'branch' },
+          lualine_a = { "mode" },
+          lualine_b = { "branch" },
           lualine_c = {
-            { 'filename',
+            {
+              "filename",
               path = 1, -- 0: Just the filename
               -- 1: Relative path
               -- 2: Absolute path
               -- 3: Absolute path, with tilde as the home directory
               -- 4: Filename and parent dir, with tilde as the home directory
             },
-            'lsp_progress'
+            "lsp_progress",
           },
           lualine_x = {
             --[[ 'diff', ]]
-            'diagnostics',
-            'encoding', 'fileformat' },
-          lualine_y = {
+            "diagnostics",
+            "encoding",
+            {
+              function()
+                local tabstop = vim.opt.tabstop:get() -- 获取当前的 tabstop 数
+                return "Tab:" .. tabstop
+              end,
+            },
+            "fileformat",
           },
-          lualine_z = { 'location' }
+          lualine_y = {},
+          lualine_z = { "location" },
         },
         inactive_sections = {
           lualine_a = {},
           lualine_b = {},
-          lualine_c = { 'filename' },
-          lualine_x = { 'location' },
+          lualine_c = { "filename" },
+          lualine_x = { "location" },
           lualine_y = {},
-          lualine_z = {}
+          lualine_z = {},
         },
         tabline = {},
         winbar = {
@@ -434,40 +462,40 @@ return {
           -- },
         },
         inactive_winbar = {},
-        extensions = {}
-      }
-    end
+        extensions = {},
+      })
+    end,
   },
   {
     "SmiteshP/nvim-navic",
     enabled = true,
     opts = {
       icons = {
-        File          = "󰈙 ",
-        Module        = " ",
-        Namespace     = "󰌗 ",
-        Package       = " ",
-        Class         = "󰌗 ",
-        Method        = "󰆧 ",
-        Property      = " ",
-        Field         = " ",
-        Constructor   = " ",
-        Enum          = "󰕘",
-        Interface     = "󰕘",
-        Function      = "󰊕 ",
-        Variable      = "󰆧 ",
-        Constant      = "󰏿 ",
-        String        = "󰀬 ",
-        Number        = "󰎠 ",
-        Boolean       = "◩ ",
-        Array         = "󰅪 ",
-        Object        = "󰅩 ",
-        Key           = "󰌋 ",
-        Null          = "󰟢 ",
-        EnumMember    = " ",
-        Struct        = "󰌗 ",
-        Event         = " ",
-        Operator      = "󰆕 ",
+        File = "󰈙 ",
+        Module = " ",
+        Namespace = "󰌗 ",
+        Package = " ",
+        Class = "󰌗 ",
+        Method = "󰆧 ",
+        Property = " ",
+        Field = " ",
+        Constructor = " ",
+        Enum = "󰕘",
+        Interface = "󰕘",
+        Function = "󰊕 ",
+        Variable = "󰆧 ",
+        Constant = "󰏿 ",
+        String = "󰀬 ",
+        Number = "󰎠 ",
+        Boolean = "◩ ",
+        Array = "󰅪 ",
+        Object = "󰅩 ",
+        Key = "󰌋 ",
+        Null = "󰟢 ",
+        EnumMember = " ",
+        Struct = "󰌗 ",
+        Event = " ",
+        Operator = "󰆕 ",
         TypeParameter = "󰊄 ",
       },
       lsp = {
@@ -484,7 +512,7 @@ return {
       format_text = function(text)
         return text
       end,
-    }
+    },
   },
   {
     "utilyre/barbecue.nvim",
@@ -500,23 +528,23 @@ return {
   },
   {
     "okuuva/auto-save.nvim",
-    cmd = "ASToggle",                         -- optional for lazy loading on command
+    cmd = "ASToggle",                       -- optional for lazy loading on command
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     config = function()
-      require("auto-save").setup {
+      require("auto-save").setup({
         enabled = true, -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
         execution_message = {
           enabled = false,
           message = function() -- message to print on save
             return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
           end,
-          dim = 0.18,                                    -- dim the color of `message`
-          cleaning_interval = 1250,                      -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
+          dim = 0.18,                               -- dim the color of `message`
+          cleaning_interval = 1250,                 -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
         },
-        trigger_events = {                               -- See :h events
-          immediate_save = { "BufLeave", "FocusLost" },  -- vim events that trigger an immediate save
+        trigger_events = {                          -- See :h events
+          immediate_save = { "BufLeave", "FocusLost" }, -- vim events that trigger an immediate save
           defer_save = { "InsertLeave", "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
-          cancel_defered_save = { "InsertEnter" },       -- vim events that cancel a pending deferred save
+          cancel_defered_save = { "InsertEnter" },  -- vim events that cancel a pending deferred save
         },
         -- function that takes the buffer handle and determines whether to save the current buffer or not
         -- return true: if buffer is ok to be saved
@@ -526,55 +554,55 @@ return {
           local fn = vim.fn
           local utils = require("auto-save.utils.data")
           -- don't save for `sql` file types
-          if utils.not_in(fn.getbufvar(buf, "&filetype"), { 'lua', "NvimTree" }) then
+          if utils.not_in(fn.getbufvar(buf, "&filetype"), { "lua", "NvimTree" }) then
             return true
           end
           return false
         end,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
-        noautocmd = false,         -- do not execute autocmds when saving
-        debounce_delay = 1000,     -- delay after which a pending save is executed
+        noautocmd = false,     -- do not execute autocmds when saving
+        debounce_delay = 1000, -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
         debug = false,
-      }
-    end
+      })
+    end,
   },
   { "famiu/bufdelete.nvim" },
   { "simeji/winresizer" },
   {
     "Shatur/neovim-session-manager",
     config = function()
-      local Path = require('plenary.path')
-      local config = require('session_manager.config')
-      require('session_manager').setup({
-        sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'), -- The directory where the session files will be saved.
+      local Path = require("plenary.path")
+      local config = require("session_manager.config")
+      require("session_manager").setup({
+        sessions_dir = Path:new(vim.fn.stdpath("data"), "sessions"), -- The directory where the session files will be saved.
         -- session_filename_to_dir = session_filename_to_dir,     -- Function that replaces symbols into separators and colons to transform filename into a session directory.
         -- dir_to_session_filename = dir_to_session_filename,     -- Function that replaces separators and colons into special symbols to transform session directory into a filename. Should use `vim.loop.cwd()` if the passed `dir` is `nil`.
         autoload_mode = config.AutoloadMode.LastSession, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-        autosave_last_session = true,                    -- Automatically save last session on exit and on session switch.
-        autosave_ignore_not_normal = true,               -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-        autosave_ignore_dirs = {},                       -- A list of directories where the session will not be autosaved.
-        autosave_ignore_filetypes = {                    -- All buffers of these file types will be closed before the session is saved.
-          'gitcommit',
-          'gitrebase',
+        autosave_last_session = true,                -- Automatically save last session on exit and on session switch.
+        autosave_ignore_not_normal = true,           -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+        autosave_ignore_dirs = {},                   -- A list of directories where the session will not be autosaved.
+        autosave_ignore_filetypes = {                -- All buffers of these file types will be closed before the session is saved.
+          "gitcommit",
+          "gitrebase",
         },
-        autosave_ignore_buftypes = {},    -- All buffers of these bufer types will be closed before the session is saved.
+        autosave_ignore_buftypes = {}, -- All buffers of these bufer types will be closed before the session is saved.
         autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-        max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+        max_path_length = 80,         -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
-    end
+    end,
   },
   { "s1n7ax/nvim-window-picker" },
   {
     "RRethy/vim-illuminate",
     config = function()
       -- default configuration
-      require('illuminate').configure({
+      require("illuminate").configure({
         -- providers: provider used to get references in the buffer, ordered by priority
         providers = {
-          'lsp',
-          'treesitter',
-          'regex',
+          "lsp",
+          "treesitter",
+          "regex",
         },
         -- delay: delay in milliseconds
         delay = 100,
@@ -597,7 +625,7 @@ return {
           "py",
           "lua",
           "sh",
-          'proto'
+          "proto",
         },
         -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
         -- See `:help mode()` for possible values
@@ -627,11 +655,13 @@ return {
         -- should_enable: a callback that overrides all other settings to
         -- enable/disable illumination. This will be called a lot so don't do
         -- anything expensive in it.
-        should_enable = function(bufnr) return true end,
+        should_enable = function(bufnr)
+          return true
+        end,
         -- case_insensitive_regex: sets regex case sensitivity
         case_insensitive_regex = false,
       })
-    end
+    end,
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -640,7 +670,19 @@ return {
     config = function()
       local configs = require("nvim-treesitter.configs")
       configs.setup({
-        ensure_installed = { "cpp", "python", "markdown", "json", "yaml", "xml", "c", "bash", "lua", "vim", "vimdoc" },
+        ensure_installed = {
+          "cpp",
+          "python",
+          "markdown",
+          "json",
+          "yaml",
+          "xml",
+          "c",
+          "bash",
+          "lua",
+          "vim",
+          "vimdoc",
+        },
         sync_install = false,
         highlight = { enable = true },
         indent = {
@@ -650,7 +692,7 @@ return {
           -- }
         },
       })
-    end
+    end,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
@@ -658,7 +700,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
     },
     config = function()
-      require 'nvim-treesitter.configs'.setup {
+      require("nvim-treesitter.configs").setup({
         textobjects = {
           select = {
             enable = true,
@@ -683,9 +725,9 @@ return {
             -- and should return the mode ('v', 'V', or '<c-v>') or a table
             -- mapping query_strings to modes.
             selection_modes = {
-              ['@parameter.outer'] = 'v', -- charwise
-              ['@function.outer'] = 'V',  -- linewise
-              ['@class.outer'] = '<c-v>', -- blockwise
+              ["@parameter.outer"] = "v", -- charwise
+              ["@function.outer"] = "V", -- linewise
+              ["@class.outer"] = "<c-v>", -- blockwise
             },
             -- If you set this to `true` (default is `false`) then any textobject is
             -- extended to include preceding or succeeding whitespace. Succeeding
@@ -728,8 +770,8 @@ return {
             },
           },
         },
-      }
-    end
+      })
+    end,
   },
   {
     "iamcco/markdown-preview.nvim",
@@ -766,6 +808,6 @@ return {
       require("nvim-surround").setup({
         -- Configuration here, or leave empty to use defaults
       })
-    end
+    end,
   },
 }
