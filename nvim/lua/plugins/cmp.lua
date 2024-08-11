@@ -98,15 +98,15 @@ return {
    })
   end,
  },
- {
-  "rcarriga/cmp-dap",
-  event = "InsertEnter",
-  config = function()
-   require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-    sources = {
-     { name = "dap" },
-    },
-   })
-  end,
- },
+ -- {
+ --  "rcarriga/cmp-dap",
+ --  event = "InsertEnter",
+ --  config = function()
+ --   require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+ --    sources = {
+ --     { name = "dap" },
+ --    },
+ --   })
+ --  end,
+ -- },
 }
