@@ -67,6 +67,7 @@ return {
   },
   {
     "williamboman/mason.nvim",
+    cmd = { "Mason" },
     config = function()
       require("mason").setup()
     end,
@@ -205,9 +206,13 @@ return {
   {
     "jay-babu/mason-null-ls.nvim",
     commit = "e270134d83ba59425edc53356c6fd337b61bb8dd",
-    event = { "BufReadPre", "BufNewFile" },
+    cmd = { "Mason" },
+    -- event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "williamboman/mason.nvim",
+      {
+        "williamboman/mason.nvim",
+        cmd = { "Mason" },
+      },
       {
         "jose-elias-alvarez/null-ls.nvim",
       },
@@ -246,9 +251,13 @@ return {
       require("symbol-usage").setup({
         ---@type 'above'|'end_of_line'|'textwidth'|'signcolumn' `above` by default
         vt_position = "end_of_line",
-        disable = { lsp = {}, filetypes = {
-          "python" -- symbol usage case pyright too slow
-        }, cond = {} },
+        disable = {
+          lsp = {},
+          filetypes = {
+            "python", -- symbol usage case pyright too slow
+          },
+          cond = {},
+        },
       })
     end,
   },

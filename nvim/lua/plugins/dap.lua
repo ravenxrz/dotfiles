@@ -5,7 +5,10 @@ return {
 		-- event = "VeryLazy",
 		dependencies = {
 			"mfussenegger/nvim-dap",
-			"williamboman/mason.nvim",
+			{
+				"williamboman/mason.nvim",
+				cmd = { "Mason" },
+			},
 		},
 		config = function()
 			require("mason-nvim-dap").setup({
