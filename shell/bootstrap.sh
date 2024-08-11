@@ -1,4 +1,9 @@
-path_prepend "$HOME/.local/bin"
+# intall pyenv by 'curl -L https://pyenv.run | bash'
+path_prepend "$HOME/.local/bin:$HOME/.pyenv/bin"
+# init pyenv
+if which pyenv > /dev/null 2>&1; then
+  eval "$(pyenv init -)" > /dev/null 2>&1
+fi
 
 if [[ $OSTYPE == 'darwin'* ]]; then
   path_prepend "$HOME/.dotfiles/bin/macos"
