@@ -643,7 +643,7 @@ return {
           "regex",
         },
         -- delay: delay in milliseconds
-        delay = 800,
+        delay = 500,
         -- filetype_overrides: filetype specific overrides.
         -- The keys are strings to represent the filetype while the values are tables that
         -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
@@ -701,17 +701,17 @@ return {
       })
 
       -- change the highlight style
-      vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "Visual" })
-      vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "Visual" })
-      vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "Visual" })
+      vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "LspReferenceText" })
+      vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "LspReferenceRead" })
+      vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "LspReferenceWrite" })
 
       --- auto update the highlight style on colorscheme change
       vim.api.nvim_create_autocmd({ "ColorScheme" }, {
         pattern = { "*" },
         callback = function(ev)
-          vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "Visual" })
-          vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "Visual" })
-          vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "Visual" })
+          vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "LspReferenceText" })
+          vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "LspReferenceRead" })
+          vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "LspReferenceWrite" })
         end,
       })
     end,
