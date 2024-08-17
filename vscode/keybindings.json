@@ -17,8 +17,7 @@
 	{ // window move down
 		"key": "ctrl+j",
 		"command": "vim.remap",
-		"when": "vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen",
-		"args": {
+		"when": "vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen", "args": {
 			"after": [
 				"<c-w>",
 				"j"
@@ -544,11 +543,11 @@
 		"command": "-revealReference",
 		"when": "listFocus && referenceSearchVisible && !inputFocus && !treeElementCanCollapse && !treeElementCanExpand"
 	},
-	{
-		"key": "space",
-		"command": "whichkey.show",
-		"when": "!inputFocus"
-	},
+	// {
+	// 	"key": "space",
+	// 	"command": "whichkey.show",
+	// 	"when": "!inputFocus"
+	// },
 	{
 		"key": "alt+backspace",
 		"command": "git.stageChange"
