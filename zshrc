@@ -77,7 +77,6 @@ plugins=(
   zsh-syntax-highlighting
   vi-mode
   docker
-  fzf
 )
 
 # plugin settings
@@ -118,6 +117,8 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 source ~/.shell/functions.sh
+source ~/.shell/bootstrap.sh
 source ~/.shell/aliases.sh
 source ~/.shell/external.sh
-source ~/.shell/bootstrap.sh
+source ~/.shell/fzf-completion.zsh
+source ~/.shell/fzf-key-bindings.zsh
