@@ -2,21 +2,6 @@
 	path = .dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
-[submodule "zsh/plugins/dircolors-solarized"]
-	path = shell/plugins/dircolors-solarized
-	url = https://github.com/seebi/dircolors-solarized.git
-[submodule "zsh/plugins/zsh-syntax-highlighting"]
-	path = zsh/plugins/zsh-syntax-highlighting
-	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
-[submodule "zsh/plugins/zsh-completions"]
-	path = zsh/plugins/zsh-completions
-	url = https://github.com/ravenxrz/zsh-autosuggestions.git
 [submodule "tmux/tpm"]
 	path = tmux/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "zsh/plugins/zsh-autosuggestions"]
-	path = zsh/plugins/zsh-autosuggestions
-	url = https://github.com/ravenxrz/zsh-autosuggestions
-[submodule "zsh/plugins/spaceship-prompt"]
-	path = zsh/plugins/spaceship-prompt
-	url = https://github.com/spaceship-prompt/spaceship-prompt
