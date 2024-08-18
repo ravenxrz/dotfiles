@@ -76,7 +76,14 @@ plugins=(
   zsh-autosuggestions
   zsh-syntax-highlighting
   vi-mode
+  docker
 )
+
+# plugin settings
+# docker plugin settings
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
+
 
 source $ZSH/oh-my-zsh.sh
 
