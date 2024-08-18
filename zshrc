@@ -77,6 +77,7 @@ plugins=(
   zsh-syntax-highlighting
   vi-mode
   docker
+  fzf
 )
 
 # plugin settings
