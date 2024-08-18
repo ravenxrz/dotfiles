@@ -145,6 +145,9 @@ alias peek='tee >(cat 1>&2)'
 # clean window output
 alias clc="clear"
 
+# docker x86 on mac
+alias dockerx86="DOCKER_DEFAULT_PLATFORM=linux/amd64 docker"
+
 # lazygit
 alias lazygit="lazygit -ucd ~/.config/lazygit/"
 
