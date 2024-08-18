@@ -40,7 +40,7 @@
     ~/.vimrc_local:
     ~/.ideavimrc:
     ~/.vsvimrc: vscode/vsvimrc
-    ~/.zsh:
+    ~/.oh-my-zsh:
     ~/.zshrc:
     ~/.shell_local_before:
     ~/.config/helix/config.toml: helix/config.toml
