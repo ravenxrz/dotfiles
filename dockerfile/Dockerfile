@@ -18,7 +18,7 @@ deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted univer
 RUN apt-get update \
   && apt-get install -y  \
   ssh openssh-server \
-  build-essential gcc g++ gdb gdbserver cmake \
+  build-essential gcc g++ gdb gdbserver cmake clangd \
   python3 python3-pip \
   sudo git\
   && apt-get clean \
