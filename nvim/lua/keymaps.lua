@@ -118,6 +118,9 @@ keymap("n", "<leader>z", "<cmd>ZenMode<cr>", opts)
 -- neogen
 keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
 
+-- highlight current line
+keymap("v", "<leader>l", ":<c-u>HSHighlight 1<CR>", opts)
+keymap("v", "<leader>L", ":<c-u>HSRmHighlight<CR>", opts)
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)

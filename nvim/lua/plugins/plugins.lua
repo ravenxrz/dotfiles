@@ -194,9 +194,7 @@ return {
   },
   {
     "numToStr/Comment.nvim",
-    keys = {
-      "gcc"
-    },
+    event = { "BufReadPost" },
     opts = {
       ---Add a space b/w comment and the line
       padding = true,
@@ -925,5 +923,7 @@ return {
         current = "DiffText",
       },
     },
-  },
+  },{
+    "Pocco81/HighStr.nvim",
+  }
 }
