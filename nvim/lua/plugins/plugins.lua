@@ -10,8 +10,7 @@ return {
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
     },
-  },
-  {
+  }, {
     "ggandor/leap.nvim",
     config = function()
       -- require('leap').create_default_mappings()
@@ -613,7 +612,7 @@ return {
         sessions_dir = Path:new(vim.fn.stdpath("data"), "sessions"), -- The directory where the session files will be saved.
         -- session_filename_to_dir = session_filename_to_dir,     -- Function that replaces symbols into separators and colons to transform filename into a session directory.
         -- dir_to_session_filename = dir_to_session_filename,     -- Function that replaces separators and colons into special symbols to transform session directory into a filename. Should use `vim.loop.cwd()` if the passed `dir` is `nil`.
-        autoload_mode = config.AutoloadMode.LastSession, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
+        autoload_mode = config.AutoloadMode.CurrentDir, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
         autosave_last_session = true,                    -- Automatically save last session on exit and on session switch.
         autosave_ignore_not_normal = true,               -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
         autosave_ignore_dirs = {},                       -- A list of directories where the session will not be autosaved.
