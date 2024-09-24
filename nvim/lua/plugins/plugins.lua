@@ -9,14 +9,44 @@ return {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
+      window = {
+        -- backdrop = 0.99, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
+        -- height and width can be:
+        -- * an absolute number of cells when > 1
+        -- * a percentage of the width / height of the editor when <= 1
+        -- * a function that returns the width or the height
+        width = 140, -- width of the Zen window
+        height = 1,  -- height of the Zen window
+        -- by default, no options are changed for the Zen window
+        -- uncomment any of the options below, or add other vim.wo options you want to apply
+        options = {
+          -- signcolumn = "no", -- disable signcolumn
+          -- number = false, -- disable number column
+          -- relativenumber = false, -- disable relative numbers
+          -- cursorline = false, -- disable cursorline
+          -- cursorcolumn = false, -- disable cursor column
+          -- foldcolumn = "0", -- disable fold column
+          -- list = false, -- disable whitespace characters
+        },
+      },
+      plugins = {
+        options = {
+          enabled = true,
+          ruler = true, -- disables the ruler text in the cmd line area
+          showcmd = false, -- disables the command in the last line of the screen
+          -- you may turn on/off statusline in zen mode by setting 'laststatus'
+          -- statusline will be shown only if 'laststatus' == 3
+          laststatus = 3, -- turn off the statusline in zen mode
+        },
+      }
     },
   }, {
-    "ggandor/leap.nvim",
-    config = function()
-      -- require('leap').create_default_mappings()
-      require("leap").init_highlight(true)
-    end,
-  },
+  "ggandor/leap.nvim",
+  config = function()
+    -- require('leap').create_default_mappings()
+    require("leap").init_highlight(true)
+  end,
+},
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -613,10 +643,10 @@ return {
         -- session_filename_to_dir = session_filename_to_dir,     -- Function that replaces symbols into separators and colons to transform filename into a session directory.
         -- dir_to_session_filename = dir_to_session_filename,     -- Function that replaces separators and colons into special symbols to transform session directory into a filename. Should use `vim.loop.cwd()` if the passed `dir` is `nil`.
         autoload_mode = config.AutoloadMode.CurrentDir, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-        autosave_last_session = true,                    -- Automatically save last session on exit and on session switch.
-        autosave_ignore_not_normal = true,               -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-        autosave_ignore_dirs = {},                       -- A list of directories where the session will not be autosaved.
-        autosave_ignore_filetypes = {                    -- All buffers of these file types will be closed before the session is saved.
+        autosave_last_session = true,                   -- Automatically save last session on exit and on session switch.
+        autosave_ignore_not_normal = true,              -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+        autosave_ignore_dirs = {},                      -- A list of directories where the session will not be autosaved.
+        autosave_ignore_filetypes = {                   -- All buffers of these file types will be closed before the session is saved.
           "gitcommit",
           "gitrebase",
         },
@@ -786,83 +816,83 @@ return {
     end,
   },
   {
-  	"nvim-treesitter/nvim-treesitter-textobjects",
-  	dependencies = {
-  		"nvim-treesitter/nvim-treesitter",
-  	},
-  	config = function()
-  		require("nvim-treesitter.configs").setup({
-  			textobjects = {
-  				select = {
-  					enable = true,
-  					-- Automatically jump forward to textobj, similar to targets.vim
-  					lookahead = true,
-  					keymaps = {
-  						-- You can use the capture groups defined in textobjects.scm
-  						["af"] = "@function.outer",
-  						["if"] = "@function.inner",
-  						["ac"] = "@class.outer",
-  						-- You can optionally set descriptions to the mappings (used in the desc parameter of
-  						-- nvim_buf_set_keymap) which plugins like which-key display
-  						["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-  						-- You can also use captures from other query groups like `locals.scm`
-  						["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
-  					},
-  					-- You can choose the select mode (default is charwise 'v')
-  					--
-  					-- Can also be a function which gets passed a table with the keys
-  					-- * query_string: eg '@function.inner'
-  					-- * method: eg 'v' or 'o'
-  					-- and should return the mode ('v', 'V', or '<c-v>') or a table
-  					-- mapping query_strings to modes.
-  					selection_modes = {
-  						["@parameter.outer"] = "v", -- charwise
-  						["@function.outer"] = "V", -- linewise
-  						["@class.outer"] = "<c-v>", -- blockwise
-  					},
-  					-- If you set this to `true` (default is `false`) then any textobject is
-  					-- extended to include preceding or succeeding whitespace. Succeeding
-  					-- whitespace has priority in order to act similarly to eg the built-in
-  					-- `ap`.
-  					--
-  					-- Can also be a function which gets passed a table with the keys
-  					-- * query_string: eg '@function.inner'
-  					-- * selection_mode: eg 'v'
-  					-- and should return true or false
-  					include_surrounding_whitespace = true,
-  				},
-  				move = {
-  					enable = true,
-  					set_jumps = true, -- whether to set jumps in the jumplist
-  					goto_next_start = {
-  						["]f"] = "@function.outer",
-  						["]]"] = { query = "@class.outer", desc = "Next class start" },
-  						--
-  						-- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
-  						["]o"] = "@loop.*",
-  						-- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
-  						--
-  						-- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
-  						-- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
-  						["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-  						["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-  					},
-  					goto_next_end = {
-  						["]F"] = "@function.outer",
-  						["]["] = "@class.outer",
-  					},
-  					goto_previous_start = {
-  						["[f"] = "@function.outer",
-  						["[["] = "@class.outer",
-  					},
-  					goto_previous_end = {
-  						["[F"] = "@function.outer",
-  						["[]"] = "@class.outer",
-  					},
-  				},
-  			},
-  		})
-  	end,
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        textobjects = {
+          select = {
+            enable = true,
+            -- Automatically jump forward to textobj, similar to targets.vim
+            lookahead = true,
+            keymaps = {
+              -- You can use the capture groups defined in textobjects.scm
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              -- You can optionally set descriptions to the mappings (used in the desc parameter of
+              -- nvim_buf_set_keymap) which plugins like which-key display
+              ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+              -- You can also use captures from other query groups like `locals.scm`
+              ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
+            },
+            -- You can choose the select mode (default is charwise 'v')
+            --
+            -- Can also be a function which gets passed a table with the keys
+            -- * query_string: eg '@function.inner'
+            -- * method: eg 'v' or 'o'
+            -- and should return the mode ('v', 'V', or '<c-v>') or a table
+            -- mapping query_strings to modes.
+            selection_modes = {
+              ["@parameter.outer"] = "v", -- charwise
+              ["@function.outer"] = "V",  -- linewise
+              ["@class.outer"] = "<c-v>", -- blockwise
+            },
+            -- If you set this to `true` (default is `false`) then any textobject is
+            -- extended to include preceding or succeeding whitespace. Succeeding
+            -- whitespace has priority in order to act similarly to eg the built-in
+            -- `ap`.
+            --
+            -- Can also be a function which gets passed a table with the keys
+            -- * query_string: eg '@function.inner'
+            -- * selection_mode: eg 'v'
+            -- and should return true or false
+            include_surrounding_whitespace = true,
+          },
+          move = {
+            enable = true,
+            set_jumps = true, -- whether to set jumps in the jumplist
+            goto_next_start = {
+              ["]f"] = "@function.outer",
+              ["]]"] = { query = "@class.outer", desc = "Next class start" },
+              --
+              -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
+              ["]o"] = "@loop.*",
+              -- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
+              --
+              -- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
+              -- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
+              ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+              ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
+            },
+            goto_next_end = {
+              ["]F"] = "@function.outer",
+              ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+              ["[f"] = "@function.outer",
+              ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+              ["[F"] = "@function.outer",
+              ["[]"] = "@class.outer",
+            },
+          },
+        },
+      })
+    end,
   },
   {
     "iamcco/markdown-preview.nvim",
@@ -922,7 +952,7 @@ return {
         current = "DiffText",
       },
     },
-  },{
-    "Pocco81/HighStr.nvim",
-  }
+  }, {
+  "Pocco81/HighStr.nvim",
+}
 }
