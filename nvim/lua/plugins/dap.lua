@@ -1,13 +1,13 @@
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",
-		cmd = { "Mason" },
+		-- cmd = { "Mason" },
 		-- event = "VeryLazy",
 		dependencies = {
 			"mfussenegger/nvim-dap",
 			{
 				"williamboman/mason.nvim",
-				cmd = { "Mason" },
+				-- cmd = { "Mason" },
 			},
 		},
 		config = function()
@@ -178,7 +178,7 @@ return {
 	},
 	{
 		"rcarriga/nvim-dap-ui",
-		cmd = "DapContinue",
+		-- cmd = "DapContinue",
 		-- keys = { "<leader>dc" },
 		dependencies = {
 			"mfussenegger/nvim-dap",

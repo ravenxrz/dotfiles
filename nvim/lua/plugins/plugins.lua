@@ -3,6 +3,24 @@ return {
     "stevearc/dressing.nvim",
   },
   {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
+    },
+  },
+  {
     "folke/zen-mode.nvim",
     cmd = { "ZenMode" },
     opts = {
@@ -10,7 +28,7 @@ return {
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
       window = {
-        -- backdrop = 0.99, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
+        backdrop = 1, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
         -- height and width can be:
         -- * an absolute number of cells when > 1
         -- * a percentage of the width / height of the editor when <= 1
@@ -32,11 +50,11 @@ return {
       plugins = {
         options = {
           enabled = true,
-          ruler = true, -- disables the ruler text in the cmd line area
+          ruler = false,   -- disables the ruler text in the cmd line area
           showcmd = false, -- disables the command in the last line of the screen
           -- you may turn on/off statusline in zen mode by setting 'laststatus'
           -- statusline will be shown only if 'laststatus' == 3
-          laststatus = 3, -- turn off the statusline in zen mode
+          laststatus = 0, -- turn off the statusline in zen mode
         },
       }
     },
