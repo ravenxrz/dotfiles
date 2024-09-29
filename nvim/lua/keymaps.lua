@@ -56,6 +56,7 @@ keymap("n", "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>", opts)
 keymap("n", "<leader>gl", "<cmd>Gitsigns blame_line<cr>", opts)
 keymap("n", "]g", "<cmd>Gitsigns next_hunk<cr>", opts)
 keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
+keymap("n", "<leader>gf", "<cmd>Telescope git_file_history<cr>", opts)
 
 -- Telescope
 keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)

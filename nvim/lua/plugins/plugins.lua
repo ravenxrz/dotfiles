@@ -296,6 +296,12 @@ return {
         "nvim-telescope/telescope-live-grep-args.nvim",
         version = "^1.0.0",
       },
+      {
+        "isak102/telescope-git-file-history.nvim",
+        dependencies = {
+          "tpope/vim-fugitive"
+        }
+      }
     },
     config = function()
       local function filename_first(_, path)
@@ -336,6 +342,7 @@ return {
         },
       })
       telescope.load_extension("live_grep_args")
+      telescope.load_extension("git_file_history")
     end,
   },
   {
