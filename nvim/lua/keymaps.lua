@@ -42,12 +42,13 @@ keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", opts)
 keymap("n", "<leader>o", "<cmd>Neotree reveal<cr>", opts)
 
 -- Buffer
-keymap("n", "E", "<cmd>BufferLineCyclePrev<cr>", opts)
-keymap("n", "R", "<cmd>BufferLineCycleNext<cr>", opts)
-keymap("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", opts)
-keymap("n", "<leader>bb", "<cmd>BufferLinePick<cr>", opts)
+keymap("n", "E", "<cmd>BufferPrevious<cr>", opts)
+keymap("n", "R", "<cmd>BufferNext<cr>", opts)
+keymap("n", "<leader>bp", "<cmd>BufferPin<cr>", opts)
+keymap("n", "<leader>bb", "<cmd>BufferPick<cr>", opts)
 -- buffer delete
-keymap("n", "<leader>bd", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
+-- keymap("n", "<leader>bd", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
+keymap("n", "<leader>bd", "<cmd>BufferClose<cr>", opts)
 
 -- Gitsigns
 keymap("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", opts)
