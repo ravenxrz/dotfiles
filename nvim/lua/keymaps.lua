@@ -124,7 +124,8 @@ keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
 keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle<cr>", opts)
 keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=false<cr>", opts)
-keymap("n", "gr", "<cmd>Trouble lsp toggle focus=true<cr>", opts)
+keymap("n", "gr", "<cmd>Trouble lsp_references focus=true<cr>", opts)
+keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true<cr>", opts)
 keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
 
 
