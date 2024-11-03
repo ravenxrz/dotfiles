@@ -354,15 +354,15 @@ return {
 			telescope.load_extension("git_file_history")
 		end,
 	},
-	{
-		"stevearc/aerial.nvim",
-		event = "LspAttach",
-		opts = {},
-		dependencies = {
-			-- "nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
+	-- {
+	-- 	"stevearc/aerial.nvim",
+	-- 	event = "LspAttach",
+	-- 	opts = {},
+	-- 	dependencies = {
+	-- 		-- "nvim-treesitter/nvim-treesitter",
+	-- 		"nvim-tree/nvim-web-devicons",
+	-- 	},
+	-- },
 	{
 		"akinsho/toggleterm.nvim",
 		keys = {
