@@ -61,7 +61,7 @@ keymap("n", "<leader>gf", "<cmd>Telescope git_file_history<cr>", opts)
 
 -- Telescope
 keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
-keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
+-- keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
@@ -74,11 +74,11 @@ keymap("n", "<leader>fW", "<cmd>lua require('telescope-live-grep-args.shortcuts'
 keymap("v", "<leader>fW", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=' --no-ignore --no-config'})<cr>", opts)
 keymap("n", "<leader>s", "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 55, fname_width = 25})<cr>", opts)
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
-keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
+-- keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
 -- outline
-keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
+-- keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
 
 -- lazygit
 -- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
@@ -119,6 +119,14 @@ keymap("n", "<leader>z", "<cmd>ZenMode<cr>", opts)
 
 -- neogen
 keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
+
+-- trouble
+keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", opts)
+keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle<cr>", opts)
+keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=false<cr>", opts)
+keymap("n", "gr", "<cmd>Trouble lsp toggle focus=true<cr>", opts)
+keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
+
 
 -- highlight current line
 keymap("v", "<leader>l", ":<c-u>HSHighlight 1<CR>", opts)

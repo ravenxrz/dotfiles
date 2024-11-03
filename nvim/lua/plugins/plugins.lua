@@ -1,5 +1,9 @@
 return {
 	{
+		"folke/trouble.nvim",
+		cmd = "Trouble",
+	},
+	{
 		"stevearc/dressing.nvim",
 	},
 	{
@@ -316,6 +320,7 @@ return {
 
 			local actions = require("telescope.actions")
 			local telescope = require("telescope")
+			local open_with_trouble = require("trouble.sources.telescope").open
 			telescope.setup({
 				defaults = {
 					-- sorting_strategy = "ascending", -- display results top->bottom
@@ -332,10 +337,12 @@ return {
 					end,
 					mappings = {
 						i = {
+							["<c-t>"] = open_with_trouble,
 							["<C-j>"] = actions.cycle_history_next,
 							["<C-k>"] = actions.cycle_history_prev,
 						},
 						n = {
+							["<c-t>"] = open_with_trouble,
 							["<C-j>"] = actions.cycle_history_next,
 							["<C-k>"] = actions.cycle_history_prev,
 						},
@@ -470,9 +477,9 @@ return {
 			vim.g.barbar_auto_setup = false
 		end,
 		opts = {
-      icons = {
-        pinned = { button = "", filename = true },
-      }
+			icons = {
+				pinned = { button = "", filename = true },
+			},
 			-- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
 			-- animation = true,
 			-- insert_at_start = true,
