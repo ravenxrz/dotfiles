@@ -8,10 +8,15 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Better window navigation
-keymap("n", "<C-h>", "<C-w>h", opts)
-keymap("n", "<C-j>", "<C-w>j", opts)
-keymap("n", "<C-k>", "<C-w>k", opts)
-keymap("n", "<C-l>", "<C-w>l", opts)
+-- keymap("n", "<C-h>", "<C-w>h", opts)
+-- keymap("n", "<C-j>", "<C-w>j", opts)
+-- keymap("n", "<C-k>", "<C-w>k", opts)
+-- keymap("n", "<C-l>", "<C-w>l", opts)
+
+keymap("n", "<C-h>", "<cmd>NvimTmuxNavigateLeft<CR>", opts)
+keymap("n", "<C-j>", "<Cmd>NvimTmuxNavigateDown<CR>", opts)
+keymap("n", "<C-k>", "<Cmd>NvimTmuxNavigateUp<CR>", opts)
+keymap("n", "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>", opts)
 
 -- Navigate line
 keymap("n", "H", "^", opts)
