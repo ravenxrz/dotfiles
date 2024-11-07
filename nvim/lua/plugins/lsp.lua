@@ -212,7 +212,13 @@ return {
     },
     config = function()
       require("mason-null-ls").setup({
-        handlers = {},
+        ensure_installed = { "yapf" }
+      })
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.yapf,
+        },
       })
     end
   },
