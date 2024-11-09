@@ -1,5 +1,21 @@
 return {
   {
+    "michaelb/sniprun",
+    branch = "master",
+    build = "sh install.sh",
+    config = function()
+      require("sniprun").setup({
+        -- your options
+        display = { "Classic" },
+        interpreter_options = {
+        Cpp_original = {
+            compiler = "g++ -g --std=c++20"
+            }
+        }
+      })
+    end,
+  },
+  {
     "folke/trouble.nvim",
     cmd = "Trouble",
     opts = {}
@@ -1005,7 +1021,7 @@ return {
   {
     "alexghergh/nvim-tmux-navigation",
     opts = {
-      disable_when_zoomed = true,   -- defaults to false
+      disable_when_zoomed = true, -- defaults to false
     }
   },
 }

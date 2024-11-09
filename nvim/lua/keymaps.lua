@@ -137,6 +137,10 @@ keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
 keymap("n", "Q", "q", opts)
 keymap("n", "q", "<Nop>", opts)
 
+-- sniprun
+keymap("n", "<leader><enter>", ":let b:caret=winsaveview() <CR> | :%SnipRun <CR>| :call winrestview(b:caret) <CR>", opts)
+keymap("v", "<leader><enter>", "<Plug>SnipRun", opts)
+
 -- highlight current line
 keymap("v", "<leader>l", ":<c-u>HSHighlight 1<CR>", opts)
 keymap("v", "<leader>L", ":<c-u>HSRmHighlight<CR>", opts)
