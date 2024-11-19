@@ -151,6 +151,13 @@ alias dockerx86="DOCKER_DEFAULT_PLATFORM=linux/amd64 docker"
 # lazygit
 alias lazygit="lazygit -ucd ~/.config/lazygit/"
 
+alias rgn="rg --no-ignore"
+
+alias ctree="calltree.pl"
+
+alias cpptree="cpptree.pl"
+
+
 myssh() {
    /usr/bin/kinit -kt ~/.ssh/keytab zhangxingrui.leo@BYTEDANCE.COM
    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $@
