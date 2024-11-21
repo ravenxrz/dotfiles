@@ -19,7 +19,7 @@ return {
         display = { "Classic" },
         interpreter_options = {
           Cpp_original = {
-            compiler = "g++ -g --std=c++20"
+            compiler = "g++ -g --std=c++2a"
           }
         }
       })
