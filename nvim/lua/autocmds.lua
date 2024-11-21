@@ -3,7 +3,7 @@ local function detect_python_indent()
   for line in io.lines(vim.fn.expand("%")) do
     local spaces = line:match("^(%s*)") -- 匹配每行开头的空格
     if spaces then
-      local tabsize = #spaces         -- 计算空格数
+      local tabsize = #spaces           -- 计算空格数
       if tabsize > 0 then
         vim.opt_local.expandtab = true
         vim.opt_local.shiftwidth = tabsize
@@ -24,3 +24,26 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
   group = "DetectPythonIndent",
 })
+
+local win_focus_ignore_filetypes = { 'neo-tree' }
+vim.api.nvim_create_autocmd('FileType', {
+  group = augroup,
+  callback = function(_)
+    if vim.tbl_contains(win_focus_ignore_filetypes, vim.bo.filetype) then
+      vim.b.focus_disable = true
+    else
+      vim.b.focus_disable = false
+    end
+  end,
+  desc = 'Disable focus autoresize for FileType',
+})
+
+-- some plugin reset signcolumn to auto, I dont know who do that,
+-- so reset it every time
+-- vim.api.nvim_create_autocmd('WinEnter', {
+--   group = augroup,
+--   callback = function(_)
+--     vim.opt["signcolumn"] = "yes"
+--   end,
+--   desc = 'Reset signcolum',
+-- })

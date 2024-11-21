@@ -7,6 +7,10 @@ return {
         width = 160,
         height = 35
       },
+      ui = {
+        signcolumn = false,
+        winhighlight = false,         -- Auto highlighting for focussed/unfocussed windows
+      }
     }
   },
   {
