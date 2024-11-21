@@ -1,5 +1,15 @@
 return {
   {
+    'nvim-focus/focus.nvim',
+    version = '*',
+    opts = {
+      autoresize = {
+        width = 160,
+        height = 35
+      },
+    }
+  },
+  {
     "michaelb/sniprun",
     branch = "master",
     build = "sh install.sh",
@@ -8,9 +18,9 @@ return {
         -- your options
         display = { "Classic" },
         interpreter_options = {
-        Cpp_original = {
+          Cpp_original = {
             compiler = "g++ -g --std=c++20"
-            }
+          }
         }
       })
     end,

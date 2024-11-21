@@ -120,7 +120,9 @@ keymap("n", "]c", "<cmd>cn<cr>", opts)
 keymap("n", "[c", "<cmd>cp<cr>", opts)
 
 -- zenmode
-keymap("n", "<leader>z", "<cmd>ZenMode<cr>", opts)
+keymap("n", "<leader>zz", "<cmd>ZenMode<cr>", opts)
+-- foucs
+keymap("n", "<leader>zf", "<cmd>FocusToggle<cr>", opts)
 
 -- neogen
 keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
