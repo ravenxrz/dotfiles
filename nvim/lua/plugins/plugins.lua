@@ -4,6 +4,7 @@ return {
     version = '*',
     opts = {
       autoresize = {
+        enable = false,
         width = 160,
         height = 35
       },
