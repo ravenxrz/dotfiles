@@ -35,3 +35,6 @@ Thumbs.db
 
 # nvim
 .local_history/
+
+pst_admin*
+cgdb/logs
