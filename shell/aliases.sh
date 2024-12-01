@@ -153,7 +153,7 @@ alias lazygit="lazygit -ucd ~/.config/lazygit/"
 
 alias rgn="rg --no-ignore"
 
-alias ctree="calltree.pl"
+# alias ctree="calltree.pl"
 
 alias cpptree="cpptree.pl"
 
