@@ -10,7 +10,7 @@ return {
       },
       ui = {
         signcolumn = false,
-        winhighlight = false,         -- Auto highlighting for focussed/unfocussed windows
+        winhighlight = false, -- Auto highlighting for focussed/unfocussed windows
       }
     }
   },
@@ -491,9 +491,30 @@ return {
   },
   {
     "MagicDuck/grug-far.nvim",
-    cmd = { "GrugFar" },
+    -- cmd = { "GrugFar" },
     config = function()
       require("grug-far").setup({
+        keymaps = {
+          replace = { n = '<localleader>r' },
+          qflist = { n = '<C-q>' },
+          syncLocations = { n = '<localleader>s' },
+          syncLine = { n = '<localleader>l' },
+          close = { n = '<localleader>q' },
+          historyOpen = { n = '<localleader>t' },
+          historyAdd = { n = '<localleader>a' },
+          refresh = { n = '<localleader>f' },
+          openLocation = { n = '<localleader>o' },
+          openNextLocation = { n = '<localleader>j' },
+          openPrevLocation = { n = '<localleader>k' },
+          gotoLocation = { n = '<enter>' },
+          pickHistoryEntry = { n = '<enter>' },
+          abort = { n = '<localleader>b' },
+          help = { n = 'g?' },
+          toggleShowCommand = { n = '<localleader>c' },
+          swapEngine = { n = '<localleader>e' },
+          previewLocation = { n = '<localleader>p' },
+          swapReplacementInterpreter = { n = '<localleader>x' },
+        },
         -- ... options, see Configuration section below ...
         -- ... there are no required options atm...
       })
