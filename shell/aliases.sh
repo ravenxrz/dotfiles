@@ -157,6 +157,25 @@ alias ctree="calltree.pl"
 
 alias cpptree="cpptree.pl"
 
+ctree() {
+  # usage: calltree.pl 'start_pattern' 'end_pattern' mode verbose depeth
+  echo $#
+  if [ $# -eq 3 ]; then
+    cmd="calltree.pl $1 '' $2 1 $3"
+    echo "cmd:$cmd"
+    eval $cmd
+    return
+  fi
+  if [ $# -eq 4 ]; then
+    cmd="calltree.pl $1 '' $2 1 $3 $4"
+    echo "cmd:$cmd"
+    eval $cmd
+    return
+  fi
+  # print usage
+  calltree.pl
+  return
+}
 
 myssh() {
    /usr/bin/kinit -kt ~/.ssh/keytab zhangxingrui.leo@BYTEDANCE.COM
