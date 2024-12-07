@@ -12,13 +12,13 @@ if [ -f ~/.bashrc_local_before ]; then
 fi
 
 # Settings
-source ~/.bash/settings.bash
+# source ~/.bash/settings.bash
 
 # Custom prompt
 source ~/.bash/prompt.bash
 
 # Plugins
-source ~/.bash/plugins.bash
+# source ~/.bash/plugins.bash
 
 # Bootstrap
 source ~/.shell/bootstrap.sh
@@ -30,10 +30,10 @@ source ~/.shell/external.sh
 source ~/.shell/aliases.sh
 
 # language enviroment
-source ~/.shell/language.sh
+# source ~/.shell/language.sh
 
 # auto commands
-source ~/.shell/autocommands.sh
+# source ~/.shell/autocommands.sh
 
 # Allow local customizations in the ~/.shell_local_after file
 if [ -f ~/.shell_local_after ]; then
