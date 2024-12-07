@@ -36,7 +36,8 @@ Thumbs.db
 # nvim
 .local_history/
 
-pst_admin
+# pst_admin
+# !pst_admin/*
 pst_admin.INFO*
 pst_admin.DEBUG*
 pst_admin.WARN*
