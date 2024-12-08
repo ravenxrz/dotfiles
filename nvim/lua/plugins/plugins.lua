@@ -6,6 +6,9 @@ return {
     },
     config = true,
   },
+  {
+    'pteroctopus/faster.nvim'
+  },
   -- {  -- this plugins has conflicts with GrugFar, disable this
   --   'nvim-focus/focus.nvim',
   --   version = '*',
