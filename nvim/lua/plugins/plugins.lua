@@ -1,5 +1,15 @@
 return {
   {
+    "amitds1997/remote-nvim.nvim",
+    version = "*",                     -- Pin to GitHub releases
+    dependencies = {
+      "nvim-lua/plenary.nvim",         -- For standard functions
+      "MunifTanjim/nui.nvim",          -- To build the plugin UI
+      "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
+    },
+    config = false,
+  },
+  {
     "andymass/vim-matchup"
   },
   {
@@ -738,7 +748,7 @@ return {
         end,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
         noautocmd = false,         -- do not execute autocmds when saving
-        debounce_delay = 500,     -- delay after which a pending save is executed
+        debounce_delay = 500,      -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
         debug = false,
       })
