@@ -2,7 +2,7 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 local opts = {
-  eadirection = 'ver',                                                                             -- keep other window to a fixed size when vsplit (keep grug-far plugin to a fixed size)
+  -- eadirection = 'ver',                                                                             -- keep other window to a fixed size when vsplit (keep grug-far plugin to a fixed size)
   backup = false,                                                                                  -- creates a backup file
   clipboard = "unnamedplus",                                                                       -- allows neovim to access the system clipboard
   cmdheight = 1,                                                                                   -- keep status bar position close to bottom

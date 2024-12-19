@@ -1,5 +1,8 @@
 return {
   {
+    "andymass/vim-matchup"
+  },
+  {
     "yorickpeterse/nvim-window",
     keys = {
       { "<C-w>", "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },
@@ -456,10 +459,16 @@ return {
         "<cmd>lua _lazygit_toggle()<CR>",
         { noremap = true, silent = true }
       )
+      -- vim.api.nvim_set_keymap(
+      --   "n",
+      --   "<leader>gt",
+      --   "<cmd>TermExec cmd='tig %' go_back=1 direction=float<CR>",
+      --   { noremap = true, silent = true }
+      -- )
       vim.api.nvim_set_keymap(
         "n",
         "<leader>gt",
-        "<cmd>TermExec cmd='tig %' go_back=1 direction=float<CR>",
+        "<cmd>G blame<CR>",
         { noremap = true, silent = true }
       )
       vim.api.nvim_set_keymap(
@@ -504,6 +513,7 @@ return {
     -- cmd = { "GrugFar" },
     config = function()
       require("grug-far").setup({
+        -- windowCreationCommand = 'topleft split',
         keymaps = {
           replace = { n = '<localleader>r' },
           qflist = { n = '<C-q>' },
@@ -721,14 +731,14 @@ return {
           local fn = vim.fn
           local utils = require("auto-save.utils.data")
           -- don't save for `sql` file types
-          if utils.not_in(fn.getbufvar(buf, "&filetype"), { "lua", "NvimTree" }) then
+          if utils.not_in(fn.getbufvar(buf, "&filetype"), { "lua", "NvimTree", "neo-tree" }) then
             return true
           end
           return false
         end,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
         noautocmd = false,         -- do not execute autocmds when saving
-        debounce_delay = 1000,     -- delay after which a pending save is executed
+        debounce_delay = 500,     -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
         debug = false,
       })
