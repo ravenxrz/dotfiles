@@ -83,7 +83,8 @@ return {
           "jsonls",
           "clangd",
           "pyright",
-          "lua_ls"
+          "lua_ls",
+          "yamlls"
         },
       }
       )
@@ -196,6 +197,22 @@ return {
                 },
               },
             },
+            yamlls = {
+              on_attach = function(client, bufnr)
+                client.server_capabilities.documentFormattingProvider = true
+              end,
+              capabilities = capabilities,
+              settings = {
+                yaml = {
+                  format = {
+                    enable = true
+                  },
+                  schemaStore = {
+                    enable = true
+                  }
+                }
+              }
+            }
           }
           if opts[server_name] then
             local server_opt = opts[server_name]
