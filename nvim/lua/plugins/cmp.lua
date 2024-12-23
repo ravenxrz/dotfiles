@@ -95,11 +95,8 @@ return {
     end,
   },
   {
-    "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
-      config = function()
-        require("codeverse").setup({
-        })
-    end
+    -- :Copilot auth/signin
+    "github/copilot.vim",
   }
 
   -- {

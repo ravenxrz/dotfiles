@@ -142,17 +142,33 @@ alias rgn="rg --no-ignore"
 alias cpptree="cpptree.pl"
 
 ctree() {
-  # usage: calltree.pl 'start_pattern' 'end_pattern' mode verbose depeth
-  echo $#
+  # usage: calltree.pl 'start_pattern' 'end_pattern' mode verbose depeth path
   if [ $# -eq 3 ]; then
-    cmd="calltree.pl $1 '' $2 1 $3"
+    cmd="calltree.pl '$1' '' $2 1 $3"
     echo "cmd:$cmd"
     eval $cmd
     return
   fi
   if [ $# -eq 4 ]; then
-    cmd="calltree.pl $1 '' $2 1 $3 $4"
+    cmd="calltree.pl '$1' '' $2 1 $3 $4"
     echo "cmd:$cmd"
+    eval $cmd
+    return
+  fi
+  # print usage
+  calltree.pl
+  return
+}
+
+ctree_no_verbose() {
+  # usage: calltree.pl 'start_pattern' 'end_pattern' mode verbose depeth path
+  if [ $# -eq 3 ]; then
+    cmd="calltree.pl '$1' '' $2 0 $3"
+    eval $cmd
+    return
+  fi
+  if [ $# -eq 4 ]; then
+    cmd="calltree.pl '$1' '' $2 0 $3 $4"
     eval $cmd
     return
   fi
