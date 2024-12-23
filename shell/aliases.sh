@@ -169,6 +169,7 @@ rfzf() {
   fi
   if [ -x "${file}" ]; then
     ./${file}
+    echo $(realpath ${file})
   else
     echo "${file} is not executable file"
   fi
