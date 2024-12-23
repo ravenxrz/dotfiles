@@ -78,7 +78,7 @@ return {
       "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
     },
     config = function()
-      require("mason-lspconfig").setup( {
+      require("mason-lspconfig").setup({
         ensure_installed = {
           "jsonls",
           "clangd",

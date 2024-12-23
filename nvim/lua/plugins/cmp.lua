@@ -81,8 +81,8 @@ return {
           }),
           ["<C-n>"] = select_next,
           ["<C-p>"] = select_prev,
-          -- ["<Tab>"] = select_next,
-          -- ["<S-Tab>"] = select_prev,
+          ["<Tab>"] = select_next,
+          ["<S-Tab>"] = select_prev,
         }),
         sources = {
           { name = "nvim_lsp" },
@@ -95,7 +95,11 @@ return {
     end,
   },
   {
-    "github/copilot.vim",
+    "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
+      config = function()
+        require("codeverse").setup({
+        })
+    end
   }
 
   -- {

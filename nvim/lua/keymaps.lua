@@ -148,10 +148,12 @@ keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
 -- trouble
 keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle<cr>", opts)
-keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=false<cr>", opts)
+keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=bottom<cr>", opts)
 -- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true<cr>", opts)
-keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true<cr>", opts)
-keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
+-- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true<cr>", opts)
+-- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
+keymap("n", "<leader>in", "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", opts)
+keymap("n", "<leader>on", "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", opts)
 
 -- change macro keyshort for not interrupting cmp plugin
 keymap("n", "Q", "q", opts)
@@ -167,3 +169,12 @@ keymap("v", "<leader>L", ":<c-u>HSRmHighlight<CR>", opts)
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
+
+-- codeverse
+vim.cmd( [[
+let g:codeverse_disable_bindings = v:true
+inoremap <script><silent><nowait><expr> <C-b> codeverse#Accept()
+]])
+-- keymap("i", "<C-[", "<Plug>(codeverse-previous)", opts)
+-- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
+
