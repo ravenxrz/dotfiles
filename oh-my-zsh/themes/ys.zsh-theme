@@ -55,6 +55,9 @@ virtenv_prompt() {
 
 local exit_code="%(?,,C:%{$fg[red]%}%?%{$reset_color%})"
 
+UNAME_INFO=$(uname -s)
+local platform=%{$fg[magenta]%}\${UNAME_INFO}%{$reset_color%}
+
 # Prompt format:
 #
 # PRIVILEGES USER @ MACHINE in DIRECTORY on git:BRANCH STATE [TIME] C:LAST_EXIT_CODE
@@ -75,6 +78,7 @@ ${hg_info}\
 ${git_info}\
 ${svn_info}\
 ${venv_info}\
+ ${platform}\
  \
 [%*] $exit_code
 %{$terminfo[bold]$fg[red]%}$ %{$reset_color%}"
