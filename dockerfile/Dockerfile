@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 ENV PASSWD=1234
-ARG USER=dev
+ARG USER=leo
 ARG HOME=/home/${USER}
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -27,6 +27,11 @@ RUN cd /tmp && wget "https://github.com/neovim/neovim/releases/download/stable/n
   && cp -rf bin/* /usr/local/bin && cp -rf lib/* /usr/local/lib && cp -rf share/* /usr/local/share \
   && rm -rf /tmp/nvim-*
 
+RUN mkdir /var/run/sshd \
+  && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+  && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+  && ssh-keygen -A
+
 # 添加用户并配置密码
 # 赋予sudo权限并允许无密码sudo
 # 设置默认shell为zsh
@@ -36,10 +41,8 @@ RUN useradd -m -d ${HOME} ${USER} && \
     chmod 440 /etc/sudoers && \
     chsh -s /usr/bin/zsh ${USER}
 
-# 切换USER, 安装dotfiles
-# RUN sudo -u ${USER} -H bash -c 'cd ~ && mkdir -p .config && cd .config \
-#   && rm ~/.bashrc && git clone https://github.com/ravenxrz/dotfiles.git --depth=1 \
-#   && cd dotfiles && ./install'
-
 USER ${USER}
 ENV LC_ALL C.UTF-8
+EXPOSE 22
+CMD ["/bin/bash", "-c", "sudo service ssh restart & tail -f /dev/null"]
+

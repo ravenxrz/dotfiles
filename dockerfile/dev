@@ -14,6 +14,7 @@ IMAGE_NAME="my_dev"
 MAPPING="-v $HOME:$HOME -v $HOME/Projects:$HOME/Projects"
 CONTAINER_ID=$(docker ps -a -q --filter "ancestor=$IMAGE_NAME" | head -n 1)
 DOCKERFILE=$(dirname $0)/Dockerfile
+SSH_PORT=2222
 
 function build_image() {
   docker build --platform=linux/amd64 --build-arg USER=$(whoami) --build-arg HOME=$HOME -t ${IMAGE_NAME} -f $DOCKERFILE .
@@ -23,7 +24,7 @@ function kill_container() {
   if [ -n "$CONTAINER_ID" ]; then
     docker stop $CONTAINER_ID >/dev/null
     docker rm $CONTAINER_ID >/dev/null
-    echo "Old container killed and rm: $CONTAINER_ID"
+    echo "old container killed and rm: $CONTAINER_ID"
   fi
 }
 
@@ -43,7 +44,7 @@ function run() {
 
   # launch container
   if [ -z "$CONTAINER_ID" ]; then
-    CONTAINER_ID=$(docker run $MAPPING -d -it --name my_dev $IMAGE_NAME)
+    CONTAINER_ID=$(docker run $MAPPING -d -p ${SSH_PORT}:22 -it $IMAGE_NAME)
     echo "no container found, create a new one, id: $CONTAINER_ID"
   else
     echo "find a container: $CONTAINER_ID"
@@ -60,6 +61,10 @@ function new_container() {
   run
 }
 
+function rm_image() {
+  docker rmi $IMAGE_NAME
+}
+
 function list_containers() {
   if [ -n "$CONTAINER_ID" ]; then
     echo "container:${CONTAINER_ID}" 
@@ -71,7 +76,8 @@ function help() {
   echo "  check: check image exists or not"
   echo "  ls: list container"
   echo "  kill: kill the running container"
-  echo "  build: build the image"
+  echo "  rmi: remove the image"
+  echo "  build: killrm container/image and build the image"
   echo "  run: enter the container(If container not exists, create a new one)"
 }
 
@@ -90,7 +96,12 @@ for arg in "$@"; do
     kill_container 
     exit 0
     ;;
+  rmi)
+    rm_image
+    exit 0
+    ;;
   build)
+    kill_container
     build_image
     exit 0
     ;;
