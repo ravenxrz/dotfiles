@@ -16,3 +16,5 @@ bin/linux/tmux
 vim/sessions
 vim/.netrwhist
 bin/linux/bsadmin
+.calltree*
+.cpptree*
