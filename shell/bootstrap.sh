@@ -13,6 +13,7 @@ else
 fi
 
 path_prepend "$HOME/.dotfiles/remote_dev/"
+path_prepend "$HOME/.dotfiles/dockerfile/"
 
 # set zsh term color
 export TERM=xterm-256color

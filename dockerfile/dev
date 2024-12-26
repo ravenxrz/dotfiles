@@ -1,0 +1,108 @@
+#!/bin/bash
+#
+# 起docker
+#
+
+set -e
+
+if [ ! $(which docker) ] 2>/dev/null; then
+  echo "Docker is not installed"
+  exit 1
+fi
+
+IMAGE_NAME="my_dev"
+MAPPING="-v $HOME:$HOME -v $HOME/Projects:$HOME/Projects"
+CONTAINER_ID=$(docker ps -a -q --filter "ancestor=$IMAGE_NAME" | head -n 1)
+DOCKERFILE=$(dirname $0)/Dockerfile
+
+function build_image() {
+  docker build --platform=linux/amd64 --build-arg USER=$(whoami) --build-arg HOME=$HOME -t ${IMAGE_NAME} -f $DOCKERFILE .
+}
+
+function kill_container() {
+  if [ -n "$CONTAINER_ID" ]; then
+    docker stop $CONTAINER_ID >/dev/null
+    docker rm $CONTAINER_ID >/dev/null
+    echo "Old container killed and rm: $CONTAINER_ID"
+  fi
+}
+
+function check_image() {
+  if docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
+    echo "image $IMAGE_NAME exists."
+  else
+    echo "$IMAGE_NAME not exists"
+  fi
+}
+
+function run() {
+  # check images exist or not
+  if check_image | grep -q "not exists"; then
+    exit 1
+  fi
+
+  # launch container
+  if [ -z "$CONTAINER_ID" ]; then
+    CONTAINER_ID=$(docker run $MAPPING -d -it --name my_dev $IMAGE_NAME)
+    echo "no container found, create a new one, id: $CONTAINER_ID"
+  else
+    echo "find a container: $CONTAINER_ID"
+  fi
+
+  # run
+  echo "enter container"
+  docker exec -it $CONTAINER_ID /bin/zsh
+}
+
+function new_container() {
+  kill_container
+  CONTAINER_ID=""
+  run
+}
+
+function list_containers() {
+  if [ -n "$CONTAINER_ID" ]; then
+    echo "container:${CONTAINER_ID}" 
+  fi
+}
+
+function help() {
+  echo "Usage: $(basename $0) [op]"
+  echo "  check: check image exists or not"
+  echo "  ls: list container"
+  echo "  kill: kill the running container"
+  echo "  build: build the image"
+  echo "  run: enter the container(If container not exists, create a new one)"
+}
+
+# 处理传入参数
+for arg in "$@"; do
+  case $arg in
+  ls)
+    list_containers
+    exit 0
+    ;;
+  check)
+    check_image
+    exit 0
+    ;;
+  kill)
+    kill_container 
+    exit 0
+    ;;
+  build)
+    build_image
+    exit 0
+    ;;
+  help)
+    help
+    exit 0
+    ;;
+  run)
+    run
+    exit 0
+    ;;
+  esac
+done
+
+help
