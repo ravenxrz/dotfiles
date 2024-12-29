@@ -74,9 +74,9 @@ keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
--- keymap("n", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>", opts)
--- keymap("v", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>", opts)
--- keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
+keymap("n", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>", opts)
+keymap("v", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>", opts)
+keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
 -- no ignore, no config
 keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files,--no-config<cr>", opts)
 keymap("n", "<leader>fW",
@@ -88,7 +88,7 @@ keymap("v", "<leader>fW",
 keymap("n", "<leader>s",
   "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 55, fname_width = 25})<cr>", opts)
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
-keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
+-- keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
 -- outline
@@ -98,14 +98,15 @@ keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 -- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
 -- search & replace config
-keymap("n", "<leader>fg", "<cmd>GrugFar<cr>", opts)
-keymap("n", "<leader>fw", "<cmd>lua require('grug-far').open({ prefills = { search = vim.fn.expand('<cword>') } })<cr>",
-  opts)
-keymap("n", "<leader>fc",
-  "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%'),  search = vim.fn.expand('<cword>')  } })<cr>",
-  opts)
-keymap("v", "<leader>fw",
-  ":<C-u>lua require('grug-far').with_visual_selection({ prefills = { search = vim.fn.expand('<cword>') } })<cr>", opts)
+keymap("n", "<leader>fr", "<cmd>GrugFar<cr>", opts)
+-- keymap("n", "<leader>fg", "<cmd>GrugFar<cr>", opts)
+-- keymap("n", "<leader>fw", "<cmd>lua require('grug-far').open({ prefills = { search = vim.fn.expand('<cword>') } })<cr>",
+--   opts)
+-- keymap("n", "<leader>fc",
+--   "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%'),  search = vim.fn.expand('<cword>')  } })<cr>",
+--   opts)
+-- keymap("v", "<leader>fw",
+--   ":<C-u>lua require('grug-far').with_visual_selection({ prefills = { search = vim.fn.expand('<cword>') } })<cr>", opts)
 
 
 
@@ -146,14 +147,16 @@ keymap("n", "<leader>zf", "<cmd>FocusToggle<cr>", opts)
 keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
 
 -- trouble
-keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", opts)
-keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle<cr>", opts)
-keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=bottom<cr>", opts)
--- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true<cr>", opts)
--- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true<cr>", opts)
+keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0 win.position=bottom<cr>", opts)
+keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle win.position=bottom<cr>", opts)
+keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=top<cr>", opts)
+keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
+keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
 -- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
-keymap("n", "<leader>in", "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", opts)
-keymap("n", "<leader>on", "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", opts)
+
+-- liteecall
+-- keymap("n", "<leader>in", "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", opts)
+-- keymap("n", "<leader>on", "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", opts)
 
 -- change macro keyshort for not interrupting cmp plugin
 keymap("n", "Q", "q", opts)
