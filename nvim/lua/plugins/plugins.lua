@@ -1,36 +1,14 @@
 return {
   {
-    'ldelossa/litee.nvim',
-    event = "VeryLazy",
-    opts = {
-      notify = { enabled = false },
-      panel = {
-        orientation = "bottom",
-        panel_size = 10,
-      },
+    "amitds1997/remote-nvim.nvim",
+    version = "*",                     -- Pin to GitHub releases
+    dependencies = {
+      "nvim-lua/plenary.nvim",         -- For standard functions
+      "MunifTanjim/nui.nvim",          -- To build the plugin UI
+      "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
     },
-    config = function(_, opts) require('litee.lib').setup(opts) end
+    config = false,
   },
-
-  {
-    'ldelossa/litee-calltree.nvim',
-    dependencies = 'ldelossa/litee.nvim',
-    event = "VeryLazy",
-    opts = {
-      on_open = "panel",
-      map_resize_keys = false,
-    },
-    config = function(_, opts) require('litee.calltree').setup(opts) end
-  }, {
-  "amitds1997/remote-nvim.nvim",
-  version = "*",                       -- Pin to GitHub releases
-  dependencies = {
-    "nvim-lua/plenary.nvim",           -- For standard functions
-    "MunifTanjim/nui.nvim",            -- To build the plugin UI
-    "nvim-telescope/telescope.nvim",   -- For picking b/w different remote methods
-  },
-  config = false,
-},
   {
     "andymass/vim-matchup"
   },
@@ -78,7 +56,17 @@ return {
   {
     "folke/trouble.nvim",
     cmd = "Trouble",
-    opts = {}
+    opts = {
+      auto_refresh = false,
+      auto_preview = true,
+      throttle = {
+        refresh = 20,                            -- fetches new data when needed
+        update = 10,                             -- updates the window
+        render = 10,                             -- renders the window
+        follow = 100,                            -- follows the current item
+        preview = { ms = 100, debounce = true }, -- shows the preview for the current item
+      },
+    }
   },
   {
     "stevearc/dressing.nvim",
