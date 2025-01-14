@@ -88,7 +88,7 @@ keymap("v", "<leader>fW",
 keymap("n", "<leader>s",
   "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 55, fname_width = 25})<cr>", opts)
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
--- keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
+keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
 -- outline
@@ -153,8 +153,8 @@ keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
 -- trouble
 keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0 win.position=bottom<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle win.position=bottom<cr>", opts)
-keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=top<cr>", opts)
-keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
+keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", opts)
+-- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
 keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
 -- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
 
