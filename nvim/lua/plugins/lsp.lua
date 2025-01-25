@@ -1,9 +1,9 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
-    },
+    -- dependencies = {
+    --   "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
+    -- },
     config = function()
       -- vim.lsp.set_log_level("error")
       vim.lsp.set_log_level("off")
@@ -74,9 +74,9 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
-    },
+    -- dependencies = {
+    --   "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
+    -- },
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
@@ -93,7 +93,7 @@ return {
         -- and will be called for each installed server that doesn't have
         -- a dedicated handler.
         function(server_name) -- default handler (optional)
-          local util = require("lspconfig.util")
+          local capabilities = require('blink.cmp').get_lsp_capabilities()
           local opts = {
             clangd = {
               cmd = {
@@ -158,30 +158,6 @@ return {
               },
               single_file_support = true,
             },
-            pylyzer = { -- doesn't work for me
-              filetypes = { "python" },
-              root_dir = function(fname)
-                local root_files = {
-                  "pyproject.toml",
-                  "setup.py",
-                  "setup.cfg",
-                  "requirements.txt",
-                  "Pipfile",
-                }
-                return util.root_pattern(unpack(root_files))(fname)
-                    or util.find_git_ancestor(fname)
-                    or util.path.dirname(fname)
-              end,
-              settings = {
-                python = {
-                  checkOnType = false,
-                  diagnostics = false,
-                  inlayHints = true,
-                  smartCompletion = true,
-                },
-              },
-              single_file_support = true,
-            },
             lua_ls = {
               settings = {
                 Lua = {
@@ -201,7 +177,6 @@ return {
               on_attach = function(client, bufnr)
                 client.server_capabilities.documentFormattingProvider = true
               end,
-              capabilities = capabilities,
               settings = {
                 yaml = {
                   format = {
@@ -217,11 +192,13 @@ return {
           if opts[server_name] then
             local server_opt = opts[server_name]
             require("lspconfig")[server_name].setup(vim.tbl_deep_extend("force", {
-              capabilities = require("cmp_nvim_lsp").default_capabilities(),
+              capabilities =  capabilities
+              -- capabilities = require("cmp_nvim_lsp").default_capabilities(),
             }, server_opt))
           else
             require("lspconfig")[server_name].setup({
-              capabilities = require("cmp_nvim_lsp").default_capabilities(),
+              capabilities =  capabilities
+              -- capabilities = require("cmp_nvim_lsp").default_capabilities(),
             })
           end
         end,

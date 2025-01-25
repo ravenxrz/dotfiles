@@ -502,19 +502,17 @@ return {
   },
   {
     "windwp/nvim-autopairs",
-    dependencies = {
-      "hrsh7th/nvim-cmp", -- Autocompletion plugin
-    },
     event = "InsertEnter",
-    config = function()
-      require("nvim-autopairs").setup({
-        disable_filetype = { "TelescopePrompt", "vim", "spectre_panel", "dap-repl" },
-      })
-      -- add auto pair when auto completion down
-      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-      local cmp = require("cmp")
-      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-    end,
+    config = true
+    -- config = function()
+    --   require("nvim-autopairs").setup({
+    --     disable_filetype = { "TelescopePrompt", "vim", "spectre_panel", "dap-repl" },
+    --   })
+    --   -- add auto pair when auto completion down
+    --   local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+    --   local cmp = require("cmp")
+    --   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    -- end,
   },
   {
     "utilyre/sentiment.nvim",
@@ -730,18 +728,10 @@ return {
     config = function()
       require("auto-save").setup({
         enabled = true, -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
-        execution_message = {
-          enabled = false,
-          message = function() -- message to print on save
-            return ("AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"))
-          end,
-          dim = 0.18,                                    -- dim the color of `message`
-          cleaning_interval = 1250,                      -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
-        },
         trigger_events = {                               -- See :h events
           immediate_save = { "BufLeave", "FocusLost" },  -- vim events that trigger an immediate save
           defer_save = { "InsertLeave", "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
-          cancel_defered_save = { "InsertEnter" },       -- vim events that cancel a pending deferred save
+          cancel_deferred_save = { "InsertEnter" },      -- vim events that cancel a pending deferred save
         },
         -- function that takes the buffer handle and determines whether to save the current buffer or not
         -- return true: if buffer is ok to be saved
@@ -1099,5 +1089,16 @@ return {
     opts = {
       disable_when_zoomed = true, -- defaults to false
     }
+  },
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   },
 }
