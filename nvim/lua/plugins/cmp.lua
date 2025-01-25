@@ -96,13 +96,22 @@ return {
   --   end,
   -- },
   {
-    -- :Copilot auth/signin
-    "github/copilot.vim",
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+        auto_trigger = true,
+      })
+    end,
   },
   {
     'saghen/blink.cmp',
     -- optional: provides snippets for the snippet source
     dependencies = {
+      "giuxtaposition/blink-cmp-copilot",
       'rafamadriz/friendly-snippets',
       {
         "folke/lazydev.nvim",
@@ -152,13 +161,19 @@ return {
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        default = { 'lsp', "lazydev", 'path', 'snippets', 'buffer' },
+        default = { 'lsp', "lazydev", 'path', 'snippets', 'buffer', "copilot" },
         providers = {
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
             -- make lazydev completions top priority (see `:h blink.cmp`)
             score_offset = 100,
+          },
+          copilot = {
+            name = "copilot",
+            module = "blink-cmp-copilot",
+            score_offset = 99,
+            async = true,
           },
         },
         -- Disable cmdline completions
