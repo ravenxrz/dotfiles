@@ -15,9 +15,9 @@ return {
   {
     "yorickpeterse/nvim-window",
     keys = {
-      { "<C-w>", "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },
+      { "<C-j>", "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },
     },
-    config = true,
+    config = true
   },
   {
     'pteroctopus/faster.nvim'
@@ -765,7 +765,7 @@ return {
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     config = function()
       require("auto-save").setup({
-        enabled = true, -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
+        enabled = true,                                  -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
         trigger_events = {                               -- See :h events
           immediate_save = { "BufLeave", "FocusLost" },  -- vim events that trigger an immediate save
           defer_save = { "InsertLeave", "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
