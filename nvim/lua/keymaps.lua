@@ -180,7 +180,7 @@ keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 -- codeverse
 vim.cmd( [[
 let g:codeverse_disable_bindings = v:true
-inoremap <script><silent><nowait><expr> <C-b> codeverse#Accept()
+inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
 ]])
 -- keymap("i", "<C-[", "<Plug>(codeverse-previous)", opts)
 -- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
