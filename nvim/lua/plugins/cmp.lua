@@ -1,13 +1,5 @@
 return {
   {
-    "danymat/neogen",
-    cmd = { "Neogen" },
-    config = function()
-      require("neogen").setup({ snippet_engine = "luasnip" })
-    end,
-    version = "*",
-  },
-  {
     'saghen/blink.cmp',
     -- optional: provides snippets for the snippet source
     dependencies = {
