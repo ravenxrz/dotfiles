@@ -49,3 +49,9 @@ vim.api.nvim_create_autocmd('FileType', {
     end, { buffer = true })
   end,
 })
+
+-- link.txt 自动开启wrap
+vim.api.nvim_create_autocmd("BufRead", {
+  pattern = "link.txt",
+  command = "setlocal wrap"
+})
