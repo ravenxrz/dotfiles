@@ -185,3 +185,23 @@ inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
 -- keymap("i", "<C-[", "<Plug>(codeverse-previous)", opts)
 -- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
 
+-- copy filename / filename wo extensions
+local send2clipboard = function (text)
+  vim.fn.setreg('+', text)
+end
+local copy_cur_filename = function()
+  local filename = vim.fn.expand('%:t')
+  send2clipboard(filename)
+  print("copy filename:" .. filename)
+end
+local copy_cur_filename_wo_ext = function ()
+  local filename = vim.fn.expand('%:t')
+  local filename_wo_ext = vim.fn.fnamemodify(filename, ':r')
+  send2clipboard(filename_wo_ext)
+  print("copy filename wo ext:" .. filename_wo_ext)
+end
+vim.api.nvim_create_user_command("CopyFileName", copy_cur_filename, {})
+vim.api.nvim_create_user_command("CopyFileNameWoExt", copy_cur_filename_wo_ext, {})
+
+keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)
+keymap("n", "yo", "<cmd>CopyFileNameWoExt<cr>", opts)
