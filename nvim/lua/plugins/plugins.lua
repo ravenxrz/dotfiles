@@ -1,5 +1,9 @@
 return {
   {
+    "kontura/trails.nvim",
+    config = true
+  },
+  {
     "amitds1997/remote-nvim.nvim",
     version = "*",                     -- Pin to GitHub releases
     dependencies = {
@@ -15,7 +19,7 @@ return {
   {
     "yorickpeterse/nvim-window",
     keys = {
-      { "<C-j>", "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },
+      { "<C-s>", "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },
     },
     config = true
   },
@@ -52,44 +56,6 @@ return {
         }
       })
     end,
-  },
-  {
-    "jmacadie/telescope-hierarchy.nvim",
-    dependencies = {
-      {
-        "nvim-telescope/telescope.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
-      },
-    },
-    keys = {
-      { -- lazy style key map
-        -- Choose your own keys, this works for me
-        "<leader>in",
-        "<cmd>Telescope hierarchy incoming_calls<cr>",
-        desc = "LSP: [S]earch [I]ncoming Calls",
-      },
-      {
-        "<leader>on",
-        "<cmd>Telescope hierarchy outgoing_calls<cr>",
-        desc = "LSP: [S]earch [O]utgoing Calls",
-      },
-    },
-    opts = {
-      -- don't use `defaults = { }` here, do this in the main telescope spec
-      extensions = {
-        hierarchy = {
-          -- telescope-hierarchy.nvim config, see below
-        },
-        -- no other extensions here, they can have their own spec too
-      },
-    },
-    config = function(_, opts)
-      -- Calling telescope's setup from multiple specs does not hurt, it will happily merge the
-      -- configs for us. We won't use data, as everything is in it's own namespace (telescope
-      -- defaults, as well as each extension).
-      require("telescope").setup(opts)
-      require("telescope").load_extension("hierarchy")
-    end
   },
   {
     "folke/trouble.nvim",
@@ -765,11 +731,11 @@ return {
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     config = function()
       require("auto-save").setup({
-        enabled = true,                                  -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
-        trigger_events = {                               -- See :h events
-          immediate_save = { "BufLeave", "FocusLost" , "InsertLeave" },  -- vim events that trigger an immediate save
-          defer_save = { "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
-          cancel_deferred_save = { "InsertEnter" },      -- vim events that cancel a pending deferred save
+        enabled = true,                                                 -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
+        trigger_events = {                                              -- See :h events
+          immediate_save = { "BufLeave", "FocusLost", "InsertLeave" },  -- vim events that trigger an immediate save
+          defer_save = { "TextChanged" },                               -- vim events that trigger a deferred save (saves after `debounce_delay`)
+          cancel_deferred_save = { "InsertEnter" },                     -- vim events that cancel a pending deferred save
         },
         -- function that takes the buffer handle and determines whether to save the current buffer or not
         -- return true: if buffer is ok to be saved
