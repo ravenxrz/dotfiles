@@ -23,8 +23,18 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   group = "DetectPythonIndent",
 })
 
+
 -- 针对python文件（多是cd用例), 添加local keymap jo  跳转到对应的log文件
 vim.api.nvim_create_augroup("PythonCDJumpToLog", { clear = true })
+
+_edit_exist_file = function(file_path)
+  if vim.fn.filereadable(file_path) == 1 then
+    vim.cmd("e " .. file_path)
+  else
+    vim.notify("no such file:" .. file_path , vim.log.levels.WARN)
+  end
+end
+
 -- jump to log file
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "python",
@@ -36,9 +46,8 @@ vim.api.nvim_create_autocmd("FileType", {
     local filename = vim.fn.expand("<afile>:t")
     -- only match cd_xxx.py CD_xxx.py tc_xxx.py TC_xxx.py
     if filename:lower():find("cd_") == 1 or filename:lower():find("tc_") == 1 then
-      if vim.fn.state(log_filepath) then
-        vim.api.nvim_buf_set_keymap(0, 'n', 'jl', ':e ' .. log_filepath .. "<cr>", { noremap = true, silent = true })
-      end
+      cmd = ":lua _edit_exist_file(\"" .. log_filepath .. "\")<cr>"
+      vim.api.nvim_buf_set_keymap(0, 'n', 'jl', cmd, { noremap = true, silent = true })
     end
   end,
 })
@@ -51,9 +60,8 @@ vim.api.nvim_create_autocmd("BufRead", {
     local log_filepath = vim.fn.expand("<afile>:p")
     if log_filepath:find("%.py.log$") then
       local py_filepath = log_filepath:gsub("%.log$", "")
-      if vim.fn.state(py_filepath) then
-        vim.api.nvim_buf_set_keymap(0, 'n', 'jl', ':e ' .. py_filepath .. "<cr>", { noremap = true, silent = true })
-      end
+      cmd = ":lua _edit_exist_file(\"" .. py_filepath .. "\")<cr>"
+      vim.api.nvim_buf_set_keymap(0, 'n', 'jl', cmd, { noremap = true, silent = true })
     end
   end,
 })
