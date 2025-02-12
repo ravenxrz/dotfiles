@@ -228,3 +228,7 @@ keymap("n", "yb", "<cmd>CopyBreakPoint<cr>", opts)
 keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)
 keymap("n", "yF", "<cmd>CopyFilePath<cr>", opts)
 keymap("n", "yo", "<cmd>CopyFileNameWoExt<cr>", opts)
+
+-- plugin dev
+keymap("n", "<leader>xx", "<cmd>SourceFile<cr>", opts)
+

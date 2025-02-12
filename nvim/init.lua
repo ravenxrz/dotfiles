@@ -15,6 +15,7 @@ require("parser")
 require("options")
 require("autocmds")
 require("keymaps")
+require("utils")
 require("lazy").setup("plugins", {
   performance = {
     rtp = {
@@ -39,21 +40,3 @@ vim.cmd([[
 vim.cmd.colorscheme("modus")
 -- vim.cmd.colorscheme("gruvbox-baby")
 -- vim.cmd.colorscheme "eldritch"
-
-
-
--- learn nvim
-
-function Todo()
-  print("Print Todo") 
-end
-
-
--- create a command
-vim.api.nvim_create_user_command("Todo", Todo, {})
-
-
-
-
-
-
