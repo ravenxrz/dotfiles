@@ -229,3 +229,5 @@ zkinit() {
 # alias img="Honeyview.exe"
 # alias typora="Typora.exe"
 # alias vim="lvim"
+
+alias nv="nvim"
