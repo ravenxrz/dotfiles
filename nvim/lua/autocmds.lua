@@ -50,8 +50,17 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- link.txt 自动开启wrap
+-- link.txt和日志文件自动开启wrap
 vim.api.nvim_create_autocmd("BufRead", {
-  pattern = "link.txt",
-  command = "setlocal wrap"
+  pattern = { "*" },
+  callback = function()
+    local filename = vim.fn.expand("<afile>")
+    local patterns = { "link.txt", "%.log$", "DEBUG", "INFO", "WARN", "ERROR" }
+    for _, pattern in ipairs(patterns) do
+      if string.match(filename, pattern) then
+        vim.cmd("setlocal wrap")
+        return
+      end
+    end
+  end
 })
