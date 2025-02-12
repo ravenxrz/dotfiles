@@ -77,8 +77,10 @@ keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
-keymap("n", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>", opts)
-keymap("v", "<leader>fw", "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>", opts)
+keymap("n", "<leader>fw",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>", opts)
+keymap("v", "<leader>fw",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>", opts)
 keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
 -- no ignore, no config
 keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files,--no-config<cr>", opts)
@@ -182,7 +184,7 @@ keymap("v", "<leader>L", ":<c-u>HSRmHighlight<CR>", opts)
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 
 -- codeverse
-vim.cmd( [[
+vim.cmd([[
 let g:codeverse_disable_bindings = v:true
 inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
 ]])
@@ -190,7 +192,7 @@ inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
 -- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
 
 -- copy filename / filename wo extensions/full path/breakpoint
-local send2clipboard = function (text)
+local send2clipboard = function(text)
   vim.fn.setreg('+', text)
 end
 local copy_cur_filename = function()
@@ -198,18 +200,18 @@ local copy_cur_filename = function()
   send2clipboard(filename)
   print("copy filename:" .. filename)
 end
-local copy_cur_filename_wo_ext = function ()
+local copy_cur_filename_wo_ext = function()
   local filename = vim.fn.expand('%:t')
   local filename_wo_ext = vim.fn.fnamemodify(filename, ':r')
   send2clipboard(filename_wo_ext)
   print("copy filename wo ext:" .. filename_wo_ext)
 end
-local copy_cur_file_path = function ()
+local copy_cur_file_path = function()
   local file_path = vim.fn.expand('%:p')
   send2clipboard(file_path)
   print("copy file path:" .. file_path)
 end
-local copy_cur_breakpoint = function ()
+local copy_cur_breakpoint = function()
   local file_name = vim.fn.expand("%:t")
   -- get current line number
   local line_number = vim.fn.line('.')
