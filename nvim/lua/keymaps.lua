@@ -17,6 +17,9 @@ keymap("i", "jk", "<Esc>", opts)
 -- keymap("n", "<C-l>", "<C-w>l", opts)
 
 
+keymap("n", "j", "gj", opts)
+keymap("n", "k", "gk", opts)
+
 keymap("n", "<C-h>", "<cmd>NvimTmuxNavigateLeft<CR>", opts)
 keymap("n", "<C-j>", "<Cmd>NvimTmuxNavigateDown<CR>", opts)
 keymap("n", "<C-k>", "<Cmd>NvimTmuxNavigateUp<CR>", opts)
@@ -201,8 +204,15 @@ local copy_cur_filename_wo_ext = function ()
   send2clipboard(filename_wo_ext)
   print("copy filename wo ext:" .. filename_wo_ext)
 end
+local copy_cur_file_path = function ()
+  local file_path = vim.fn.expand('%:p')
+  send2clipboard(file_path)
+  print("copy file path:" .. file_path)
+end
 vim.api.nvim_create_user_command("CopyFileName", copy_cur_filename, {})
 vim.api.nvim_create_user_command("CopyFileNameWoExt", copy_cur_filename_wo_ext, {})
+vim.api.nvim_create_user_command("CopyFilePath", copy_cur_file_path, {})
 
 keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)
+keymap("n", "yF", "<cmd>CopyFilePath<cr>", opts)
 keymap("n", "yo", "<cmd>CopyFileNameWoExt<cr>", opts)
