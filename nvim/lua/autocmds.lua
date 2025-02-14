@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd("FileType", {
     -- only match cd_xxx.py CD_xxx.py tc_xxx.py TC_xxx.py
     if filename:lower():find("cd_") == 1 or filename:lower():find("tc_") == 1 then
       cmd = ":lua _edit_exist_file(\"" .. log_filepath .. "\")<cr>"
-      vim.api.nvim_buf_set_keymap(0, 'n', 'jl', cmd, { noremap = true, silent = true })
+      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>l', cmd, { noremap = true, silent = true })
     end
   end,
 })
@@ -61,7 +61,7 @@ vim.api.nvim_create_autocmd("BufRead", {
     if log_filepath:find("%.py.log$") then
       local py_filepath = log_filepath:gsub("%.log$", "")
       cmd = ":lua _edit_exist_file(\"" .. py_filepath .. "\")<cr>"
-      vim.api.nvim_buf_set_keymap(0, 'n', 'jl', cmd, { noremap = true, silent = true })
+      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>l', cmd, { noremap = true, silent = true })
     end
   end,
 })
