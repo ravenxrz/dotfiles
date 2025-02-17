@@ -1,7 +1,10 @@
 return {
   {
-    "kontura/trails.nvim",
-    config = true
+    "ravenxrz/call-graph.nvim",
+    opts = {
+      log_level = "info",
+      reuse_buf = true,
+    }
   },
   {
     "amitds1997/remote-nvim.nvim",
@@ -731,11 +734,11 @@ return {
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     config = function()
       require("auto-save").setup({
-        enabled = true,                                                 -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
-        trigger_events = {                                              -- See :h events
-          immediate_save = { "BufLeave", "FocusLost", "InsertLeave" },  -- vim events that trigger an immediate save
-          defer_save = { "TextChanged" },                               -- vim events that trigger a deferred save (saves after `debounce_delay`)
-          cancel_deferred_save = { "InsertEnter" },                     -- vim events that cancel a pending deferred save
+        enabled = true,                                                -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
+        trigger_events = {                                             -- See :h events
+          immediate_save = { "BufLeave", "FocusLost", "InsertLeave" }, -- vim events that trigger an immediate save
+          defer_save = { "TextChanged" },                              -- vim events that trigger a deferred save (saves after `debounce_delay`)
+          cancel_deferred_save = { "InsertEnter" },                    -- vim events that cancel a pending deferred save
         },
         -- function that takes the buffer handle and determines whether to save the current buffer or not
         -- return true: if buffer is ok to be saved
