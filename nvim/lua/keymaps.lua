@@ -162,6 +162,7 @@ keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=r
 -- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
 -- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
 keymap("n", "<leader>in", "<cmd>CallGraph<cr>", opts)
+keymap("n", "<leader>ih", "<cmd>CallGraphToggleAutoHighlight<cr>", opts)
 -- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
 
 -- liteecall
