@@ -748,7 +748,7 @@ return {
           local fn = vim.fn
           local utils = require("auto-save.utils.data")
           -- don't save for `sql` file types
-          if utils.not_in(fn.getbufvar(buf, "&filetype"), { "lua", "NvimTree", "neo-tree" }) then
+          if utils.not_in(fn.getbufvar(buf, "&filetype"), { "NvimTree", "neo-tree" }) then
             return true
           end
           return false

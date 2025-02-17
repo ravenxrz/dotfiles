@@ -3,3 +3,7 @@
 function P(t)
   print(vim.inspect(t))
 end
+
+function table2str(t)
+ return vim.inspect(t) 
+end
