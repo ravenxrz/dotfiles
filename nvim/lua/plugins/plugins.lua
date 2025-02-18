@@ -1,10 +1,22 @@
 return {
   {
+    "tamton-aquib/keys.nvim",
+    opts = {
+      enable_on_startup = false,
+      win_opts = {
+        width = 25
+        -- etc
+      },
+    },
+    cond = false
+  },
+  {
     "ravenxrz/call-graph.nvim",
     opts = {
       log_level = "info",
       reuse_buf = true,
-    }
+    },
+    cmd = "CallGraph"
   },
   {
     "amitds1997/remote-nvim.nvim",
@@ -14,7 +26,7 @@ return {
       "MunifTanjim/nui.nvim",          -- To build the plugin UI
       "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
     },
-    config = false,
+    enabled = false
   },
   {
     "andymass/vim-matchup"
