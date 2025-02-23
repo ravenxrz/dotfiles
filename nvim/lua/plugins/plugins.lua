@@ -15,7 +15,8 @@ return {
     opts = {
       log_level = "info",
       reuse_buf = true,
-      ref_call_max_depth = 3
+      ref_call_max_depth = 3,
+      auto_toggle_hl = true
     },
     cmd = {"CallGraphI", "CallGraphR", "CallGraphLog", "CallGraphToggleAutoHighlight"},
     branch = "main"
@@ -1082,6 +1083,7 @@ return {
   },
   {
     "akinsho/git-conflict.nvim",
+    cond = false,
     version = "*",
     config = true,
     opts = {
