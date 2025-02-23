@@ -14,11 +14,11 @@ return {
     "ravenxrz/call-graph.nvim",
     opts = {
       log_level = "info",
-      reuse_buf = false,
+      reuse_buf = true,
       ref_call_max_depth = 3
     },
-    cmd = {"CallGraphI", "CallGraphR"},
-    branch = "split_data_view"
+    cmd = {"CallGraphI", "CallGraphR", "CallGraphLog", "CallGraphToggleAutoHighlight"},
+    branch = "main"
   },
   {
     "amitds1997/remote-nvim.nvim",
