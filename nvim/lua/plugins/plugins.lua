@@ -7,16 +7,18 @@ return {
         width = 25
         -- etc
       },
-    },
-    cond = false
+      condition = false
+    }
   },
   {
     "ravenxrz/call-graph.nvim",
     opts = {
       log_level = "info",
-      reuse_buf = true,
+      reuse_buf = false,
+      ref_call_max_depth = 3
     },
-    cmd = "CallGraph"
+    cmd = {"CallGraphI", "CallGraphR"},
+    branch = "split_data_view"
   },
   {
     "amitds1997/remote-nvim.nvim",
