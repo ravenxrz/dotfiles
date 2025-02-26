@@ -164,10 +164,11 @@ keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle win.position=bottom<cr
 keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", opts)
 -- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
 -- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
-keymap("n", "<leader>ii", "<cmd>CallGraphI<cr>", opts)
-keymap("n", "<leader>ir", "<cmd>CallGraphR<cr>", opts)
-keymap("n", "<leader>iR", "<cmd>CallGraphToggleReuseBuf<cr>", opts)
-keymap("n", "<leader>ih", "<cmd>CallGraphToggleAutoHighlight<cr>", opts)
+keymap("n", "<leader>ci", "<cmd>CallGraphI<cr>", opts)
+keymap("n", "<leader>cr", "<cmd>CallGraphR<cr>", opts)
+keymap("n", "<leader>cb", "<cmd>CallGraphToggleReuseBuf<cr>", opts)
+keymap("n", "<leader>cm", "<cmd>CallGraphOpenMermaidGraph<cr>", opts)
+-- keymap("n", "<leader>ih", "<cmd>CallGraphToggleAutoHighlight<cr>", opts)
 -- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
 
 -- liteecall

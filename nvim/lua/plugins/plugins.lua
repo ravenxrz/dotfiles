@@ -19,7 +19,7 @@ return {
     },
     opts = {
       show_icons = true,
-      leader_key = ';',      -- Recommended to be a single key
+      leader_key = ';',        -- Recommended to be a single key
       buffer_leader_key = 'm', -- Per Buffer Mappings
     }
   },
@@ -32,7 +32,7 @@ return {
       auto_toggle_hl = true,
       export_mermaid_graph = true
     },
-    cmd = { "CallGraphI", "CallGraphR", "CallGraphLog", "CallGraphToggleReuseBuf" },
+    cmd = { "CallGraphI", "CallGraphR", "CallGraphLog", "CallGraphToggleReuseBuf", "CallGraphOpenMermaidGraph" },
     branch = "feat_export_mermaid"
   },
   {
@@ -138,7 +138,7 @@ return {
         -- * an absolute number of cells when > 1
         -- * a percentage of the width / height of the editor when <= 1
         -- * a function that returns the width or the height
-        width = 140, -- width of the Zen window
+        width = 145, -- width of the Zen window
         height = 1,  -- height of the Zen window
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
@@ -159,7 +159,7 @@ return {
           showcmd = false, -- disables the command in the last line of the screen
           -- you may turn on/off statusline in zen mode by setting 'laststatus'
           -- statusline will be shown only if 'laststatus' == 3
-          laststatus = 0, -- turn off the statusline in zen mode
+          laststatus = 3 -- turn off the statusline in zen mode
         },
       },
     },
@@ -653,6 +653,26 @@ return {
               -- 2: Absolute path
               -- 3: Absolute path, with tilde as the home directory
               -- 4: Filename and parent dir, with tilde as the home directory
+            },
+            {
+              function()
+                local call_graph = require("call_graph")
+                if call_graph.is_reuse_buf() then
+                  return "bufid:" .. tostring(vim.api.nvim_get_current_buf()) .. " reuse"
+                else
+                  return "bufid:" .. tostring(vim.api.nvim_get_current_buf()) .. " not reuse"
+                end
+              end
+            },
+            {
+              function()
+                local statusline = require("arrow.statusline")
+                if statusline.is_on_arrow_file() then
+                  return "in arrow"
+                else
+                  return ""
+                end
+              end
             },
             "lsp_progress",
           },

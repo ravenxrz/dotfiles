@@ -6,6 +6,7 @@
   "barbar.nvim": { "branch": "master", "commit": "53b5a2f34b68875898f0531032fbf090e3952ad7" },
   "barbecue": { "branch": "main", "commit": "cd7e7da622d68136e13721865b4d919efd6325ed" },
   "blink.cmp": { "branch": "main", "commit": "b6f11a0aa33e601c469a126e3ed6e35208fe3ea3" },
+  "bufdelete.nvim": { "branch": "master", "commit": "f6bcea78afb3060b198125256f897040538bcb81" },
   "call-graph.nvim": { "branch": "feat_export_mermaid", "commit": "980b5626612eb6d5deef877c1f2afb74cf676e1d" },
   "codeverse.vim": { "branch": "master", "commit": "5678a6d067eb1ac40e3a8e834404dfd8930e178e" },
   "dracula.nvim": { "branch": "main", "commit": "515acae4fd294fcefa5b15237a333c2606e958d1" },
