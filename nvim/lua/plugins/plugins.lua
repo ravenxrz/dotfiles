@@ -11,15 +11,29 @@ return {
     }
   },
   {
+    "otavioschwanck/arrow.nvim",
+    dependencies = {
+      { "nvim-tree/nvim-web-devicons" },
+      -- or if using `mini.icons`
+      -- { "echasnovski/mini.icons" },
+    },
+    opts = {
+      show_icons = true,
+      leader_key = ';',      -- Recommended to be a single key
+      buffer_leader_key = 'm', -- Per Buffer Mappings
+    }
+  },
+  {
     "ravenxrz/call-graph.nvim",
     opts = {
       log_level = "info",
       reuse_buf = true,
       ref_call_max_depth = 3,
-      auto_toggle_hl = true
+      auto_toggle_hl = true,
+      export_mermaid_graph = true
     },
-    cmd = {"CallGraphI", "CallGraphR", "CallGraphLog", "CallGraphToggleAutoHighlight"},
-    branch = "main"
+    cmd = { "CallGraphI", "CallGraphR", "CallGraphLog", "CallGraphToggleReuseBuf" },
+    branch = "feat_export_mermaid"
   },
   {
     "amitds1997/remote-nvim.nvim",
@@ -599,6 +613,7 @@ return {
       -- …etc.
     },
     version = "^1.0.0", -- optional: only update when a new 1.x version is released
+    cond = false
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -776,7 +791,7 @@ return {
       })
     end,
   },
-  -- { "famiu/bufdelete.nvim" },
+  { "famiu/bufdelete.nvim" },
   {
     "simeji/winresizer",
     keys = {

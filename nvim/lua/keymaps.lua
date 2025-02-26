@@ -54,13 +54,16 @@ keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", opts)
 keymap("n", "<leader>o", "<cmd>Neotree reveal<cr>", opts)
 
 -- Buffer
-keymap("n", "E", "<cmd>BufferPrevious<cr>", opts)
-keymap("n", "R", "<cmd>BufferNext<cr>", opts)
-keymap("n", "<leader>bp", "<cmd>BufferPin<cr>", opts)
-keymap("n", "<leader>bb", "<cmd>BufferPick<cr>", opts)
+-- keymap("n", "E", "<cmd>BufferPrevious<cr>", opts)
+-- keymap("n", "R", "<cmd>BufferNext<cr>", opts)
+keymap("n", "E", '<cmd>lua require("arrow.persist").previous()<cr>', opts)
+keymap("n", "R", '<cmd>lua require("arrow.persist").next()<cr>', opts)
+
+-- keymap("n", "<leader>bp", "<cmd>BufferPin<cr>", opts)
+-- keymap("n", "<leader>bb", "<cmd>BufferPick<cr>", opts)
 -- buffer delete
--- keymap("n", "<leader>bd", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
-keymap("n", "<leader>bd", "<cmd>BufferClose<cr>", opts)
+keymap("n", "<leader>bd", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
+-- keymap("n", "<leader>bd", "<cmd>BufferClose<cr>", opts)
 
 -- Gitsigns
 keymap("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", opts)
@@ -76,7 +79,7 @@ keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 -- keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
-keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
+keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
 keymap("n", "<leader>fw",
   "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>", opts)
 keymap("v", "<leader>fw",
