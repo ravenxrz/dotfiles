@@ -198,43 +198,12 @@ inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
 -- keymap("i", "<C-[", "<Plug>(codeverse-previous)", opts)
 -- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
 
--- copy filename / filename wo extensions/full path/breakpoint
-local send2clipboard = function(text)
-  vim.fn.setreg('+', text)
-end
-local copy_cur_filename = function()
-  local filename = vim.fn.expand('%:t')
-  send2clipboard(filename)
-  print("copy filename:" .. filename)
-end
-local copy_cur_filename_wo_ext = function()
-  local filename = vim.fn.expand('%:t')
-  local filename_wo_ext = vim.fn.fnamemodify(filename, ':r')
-  send2clipboard(filename_wo_ext)
-  print("copy filename wo ext:" .. filename_wo_ext)
-end
-local copy_cur_file_path = function()
-  local file_path = vim.fn.expand('%:p')
-  send2clipboard(file_path)
-  print("copy file path:" .. file_path)
-end
-local copy_cur_breakpoint = function()
-  local file_name = vim.fn.expand("%:t")
-  -- get current line number
-  local line_number = vim.fn.line('.')
-  local breakpoint = file_name .. ":" .. line_number
-  send2clipboard(breakpoint)
-  print("copy breakpoint:" .. breakpoint)
-end
-vim.api.nvim_create_user_command("CopyFileName", copy_cur_filename, {})
-vim.api.nvim_create_user_command("CopyFileNameWoExt", copy_cur_filename_wo_ext, {})
-vim.api.nvim_create_user_command("CopyFilePath", copy_cur_file_path, {})
-vim.api.nvim_create_user_command("CopyBreakPoint", copy_cur_breakpoint, {})
 
 keymap("n", "yb", "<cmd>CopyBreakPoint<cr>", opts)
 keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)
 keymap("n", "yF", "<cmd>CopyFilePath<cr>", opts)
 keymap("n", "yo", "<cmd>CopyFileNameWoExt<cr>", opts)
+keymap("n", "ym", "<cmd>CopyFuncName<cr>", opts)
 
 -- plugin dev
 keymap("n", "<leader>xx", "<cmd>SourceFile<cr>", opts)
