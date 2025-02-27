@@ -206,5 +206,5 @@ keymap("n", "yo", "<cmd>CopyFileNameWoExt<cr>", opts)
 keymap("n", "ym", "<cmd>CopyFuncName<cr>", opts)
 
 -- plugin dev
-keymap("n", "<leader>xx", "<cmd>SourceFile<cr>", opts)
+keymap("n", "<leader>t", "<cmd>PlenaryBustedFile %<cr>", opts)
 
