@@ -55,6 +55,23 @@
         )
     )
 ) 
+
+; 函数声明
+(declaration 
+  declarator: (function_declarator 
+    declarator: (identifier) @custom.function.declare
+    ))
+
+; 析构函数声明
+(declaration
+  declarator: (function_declarator 
+    declarator: (destructor_name) @custom.function.declare
+    ))
+
+; 函数声明
+(field_declaration 
+type: (primitive_type) 
+declarator: (function_declarator 
+  declarator: (field_identifier) @custom.function.declare 
+  ))
 ]
-
-
