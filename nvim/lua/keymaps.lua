@@ -203,6 +203,7 @@ keymap("n", "yb", "<cmd>CopyBreakPoint<cr>", opts)
 keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)
 keymap("n", "yF", "<cmd>CopyFilePath<cr>", opts)
 keymap("n", "yo", "<cmd>CopyFileNameWoExt<cr>", opts)
+keymap("n", "yO", "<cmd>CopyFilePathWoExt<cr>", opts)
 keymap("n", "ym", "<cmd>CopyFuncName<cr>", opts)
 
 -- plugin dev
