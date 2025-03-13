@@ -1,12 +1,11 @@
 local opts = { noremap = true, silent = true }
 
 -- Shorten function name
-local keymap = vim.api.nvim_set_keymap
+local keymap = vim.keymap.set
 
 --Remap space as leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-
 
 keymap("i", "jk", "<Esc>", opts)
 
@@ -15,7 +14,6 @@ keymap("i", "jk", "<Esc>", opts)
 -- keymap("n", "<C-j>", "<C-w>j", opts)
 -- keymap("n", "<C-k>", "<C-w>k", opts)
 -- keymap("n", "<C-l>", "<C-w>l", opts)
-
 
 keymap("n", "j", "gj", opts)
 keymap("n", "k", "gk", opts)
@@ -80,21 +78,44 @@ keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
-keymap("n", "<leader>fw",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>", opts)
-keymap("v", "<leader>fw",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>", opts)
+keymap(
+  "n",
+  "<leader>fw",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>",
+  opts
+)
+keymap(
+  "v",
+  "<leader>fw",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>",
+  opts
+)
 keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
 -- no ignore, no config
-keymap("n", "<leader>fF", "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files,--no-config<cr>", opts)
-keymap("n", "<leader>fW",
+keymap(
+  "n",
+  "<leader>fF",
+  "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files,--no-config<cr>",
+  opts
+)
+keymap(
+  "n",
+  "<leader>fW",
   "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=' --no-ignore --no-config'})<cr>",
-  opts)
-keymap("v", "<leader>fW",
+  opts
+)
+keymap(
+  "v",
+  "<leader>fW",
   "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=' --no-ignore --no-config'})<cr>",
-  opts)
-keymap("n", "<leader>s",
-  "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 55, fname_width = 25})<cr>", opts)
+  opts
+)
+keymap(
+  "n",
+  "<leader>s",
+  "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 55, fname_width = 25})<cr>",
+  opts
+)
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
@@ -115,8 +136,6 @@ keymap("n", "<leader>fr", "<cmd>GrugFar<cr>", opts)
 --   opts)
 -- keymap("v", "<leader>fw",
 --   ":<C-u>lua require('grug-far').with_visual_selection({ prefills = { search = vim.fn.expand('<cword>') } })<cr>", opts)
-
-
 
 -- session manager
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
@@ -180,12 +199,38 @@ keymap("n", "Q", "q", opts)
 keymap("n", "q", "<Nop>", opts)
 
 -- sniprun
-keymap("n", "<leader><enter>", ":let b:caret=winsaveview() <CR> | :%SnipRun <CR>| :call winrestview(b:caret) <CR>", opts)
+keymap(
+  "n",
+  "<leader><enter>",
+  ":let b:caret=winsaveview() <CR> | :%SnipRun <CR>| :call winrestview(b:caret) <CR>",
+  opts
+)
 keymap("v", "<leader><enter>", "<Plug>SnipRun", opts)
 
 -- highlight current line
-keymap("v", "<leader>l", ":<c-u>HSHighlight 1<CR>", opts)
-keymap("v", "<leader>L", ":<c-u>HSRmHighlight<CR>", opts)
+keymap("n", "<leader>bb", function()
+  require("bookmarks").toggle_bookmark()
+end, opts)
+keymap("n", "<leader>bc", function()
+  require("bookmarks").clear_current_buffer_bookmarks()
+end, opts)
+keymap("n", "<leader>bC", function()
+  require("bookmarks").clear_all_bookmarks()
+end, opts)
+keymap("n", "<leader>bs", function()
+  require("bookmarks").list_current_buffer_bookmarks()
+end, opts)
+keymap("n", "<leader>bS", function()
+  require("bookmarks").list_all_buffer_bookmarks()
+end, opts)
+keymap("n", "]m", "<Nop>", opts)
+keymap("n", "[m", "<Nop>", opts)
+keymap("n", "]m", function()
+  require("bookmarks").goto_next_bookmark()
+end, opts)
+keymap("n", "[m", function()
+  require("bookmarks").goto_prev_bookmark()
+end, opts)
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
@@ -198,7 +243,6 @@ inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
 -- keymap("i", "<C-[", "<Plug>(codeverse-previous)", opts)
 -- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
 
-
 keymap("n", "yb", "<cmd>CopyBreakPoint<cr>", opts)
 keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)
 keymap("n", "yF", "<cmd>CopyFilePath<cr>", opts)
@@ -208,4 +252,3 @@ keymap("n", "ym", "<cmd>CopyFuncName<cr>", opts)
 
 -- plugin dev
 keymap("n", "<leader>t", "<cmd>PlenaryBustedFile %<cr>", opts)
-

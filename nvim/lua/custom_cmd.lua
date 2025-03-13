@@ -1,34 +1,34 @@
 --
 -- copy filename / filename wo extensions/full path/breakpoint
 local send2clipboard = function(text)
-  vim.fn.setreg('+', text)
+  vim.fn.setreg("+", text)
 end
 local copy_cur_filename = function()
-  local filename = vim.fn.expand('%:t')
+  local filename = vim.fn.expand("%:t")
   send2clipboard(filename)
   print("copy filename:" .. filename)
 end
 local copy_cur_filename_wo_ext = function()
-  local filename = vim.fn.expand('%:t')
-  local filename_wo_ext = vim.fn.fnamemodify(filename, ':r')
+  local filename = vim.fn.expand("%:t")
+  local filename_wo_ext = vim.fn.fnamemodify(filename, ":r")
   send2clipboard(filename_wo_ext)
   print("copy filename wo ext:" .. filename_wo_ext)
 end
 local copy_cur_file_path = function()
-  local file_path = vim.fn.expand('%:p')
+  local file_path = vim.fn.expand("%:p")
   send2clipboard(file_path)
   print("copy file path:" .. file_path)
 end
 local copy_cur_file_path_wo_ext = function()
-  local file_path = vim.fn.expand('%:p')
-  local filepath_wo_ext = vim.fn.fnamemodify(file_path, ':r')
+  local file_path = vim.fn.expand("%:p")
+  local filepath_wo_ext = vim.fn.fnamemodify(file_path, ":r")
   send2clipboard(filepath_wo_ext)
   print("copy file path wo ext:" .. filepath_wo_ext)
 end
 local copy_cur_breakpoint = function()
   local file_name = vim.fn.expand("%:t")
   -- get current line number
-  local line_number = vim.fn.line('.')
+  local line_number = vim.fn.line(".")
   local breakpoint = file_name .. ":" .. line_number
   send2clipboard(breakpoint)
   print("copy breakpoint:" .. breakpoint)
@@ -70,10 +70,14 @@ local function get_current_function_name()
     for _, symbol in ipairs(symbols) do
       if vim.tbl_contains(expect_kind, symbol.kind) then
         local range = symbol.location and symbol.location.range or symbol.range
-        if range and
-            range.start.line <= row and
-            range["end"].line >= row and
-            (range.start.line ~= range["end"].line or (range.start.character <= col and range["end"].character >= col))
+        if
+          range
+          and range.start.line <= row
+          and range["end"].line >= row
+          and (
+            range.start.line ~= range["end"].line
+            or (range.start.character <= col and range["end"].character >= col)
+          )
         then
           return symbol.name
         end

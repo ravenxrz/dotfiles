@@ -1,9 +1,9 @@
 return {
   {
-    'saghen/blink.cmp',
+    "saghen/blink.cmp",
     -- optional: provides snippets for the snippet source
     dependencies = {
-      'rafamadriz/friendly-snippets',
+      "rafamadriz/friendly-snippets",
       {
         "folke/lazydev.nvim",
         ft = "lua", -- only load on lua files
@@ -18,7 +18,7 @@ return {
     },
 
     -- use a release tag to download pre-built binaries
-    version = '*',
+    version = "*",
     -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
     -- build = 'cargo build --release',
     -- If you use nix, you can build from source using latest nightly rust with:
@@ -31,9 +31,9 @@ return {
       -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
       -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
       -- See the full "keymap" documentation for information on defining your own keymap.
-      keymap = { preset = 'enter' },
+      keymap = { preset = "enter" },
       completion = {
-        accept = { auto_brackets = { enabled = true }, },
+        accept = { auto_brackets = { enabled = true } },
         -- Show documentation when selecting a completion item
         documentation = { auto_show = true, auto_show_delay_ms = 500 },
         -- Display a preview of the selected item on the current line
@@ -46,26 +46,26 @@ return {
         use_nvim_cmp_as_default = true,
         -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
-        nerd_font_variant = 'mono'
+        nerd_font_variant = "mono",
       },
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        default = { 'lsp', "lazydev", 'path', 'snippets', 'buffer' },
+        default = { "lsp", "lazydev", "path", "snippets", "buffer" },
         providers = {
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
             -- make lazydev completions top priority (see `:h blink.cmp`)
             score_offset = 100,
-          }
+          },
         },
         -- Disable cmdline completions
         cmdline = {},
       },
-      signature = { enabled = true }
+      signature = { enabled = true },
     },
-    opts_extend = { "sources.default" }
+    opts_extend = { "sources.default" },
   },
   {
     "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
@@ -73,10 +73,9 @@ return {
       "hrsh7th/nvim-cmp",
     },
     config = function()
-      require("marscode").setup({
-      })
-    end
-  }
+      require("marscode").setup({})
+    end,
+  },
   -- {
   --  "rcarriga/cmp-dap",
   --  event = "InsertEnter",

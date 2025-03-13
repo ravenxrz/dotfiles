@@ -3,7 +3,7 @@ local function detect_python_indent()
   for line in io.lines(vim.fn.expand("%")) do
     local spaces = line:match("^(%s*)") -- 匹配每行开头的空格
     if spaces then
-      local tabsize = #spaces           -- 计算空格数
+      local tabsize = #spaces -- 计算空格数
       if tabsize > 0 then
         vim.opt_local.expandtab = true
         vim.opt_local.shiftwidth = tabsize
@@ -23,7 +23,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   group = "DetectPythonIndent",
 })
 
-
 -- 针对python文件（多是cd用例), 添加local keymap jo  跳转到对应的log文件
 vim.api.nvim_create_augroup("PythonCDJumpToLog", { clear = true })
 
@@ -31,7 +30,7 @@ _edit_exist_file = function(file_path)
   if vim.fn.filereadable(file_path) == 1 then
     vim.cmd("e " .. file_path)
   else
-    vim.notify("no such file:" .. file_path , vim.log.levels.WARN)
+    vim.notify("no such file:" .. file_path, vim.log.levels.WARN)
   end
 end
 
@@ -46,8 +45,8 @@ vim.api.nvim_create_autocmd("FileType", {
     local filename = vim.fn.expand("<afile>:t")
     -- only match cd_xxx.py CD_xxx.py tc_xxx.py TC_xxx.py
     if filename:lower():find("cd_") == 1 or filename:lower():find("tc_") == 1 then
-      cmd = ":lua _edit_exist_file(\"" .. log_filepath .. "\")<cr>"
-      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>l', cmd, { noremap = true, silent = true })
+      cmd = ':lua _edit_exist_file("' .. log_filepath .. '")<cr>'
+      vim.api.nvim_buf_set_keymap(0, "n", "<leader>l", cmd, { noremap = true, silent = true })
     end
   end,
 })
@@ -60,15 +59,14 @@ vim.api.nvim_create_autocmd("BufRead", {
     local log_filepath = vim.fn.expand("<afile>:p")
     if log_filepath:find("%.py.log$") then
       local py_filepath = log_filepath:gsub("%.log$", "")
-      cmd = ":lua _edit_exist_file(\"" .. py_filepath .. "\")<cr>"
-      vim.api.nvim_buf_set_keymap(0, 'n', '<leader>l', cmd, { noremap = true, silent = true })
+      cmd = ':lua _edit_exist_file("' .. py_filepath .. '")<cr>'
+      vim.api.nvim_buf_set_keymap(0, "n", "<leader>l", cmd, { noremap = true, silent = true })
     end
   end,
 })
 
-
-local win_focus_ignore_filetypes = { 'neo-tree' }
-vim.api.nvim_create_autocmd('FileType', {
+local win_focus_ignore_filetypes = { "neo-tree" }
+vim.api.nvim_create_autocmd("FileType", {
   group = augroup,
   callback = function(_)
     if vim.tbl_contains(win_focus_ignore_filetypes, vim.bo.filetype) then
@@ -77,17 +75,17 @@ vim.api.nvim_create_autocmd('FileType', {
       vim.b.focus_disable = false
     end
   end,
-  desc = 'Disable focus autoresize for FileType',
+  desc = "Disable focus autoresize for FileType",
 })
 
 -- grug-far set fixed-string shortcut
-vim.api.nvim_create_autocmd('FileType', {
-  group = vim.api.nvim_create_augroup('my-grug-far-custom-keybinds', { clear = true }),
-  pattern = { 'grug-far' },
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("my-grug-far-custom-keybinds", { clear = true }),
+  pattern = { "grug-far" },
   callback = function()
-    vim.keymap.set('n', '<localleader>w', function()
-      local state = unpack(require('grug-far').toggle_flags({ '--fixed-strings' }))
-      vim.notify('grug-far: toggled --fixed-strings ' .. (state and 'ON' or 'OFF'))
+    vim.keymap.set("n", "<localleader>w", function()
+      local state = unpack(require("grug-far").toggle_flags({ "--fixed-strings" }))
+      vim.notify("grug-far: toggled --fixed-strings " .. (state and "ON" or "OFF"))
     end, { buffer = true })
   end,
 })
@@ -104,5 +102,5 @@ vim.api.nvim_create_autocmd("BufRead", {
         return
       end
     end
-  end
+  end,
 })

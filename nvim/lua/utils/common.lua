@@ -5,5 +5,5 @@ function P(t)
 end
 
 function table2str(t)
- return vim.inspect(t) 
+  return vim.inspect(t)
 end

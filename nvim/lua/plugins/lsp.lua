@@ -54,9 +54,7 @@ return {
 
           -- inlay hints
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
-          if
-              client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider
-          then
+          if client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
             if vim.lsp.inlay_hint then -- I don't know why somehow vim.lsp.inlay_hint is nil, so do this check befre enable inlayhint
               vim.lsp.inlay_hint.enable(true, { bufnr = buffer })
             end
@@ -84,22 +82,21 @@ return {
           "clangd",
           "pyright",
           "lua_ls",
-          "yamlls"
+          "yamlls",
         },
-      }
-      )
+      })
       require("mason-lspconfig").setup_handlers({
         -- The first entry (without a key) will be the default handler
         -- and will be called for each installed server that doesn't have
         -- a dedicated handler.
         function(server_name) -- default handler (optional)
-          local capabilities = require('blink.cmp').get_lsp_capabilities()
+          local capabilities = require("blink.cmp").get_lsp_capabilities()
           local opts = {
             clangd = {
               cmd = {
                 "clangd",
                 "--background-index", -- 后台建立索引，并持久化到disk
-                "--clang-tidy",       -- 开启clang-tidy
+                "--clang-tidy", -- 开启clang-tidy
                 -- 指定clang-tidy的检查参数， 摘抄自cmu15445. 全部参数可参考 https://clang.llvm.org/extra/clang-tidy/checks
                 "--clang-tidy-checks=bugprone-*, clang-analyzer-*, google-*, modernize-*, performance-*, portability-*, readability-*, -bugprone-too-small-loop-variable, -clang-analyzer-cplusplus.NewDelete, -clang-analyzer-cplusplus.NewDeleteLeaks, -modernize-use-nodiscard, -modernize-avoid-c-arrays, -readability-magic-numbers, -bugprone-branch-clone, -bugprone-signed-char-misuse, -bugprone-unhandled-self-assignment, -clang-diagnostic-implicit-int-float-conversion, -modernize-use-auto, -modernize-use-trailing-return-type, -readability-convert-member-functions-to-static, -readability-make-member-function-const, -readability-qualified-auto, -readability-redundant-access-specifiers,",
                 "--completion-style=detailed",
@@ -180,24 +177,24 @@ return {
               settings = {
                 yaml = {
                   format = {
-                    enable = true
+                    enable = true,
                   },
                   schemaStore = {
-                    enable = true
-                  }
-                }
-              }
-            }
+                    enable = true,
+                  },
+                },
+              },
+            },
           }
           if opts[server_name] then
             local server_opt = opts[server_name]
             require("lspconfig")[server_name].setup(vim.tbl_deep_extend("force", {
-              capabilities =  capabilities
+              capabilities = capabilities,
               -- capabilities = require("cmp_nvim_lsp").default_capabilities(),
             }, server_opt))
           else
             require("lspconfig")[server_name].setup({
-              capabilities =  capabilities
+              capabilities = capabilities,
               -- capabilities = require("cmp_nvim_lsp").default_capabilities(),
             })
           end
@@ -214,7 +211,7 @@ return {
     },
     config = function()
       require("mason-null-ls").setup({
-        ensure_installed = { "yapf" }
+        ensure_installed = { "yapf" },
       })
       local null_ls = require("null-ls")
       null_ls.setup({
@@ -222,7 +219,7 @@ return {
           null_ls.builtins.formatting.yapf,
         },
       })
-    end
+    end,
   },
   {
     "Wansmer/symbol-usage.nvim",
