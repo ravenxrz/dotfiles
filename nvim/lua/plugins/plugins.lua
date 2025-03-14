@@ -46,21 +46,6 @@ return {
   {
     "pteroctopus/faster.nvim",
   },
-  -- {  -- this plugins has conflicts with GrugFar, disable this
-  --   'nvim-focus/focus.nvim',
-  --   version = '*',
-  --   opts = {
-  --     autoresize = {
-  --       enable = false,
-  --       width = 160,
-  --       height = 35
-  --     },
-  --     ui = {
-  --       signcolumn = false,
-  --       winhighlight = false, -- Auto highlighting for focussed/unfocussed windows
-  --     }
-  --   }
-  -- },
   {
     "michaelb/sniprun",
     branch = "master",
@@ -133,13 +118,13 @@ return {
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
         options = {
-          signcolumn = "yes", -- disable signcolumn
-          number = true, -- disable number column
+          signcolumn = "yes",     -- disable signcolumn
+          number = true,          -- disable number column
           relativenumber = false, -- disable relative numbers
-          cursorline = false, -- disable cursorline
-          cursorcolumn = false, -- disable cursor column
-          foldcolumn = "99", -- disable fold column
-          list = false, -- disable whitespace characters
+          cursorline = false,     -- disable cursorline
+          cursorcolumn = false,   -- disable cursor column
+          foldcolumn = "99",      -- disable fold column
+          list = false,           -- disable whitespace characters
         },
       },
       plugins = {
@@ -417,15 +402,6 @@ return {
       },
     },
     config = function()
-      local function filename_first(_, path)
-        local tail = vim.fs.basename(path)
-        local parent = vim.fs.dirname(path)
-        if parent == "." then
-          return tail
-        end
-        return string.format("%s\t\t%s", tail, parent)
-      end
-
       local actions = require("telescope.actions")
       local telescope = require("telescope")
       local open_with_trouble = require("trouble.sources.telescope").open
@@ -435,7 +411,7 @@ return {
           -- layout_config = {
           --   prompt_position = "top",
           -- },
-          path_display = function(opts, path)
+          path_display = function(_, path)
             local tail = vim.fs.basename(path)
             local parent = vim.fs.dirname(path)
             if parent == "." then
@@ -494,7 +470,6 @@ return {
         close_on_exit = true,
         shell = vim.o.shell,
         float_opts = {
-          border = "curved",
           winblend = 0,
           border = "single",
           width = 300,
@@ -902,7 +877,7 @@ return {
         -- should_enable: a callback that overrides all other settings to
         -- enable/disable illumination. This will be called a lot so don't do
         -- anything expensive in it.
-        should_enable = function(bufnr)
+        should_enable = function(_)
           return true
         end,
         -- case_insensitive_regex: sets regex case sensitivity
@@ -917,7 +892,7 @@ return {
       --- auto update the highlight style on colorscheme change
       vim.api.nvim_create_autocmd({ "ColorScheme" }, {
         pattern = { "*" },
-        callback = function(ev)
+        callback = function(_)
           vim.api.nvim_set_hl(0, "IlluminatedWordText", { link = "LspReferenceText" })
           vim.api.nvim_set_hl(0, "IlluminatedWordRead", { link = "LspReferenceRead" })
           vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "LspReferenceWrite" })
@@ -1172,6 +1147,37 @@ return {
         vertical = "│"
       },
       show_borders = true,
+    }
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      {
+        "MunifTanjim/nui.nvim",
+      },
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    },
+    opts = {
+      lsp = {
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+        },
+      },
+      -- you can enable a preset for easier configuration
+      presets = {
+        bottom_search = false,        -- use a classic bottom cmdline for search command_palette = true,       -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = false,       -- add a border to hover docs and signature help
+      },
     }
   }
 }
