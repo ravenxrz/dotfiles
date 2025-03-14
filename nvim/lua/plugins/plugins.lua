@@ -99,6 +99,7 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
+      preset = "helix",
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
@@ -116,12 +117,13 @@ return {
   {
     "folke/zen-mode.nvim",
     cmd = { "ZenMode" },
+    enabled = true,
     opts = {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
       window = {
-        backdrop = 1, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
+        backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
         -- height and width can be:
         -- * an absolute number of cells when > 1
         -- * a percentage of the width / height of the editor when <= 1
@@ -131,13 +133,13 @@ return {
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
         options = {
-          -- signcolumn = "no", -- disable signcolumn
-          -- number = false, -- disable number column
-          -- relativenumber = false, -- disable relative numbers
-          -- cursorline = false, -- disable cursorline
-          -- cursorcolumn = false, -- disable cursor column
-          -- foldcolumn = "0", -- disable fold column
-          -- list = false, -- disable whitespace characters
+          signcolumn = "yes", -- disable signcolumn
+          number = true, -- disable number column
+          relativenumber = false, -- disable relative numbers
+          cursorline = false, -- disable cursorline
+          cursorcolumn = false, -- disable cursor column
+          foldcolumn = "99", -- disable fold column
+          list = false, -- disable whitespace characters
         },
       },
       plugins = {
@@ -147,7 +149,7 @@ return {
           showcmd = false, -- disables the command in the last line of the screen
           -- you may turn on/off statusline in zen mode by setting 'laststatus'
           -- statusline will be shown only if 'laststatus' == 3
-          laststatus = 3, -- turn off the statusline in zen mode
+          laststatus = 0, -- turn off the statusline in zen mode
         },
       },
     },
@@ -1133,5 +1135,43 @@ return {
       vim.keymap.set('n', 'zR', ufo.openAllFolds)
       vim.keymap.set('n', 'zM', ufo.closeAllFolds)
     end
+  },
+  {
+    'dgagn/diagflow.nvim',
+    event = 'LspAttach',
+    opts = {
+      enable = true,
+      max_width = 60,     -- The maximum width of the diagnostic messages
+      max_height = 10,    -- the maximum height per diagnostics
+      severity_colors = { -- The highlight groups to use for each diagnostic severity level
+        error = "DiagnosticFloatingError",
+        warning = "DiagnosticFloatingWarn",
+        info = "DiagnosticFloatingInfo",
+        hint = "DiagnosticFloatingHint",
+      },
+      format = function(diagnostic)
+        return diagnostic.message
+      end,
+      gap_size = 1,
+      scope = 'line', -- 'cursor', 'line' this changes the scope, so instead of showing errors under the cursor, it shows errors on the entire line.
+      padding_top = 0,
+      padding_right = 0,
+      text_align = 'right',                                  -- 'left', 'right'
+      placement = 'top',                                     -- 'top', 'inline'
+      inline_padding_left = 0,                               -- the padding left when the placement is inline
+      update_event = { 'DiagnosticChanged', 'BufReadPost' }, -- the event that updates the diagnostics cache
+      toggle_event = {},                                     -- if InsertEnter, can toggle the diagnostics on inserts
+      show_sign = true,                                      -- set to true if you want to render the diagnostic sign before the diagnostic message
+      render_event = { 'DiagnosticChanged', 'CursorMoved' },
+      border_chars = {
+        top_left = "┌",
+        top_right = "┐",
+        bottom_left = "└",
+        bottom_right = "┘",
+        horizontal = "─",
+        vertical = "│"
+      },
+      show_borders = true,
+    }
   }
 }
