@@ -11,19 +11,6 @@ return {
     },
   },
   {
-    "otavioschwanck/arrow.nvim",
-    dependencies = {
-      { "nvim-tree/nvim-web-devicons" },
-      -- or if using `mini.icons`
-      -- { "echasnovski/mini.icons" },
-    },
-    opts = {
-      show_icons = true,
-      leader_key = ";",        -- Recommended to be a single key
-      buffer_leader_key = "m", -- Per Buffer Mappings
-    },
-  },
-  {
     "amitds1997/remote-nvim.nvim",
     version = "*",                     -- Pin to GitHub releases
     dependencies = {
@@ -400,6 +387,7 @@ return {
           "tpope/vim-fugitive",
         },
       },
+      "nvim-telescope/telescope-frecency.nvim",
     },
     config = function()
       local actions = require("telescope.actions")
@@ -435,6 +423,7 @@ return {
       })
       telescope.load_extension("live_grep_args")
       telescope.load_extension("git_file_history")
+      telescope.load_extension("frecency")
     end,
   },
   -- {
@@ -633,16 +622,6 @@ return {
                   return "bufid:" .. tostring(vim.api.nvim_get_current_buf()) .. " reuse"
                 else
                   return "bufid:" .. tostring(vim.api.nvim_get_current_buf()) .. " not reuse"
-                end
-              end,
-            },
-            {
-              function()
-                local statusline = require("arrow.statusline")
-                if statusline.is_on_arrow_file() then
-                  return "in arrow"
-                else
-                  return ""
                 end
               end,
             },

@@ -54,8 +54,6 @@ keymap("n", "<leader>o", "<cmd>Neotree reveal<cr>", opts)
 -- Buffer
 -- keymap("n", "E", "<cmd>BufferPrevious<cr>", opts)
 -- keymap("n", "R", "<cmd>BufferNext<cr>", opts)
-keymap("n", "E", '<cmd>lua require("arrow.persist").previous()<cr>', opts)
-keymap("n", "R", '<cmd>lua require("arrow.persist").next()<cr>', opts)
 
 -- keymap("n", "<leader>bp", "<cmd>BufferPin<cr>", opts)
 -- keymap("n", "<leader>bb", "<cmd>BufferPick<cr>", opts)
@@ -73,7 +71,8 @@ keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
 keymap("n", "<leader>gf", "<cmd>Telescope git_file_history<cr>", opts)
 
 -- Telescope
-keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
+-- keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
+keymap("n", "<leader>r", "<cmd>Telescope frecency<cr>", opts)
 -- keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
