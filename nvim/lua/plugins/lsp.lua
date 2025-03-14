@@ -91,12 +91,17 @@ return {
         -- a dedicated handler.
         function(server_name) -- default handler (optional)
           local capabilities = require("blink.cmp").get_lsp_capabilities()
+          -- for plugin nvim-ufo
+          capabilities.textDocument.foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true
+          }
           local opts = {
             clangd = {
               cmd = {
                 "clangd",
                 "--background-index", -- 后台建立索引，并持久化到disk
-                "--clang-tidy", -- 开启clang-tidy
+                "--clang-tidy",       -- 开启clang-tidy
                 -- 指定clang-tidy的检查参数， 摘抄自cmu15445. 全部参数可参考 https://clang.llvm.org/extra/clang-tidy/checks
                 "--clang-tidy-checks=bugprone-*, clang-analyzer-*, google-*, modernize-*, performance-*, portability-*, readability-*, -bugprone-too-small-loop-variable, -clang-analyzer-cplusplus.NewDelete, -clang-analyzer-cplusplus.NewDeleteLeaks, -modernize-use-nodiscard, -modernize-avoid-c-arrays, -readability-magic-numbers, -bugprone-branch-clone, -bugprone-signed-char-misuse, -bugprone-unhandled-self-assignment, -clang-diagnostic-implicit-int-float-conversion, -modernize-use-auto, -modernize-use-trailing-return-type, -readability-convert-member-functions-to-static, -readability-make-member-function-const, -readability-qualified-auto, -readability-redundant-access-specifiers,",
                 "--completion-style=detailed",

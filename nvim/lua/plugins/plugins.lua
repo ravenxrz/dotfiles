@@ -7,7 +7,7 @@ return {
         width = 25,
         -- etc
       },
-      condition = false,
+      enabled = false,
     },
   },
   {
@@ -19,16 +19,16 @@ return {
     },
     opts = {
       show_icons = true,
-      leader_key = ";", -- Recommended to be a single key
+      leader_key = ";",        -- Recommended to be a single key
       buffer_leader_key = "m", -- Per Buffer Mappings
     },
   },
   {
     "amitds1997/remote-nvim.nvim",
-    version = "*", -- Pin to GitHub releases
+    version = "*",                     -- Pin to GitHub releases
     dependencies = {
-      "nvim-lua/plenary.nvim", -- For standard functions
-      "MunifTanjim/nui.nvim", -- To build the plugin UI
+      "nvim-lua/plenary.nvim",         -- For standard functions
+      "MunifTanjim/nui.nvim",          -- To build the plugin UI
       "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
     },
     enabled = false,
@@ -84,10 +84,10 @@ return {
       auto_refresh = false,
       auto_preview = true,
       throttle = {
-        refresh = 20, -- fetches new data when needed
-        update = 10, -- updates the window
-        render = 10, -- renders the window
-        follow = 100, -- follows the current item
+        refresh = 20,                            -- fetches new data when needed
+        update = 10,                             -- updates the window
+        render = 10,                             -- renders the window
+        follow = 100,                            -- follows the current item
         preview = { ms = 100, debounce = true }, -- shows the preview for the current item
       },
     },
@@ -127,7 +127,7 @@ return {
         -- * a percentage of the width / height of the editor when <= 1
         -- * a function that returns the width or the height
         width = 145, -- width of the Zen window
-        height = 1, -- height of the Zen window
+        height = 1,  -- height of the Zen window
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
         options = {
@@ -143,7 +143,7 @@ return {
       plugins = {
         options = {
           enabled = true,
-          ruler = false, -- disables the ruler text in the cmd line area
+          ruler = false,   -- disables the ruler text in the cmd line area
           showcmd = false, -- disables the command in the last line of the screen
           -- you may turn on/off statusline in zen mode by setting 'laststatus'
           -- statusline will be shown only if 'laststatus' == 3
@@ -216,7 +216,7 @@ return {
         enable_git_status = false,
         enable_diagnostics = false,
         open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
-        sort_case_insensitive = false, -- used when sorting files and directories in the tree
+        sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
         window = {
           position = "left",
           width = 40,
@@ -318,8 +318,8 @@ return {
           untracked = { text = "┆" },
         },
         signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+        numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
         word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
         watch_gitdir = {
           follow_files = true,
@@ -337,7 +337,7 @@ return {
         current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
         sign_priority = 6,
         update_debounce = 100,
-        status_formatter = nil, -- Use default
+        status_formatter = nil,  -- Use default
         max_file_length = 40000, -- Disable if file is longer than this (in lines)
         preview_config = {
           -- Options passed to nvim_open_win
@@ -592,7 +592,7 @@ return {
   {
     "romgrk/barbar.nvim",
     dependencies = {
-      "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
+      "lewis6991/gitsigns.nvim",     -- OPTIONAL: for git status
       "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
     },
     init = function()
@@ -608,7 +608,7 @@ return {
       -- …etc.
     },
     version = "^1.0.0", -- optional: only update when a new 1.x version is released
-    cond = false,
+    enabled = false
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -775,15 +775,15 @@ return {
   },
   {
     "okuuva/auto-save.nvim",
-    cmd = "ASToggle", -- optional for lazy loading on command
+    cmd = "ASToggle",                         -- optional for lazy loading on command
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     config = function()
       require("auto-save").setup({
-        enabled = true, -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
-        trigger_events = { -- See :h events
+        enabled = true,                                                -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
+        trigger_events = {                                             -- See :h events
           immediate_save = { "BufLeave", "FocusLost", "InsertLeave" }, -- vim events that trigger an immediate save
-          defer_save = { "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
-          cancel_deferred_save = { "InsertEnter" }, -- vim events that cancel a pending deferred save
+          defer_save = { "TextChanged" },                              -- vim events that trigger a deferred save (saves after `debounce_delay`)
+          cancel_deferred_save = { "InsertEnter" },                    -- vim events that cancel a pending deferred save
         },
         -- function that takes the buffer handle and determines whether to save the current buffer or not
         -- return true: if buffer is ok to be saved
@@ -799,8 +799,8 @@ return {
           return false
         end,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
-        noautocmd = false, -- do not execute autocmds when saving
-        debounce_delay = 500, -- delay after which a pending save is executed
+        noautocmd = false,         -- do not execute autocmds when saving
+        debounce_delay = 500,      -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
         debug = false,
       })
@@ -823,16 +823,16 @@ return {
         -- session_filename_to_dir = session_filename_to_dir,     -- Function that replaces symbols into separators and colons to transform filename into a session directory.
         -- dir_to_session_filename = dir_to_session_filename,     -- Function that replaces separators and colons into special symbols to transform session directory into a filename. Should use `vim.loop.cwd()` if the passed `dir` is `nil`.
         autoload_mode = config.AutoloadMode.CurrentDir, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-        autosave_last_session = true, -- Automatically save last session on exit and on session switch.
-        autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-        autosave_ignore_dirs = {}, -- A list of directories where the session will not be autosaved.
-        autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
+        autosave_last_session = true,                   -- Automatically save last session on exit and on session switch.
+        autosave_ignore_not_normal = true,              -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+        autosave_ignore_dirs = {},                      -- A list of directories where the session will not be autosaved.
+        autosave_ignore_filetypes = {                   -- All buffers of these file types will be closed before the session is saved.
           "gitcommit",
           "gitrebase",
         },
-        autosave_ignore_buftypes = {}, -- All buffers of these bufer types will be closed before the session is saved.
+        autosave_ignore_buftypes = {},    -- All buffers of these bufer types will be closed before the session is saved.
         autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-        max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+        max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
     end,
   },
@@ -923,45 +923,6 @@ return {
       })
     end,
   },
-  -- {
-  -- 	"andersevenrud/nvim_context_vt",
-  -- 	event = "VeryLazy",
-  -- 	config = function()
-  -- 		require("nvim_context_vt").setup({
-  -- 			-- Enable by default. You can disable and use :NvimContextVtToggle to maually enable.
-  -- 			-- Default: true
-  -- 			enabled = true,
-  --
-  -- 			-- Override default virtual text prefix
-  -- 			-- Default: '-->'
-  -- 			prefix = "",
-  --
-  -- 			-- Override the internal highlight group name
-  -- 			-- Default: 'ContextVt'
-  -- 			highlight = "ContextVt",
-  --
-  -- 			-- Disable virtual text for given filetypes
-  -- 			-- Default: { 'markdown' }
-  -- 			disable_ft = { "markdown" },
-  --
-  -- 			-- Disable display of virtual text below blocks for indentation based languages like Python
-  -- 			-- Default: false
-  -- 			disable_virtual_lines = false,
-  --
-  -- 			-- Same as above but only for spesific filetypes
-  -- 			-- Default: {}
-  -- 			disable_virtual_lines_ft = { "yaml" },
-  --
-  -- 			-- How many lines required after starting position to show virtual text
-  -- 			-- Default: 1 (equals two lines total)
-  -- 			min_rows = 5,
-  --
-  -- 			-- Same as above but only for spesific filetypes
-  -- 			-- Default: {}
-  -- 			min_rows_ft = {},
-  -- 		})
-  -- 	end,
-  -- },
   {
     "nvim-treesitter/nvim-treesitter",
     version = "*",
@@ -1027,7 +988,7 @@ return {
             -- mapping query_strings to modes.
             selection_modes = {
               ["@parameter.outer"] = "v", -- charwise
-              ["@function.outer"] = "V", -- linewise
+              ["@function.outer"] = "V",  -- linewise
               ["@class.outer"] = "<c-v>", -- blockwise
             },
             -- If you set this to `true` (default is `false`) then any textobject is
@@ -1114,29 +1075,6 @@ return {
     end,
   },
   {
-    "akinsho/git-conflict.nvim",
-    cond = false,
-    version = "*",
-    config = true,
-    opts = {
-      default_mappings = {
-        ours = "co",
-        theirs = "ct",
-        none = "c0",
-        both = "cb",
-        next = "]x",
-        prev = "[x",
-      }, -- disable buffer local mapping created by this plugin
-      default_commands = true, -- disable commands created by this plugin
-      disable_diagnostics = false, -- This will disable the diagnostics in a buffer whilst it is conflicted
-      list_opener = "copen", -- command or function to open the conflicts list
-      highlights = { -- They must have background color, otherwise the default color will be used
-        incoming = "DiffAdd",
-        current = "DiffChange",
-      },
-    },
-  },
-  {
     "alexghergh/nvim-tmux-navigation",
     opts = {
       disable_when_zoomed = true, -- defaults to false
@@ -1153,4 +1091,47 @@ return {
       },
     },
   },
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = {
+      "kevinhwang91/promise-async",
+    },
+    config = function()
+      local handler = function(virtText, lnum, endLnum, width, truncate)
+        local newVirtText = {}
+        local suffix = (' 󰁂 %d '):format(endLnum - lnum)
+        local sufWidth = vim.fn.strdisplaywidth(suffix)
+        local targetWidth = width - sufWidth
+        local curWidth = 0
+        for _, chunk in ipairs(virtText) do
+          local chunkText = chunk[1]
+          local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+          if targetWidth > curWidth + chunkWidth then
+            table.insert(newVirtText, chunk)
+          else
+            chunkText = truncate(chunkText, targetWidth - curWidth)
+            local hlGroup = chunk[2]
+            table.insert(newVirtText, { chunkText, hlGroup })
+            chunkWidth = vim.fn.strdisplaywidth(chunkText)
+            -- str width returned from truncate() may less than 2nd argument, need padding
+            if curWidth + chunkWidth < targetWidth then
+              suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+            end
+            break
+          end
+          curWidth = curWidth + chunkWidth
+        end
+        table.insert(newVirtText, { suffix, 'MoreMsg' })
+        return newVirtText
+      end
+
+      local ufo = require('ufo')
+      ufo.setup({
+        fold_virt_text_handler = handler
+      })
+      vim.api.nvim_set_hl(0, "UfoFoldedBg", { bg = nil, fg = nil })
+      vim.keymap.set('n', 'zR', ufo.openAllFolds)
+      vim.keymap.set('n', 'zM', ufo.closeAllFolds)
+    end
+  }
 }

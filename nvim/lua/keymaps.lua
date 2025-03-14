@@ -175,7 +175,7 @@ keymap("n", "<leader>zz", "<cmd>ZenMode<cr>", opts)
 keymap("n", "<leader>zf", "<cmd>FocusToggle<cr>", opts)
 
 -- neogen
-keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
+-- keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
 
 -- trouble
 keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0 win.position=bottom<cr>", opts)
