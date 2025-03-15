@@ -226,21 +226,4 @@ return {
       })
     end,
   },
-  {
-    "Wansmer/symbol-usage.nvim",
-    event = "LspAttach", -- need run before LspAttach if you use nvim 0.9. On 0.10 use 'LspAttach'
-    config = function()
-      require("symbol-usage").setup({
-        ---@type 'above'|'end_of_line'|'textwidth'|'signcolumn' `above` by default
-        vt_position = "end_of_line",
-        disable = {
-          lsp = {},
-          filetypes = {
-            "python", -- symbol usage case pyright too slow
-          },
-          cond = {},
-        },
-      })
-    end,
-  },
 }
