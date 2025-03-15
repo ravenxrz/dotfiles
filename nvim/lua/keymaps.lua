@@ -103,6 +103,7 @@ keymap(
   "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=' --no-ignore --no-config'})<cr>",
   opts
 )
+
 keymap(
   "v",
   "<leader>fW",
@@ -118,6 +119,7 @@ keymap(
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
+keymap("n", "<leader>lr", ":IncRename ", opts)
 
 -- outline
 -- keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
@@ -145,8 +147,8 @@ keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts)
 -- dap
 keymap("n", "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", opts)
 -- keymap("n", "<leader>dT", "<cmd>lua require('dapui').float_element('stacks', {})<cr>", opts)
--- keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)
--- keymap("n", "<leader>dB", "<cmd>lua require'dap'.toggle_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>", opts)
+keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)
+keymap("n", "<leader>dB", "<cmd>lua require'dap'.toggle_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>", opts)
 keymap("n", "<leader>dc", "<cmd>DapContinue<cr>", opts)
 -- keymap("n", "<leader>dn", "<cmd>lua require'dap'.step_over()<cr>", opts)
 -- keymap("n", "<leader>ds", "<cmd>lua require'dap'.step_into()<cr>", opts)

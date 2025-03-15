@@ -57,8 +57,8 @@ return {
               end
               -- 执行 find 命令并获取结果
               local command = "find "
-                .. vim.fn.getcwd()
-                .. " -type d -name '.git' -prune -o -type f -executable | grep -vE 'third_party|thirdparty|3rdparty'"
+                  .. vim.fn.getcwd()
+                  .. " -type d -name '.git' -prune -o -type f -executable | grep -vE 'third_party|thirdparty|3rdparty'"
               local handle = io.popen(command)
               local result = handle:read("*a")
               handle:close()
@@ -326,5 +326,22 @@ return {
   --       -- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
   --     })
   --   end,
-  -- }
+  -- },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "alfaix/neotest-gtest"
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-gtest").setup({})
+        }
+      })
+    end
+  }
 }

@@ -993,33 +993,7 @@ return {
       })
     end,
   },
-  -- {
-  --   "iamcco/markdown-preview.nvim",
-  --   enabled = vim.fn.executable("npm") == 1,
-  --   cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-  --   build = "cd app && npm install",
-  --   init = function()
-  --     vim.g.mkdp_filetypes = { "markdown" }
-  --     vim.g.mkdp_auto_close = 1
-  --     vim.g.mkdp_command_for_global = 1
-  --     vim.g.mkdp_combine_preview = 1
-  --
-  --     local function load_then_exec(cmd)
-  --       return function()
-  --         vim.cmd.delcommand(cmd)
-  --         require("lazy").load({ plugins = { "markdown-preview.nvim" } })
-  --         vim.api.nvim_exec_autocmds("BufEnter", {}) -- commands appear only after BufEnter
-  --         vim.cmd(cmd)
-  --       end
-  --     end
-  --
-  --     ---Fixes "No command :MarkdownPreview"
-  --     ---https://github.com/iamcco/markdown-preview.nvim/issues/585#issuecomment-1724859362
-  --     for _, cmd in pairs({ "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" }) do
-  --       vim.api.nvim_create_user_command(cmd, load_then_exec(cmd), {})
-  --     end
-  --   end,
-  -- },
+  -- ,
   {
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -1154,9 +1128,24 @@ return {
       presets = {
         bottom_search = false,        -- use a classic bottom cmdline for search command_palette = true,       -- position the cmdline and popupmenu together
         long_message_to_split = true, -- long messages will be sent to a split
-        inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+        inc_rename = true,            -- enables an input dialog for inc-rename.nvim
         lsp_doc_border = false,       -- add a border to hover docs and signature help
       },
     }
+  },
+  {
+    "smjonas/inc-rename.nvim",
+    config = function()
+      require("inc_rename").setup()
+    end,
+  },
+  {
+    "chrisgrieser/nvim-spider",
+    lazy = true,
+    keys = {
+      { "w", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x" } },
+      { "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
+      { "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
+    },
   }
 }
