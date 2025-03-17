@@ -1060,6 +1060,7 @@ return {
         fold_virt_text_handler = handler
       })
       vim.api.nvim_set_hl(0, "UfoFoldedBg", { bg = nil, fg = nil })
+      vim.api.nvim_set_hl(0, "UfoFoldedFg", { link = "Comment" })
       vim.keymap.set('n', 'zR', ufo.openAllFolds)
       vim.keymap.set('n', 'zM', ufo.closeAllFolds)
     end
