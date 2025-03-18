@@ -169,10 +169,5 @@ return {
         },
       })
     end,
-  },
-  {
-    "igorlfs/nvim-dap-view",
-    commit = "589dd1802137289b3ffbfd8448b79d685dcd7cdf",
-    opts = {},
-  },
+  }
 }
