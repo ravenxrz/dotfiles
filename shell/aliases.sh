@@ -230,4 +230,4 @@ zkinit() {
 # alias typora="Typora.exe"
 # alias vim="lvim"
 
-alias nv="nvim"
+alias nv="$HOME/.local/share/bob/nvim-bin/nvim"
