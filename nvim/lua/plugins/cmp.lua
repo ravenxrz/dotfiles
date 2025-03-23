@@ -83,9 +83,9 @@ return {
             score_offset = 100,
           },
         },
-        -- Disable cmdline completions
-        -- cmdline = {},
       },
+      -- Disable cmdline completions
+      cmdline = {},
       signature = { enabled = false },
     },
     opts_extend = { "sources.default" },
