@@ -7,7 +7,7 @@
   "bookmarks.nvim": { "branch": "main", "commit": "046810c083e991b4011ebb54dae4397809bc0609" },
   "bufdelete.nvim": { "branch": "master", "commit": "f6bcea78afb3060b198125256f897040538bcb81" },
   "call-graph.nvim": { "branch": "main", "commit": "84e5afea153df1037693722b501539c85450da39" },
-  "codeverse.vim": { "branch": "master", "commit": "5678a6d067eb1ac40e3a8e834404dfd8930e178e" },
+  "codeverse.vim": { "branch": "master", "commit": "336df614675875368cb62178eec911c047325519" },
   "colorful-menu.nvim": { "branch": "master", "commit": "0041037582353a2101f0ba8bd8cae21c064921dc" },
   "diagflow.nvim": { "branch": "main", "commit": "b13321b517ff64bf42eeac2214085d3c76d83a0d" },
   "dracula.nvim": { "branch": "main", "commit": "96c9d19ce81b26053055ad6f688277d655b3f7d2" },
