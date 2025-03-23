@@ -73,7 +73,7 @@ keymap("n", "<leader>gf", "<cmd>Telescope git_file_history<cr>", opts)
 -- Telescope
 -- keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>r", "<cmd>Telescope frecency<cr>", opts)
--- keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
+keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
@@ -119,10 +119,10 @@ keymap(
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
-keymap("n", "<leader>lr", ":IncRename ", opts)
 
 -- outline
 -- keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
+keymap("n", "<leader>lo", "<cmd>Outline<CR>", opts)
 
 -- lazygit
 -- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
@@ -179,9 +179,9 @@ keymap("n", "<leader>zf", "<cmd>FocusToggle<cr>", opts)
 -- keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
 
 -- trouble
-keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0 win.position=bottom<cr>", opts)
-keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle win.position=bottom<cr>", opts)
-keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", opts)
+-- keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0 win.position=bottom<cr>", opts)
+-- keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle win.position=bottom<cr>", opts)
+-- keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", opts)
 -- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
 -- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
 keymap("n", "<leader>ci", "<cmd>CallGraphI<cr>", opts)

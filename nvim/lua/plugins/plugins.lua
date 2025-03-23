@@ -50,19 +50,12 @@ return {
     end,
   },
   {
-    "folke/trouble.nvim",
-    cmd = "Trouble",
-    opts = {
-      auto_refresh = false,
-      auto_preview = true,
-      throttle = {
-        refresh = 20,                            -- fetches new data when needed
-        update = 10,                             -- updates the window
-        render = 10,                             -- renders the window
-        follow = 100,                            -- follows the current item
-        preview = { ms = 100, debounce = true }, -- shows the preview for the current item
-      },
-    },
+    "hedyhli/outline.nvim",
+    config = function()
+      require("outline").setup {
+        -- Your setup opts here (leave empty to use defaults)
+      }
+    end,
   },
   {
     "stevearc/dressing.nvim",
@@ -392,7 +385,6 @@ return {
     config = function()
       local actions = require("telescope.actions")
       local telescope = require("telescope")
-      local open_with_trouble = require("trouble.sources.telescope").open
       telescope.setup({
         defaults = {
           -- sorting_strategy = "ascending", -- display results top->bottom
@@ -409,12 +401,10 @@ return {
           end,
           mappings = {
             i = {
-              ["<c-t>"] = open_with_trouble,
               ["<C-j>"] = actions.cycle_history_next,
               ["<C-k>"] = actions.cycle_history_prev,
             },
             n = {
-              ["<c-t>"] = open_with_trouble,
               ["<C-j>"] = actions.cycle_history_next,
               ["<C-k>"] = actions.cycle_history_prev,
             },

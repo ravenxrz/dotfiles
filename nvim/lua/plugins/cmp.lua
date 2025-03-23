@@ -84,7 +84,7 @@ return {
           },
         },
         -- Disable cmdline completions
-        cmdline = {},
+        -- cmdline = {},
       },
       signature = { enabled = false },
     },
