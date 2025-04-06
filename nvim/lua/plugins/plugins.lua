@@ -597,12 +597,12 @@ return {
           lualine_b = { "branch" },
           lualine_c = {
             -- {
-              -- "filename",
-              -- path = 1, -- 0: Just the filename
-              -- 1: Relative path
-              -- 2: Absolute path
-              -- 3: Absolute path, with tilde as the home directory
-              -- 4: Filename and parent dir, with tilde as the home directory
+            -- "filename",
+            -- path = 1, -- 0: Just the filename
+            -- 1: Relative path
+            -- 2: Absolute path
+            -- 3: Absolute path, with tilde as the home directory
+            -- 4: Filename and parent dir, with tilde as the home directory
             -- },
             {
               function()
@@ -885,7 +885,7 @@ return {
         highlight = {
           enable = false,
           use_languagetree = false,
-          disable = function(lang, bufnr)
+          disable = function(_, bufnr)
             local buf_name = vim.api.nvim_buf_get_name(bufnr)
             local file_size = vim.api.nvim_call_function("getfsize", { buf_name })
             return file_size > 30 * 1024
@@ -1091,31 +1091,5 @@ return {
       },
       show_borders = true,
     }
-  },
-  {
-    "chrisgrieser/nvim-spider",
-    lazy = true,
-    keys = {
-      { "w", "<cmd>lua require('spider').motion('w')<CR>", mode = { "n", "o", "x" } },
-      { "e", "<cmd>lua require('spider').motion('e')<CR>", mode = { "n", "o", "x" } },
-      { "b", "<cmd>lua require('spider').motion('b')<CR>", mode = { "n", "o", "x" } },
-    },
-  },
-  {
-    'arnamak/stay-centered.nvim',
-    config = function()
-      require('stay-centered').setup({
-        -- The filetype is determined by the vim filetype, not the file extension. In order to get the filetype, open a file and run the command:
-        -- :lua print(vim.bo.filetype)
-        skip_filetypes = {},
-        -- Set to false to disable by default
-        enabled = true,
-        -- allows scrolling to move the cursor without centering, default recommended
-        allow_scroll_move = true,
-        -- temporarily disables plugin on left-mouse down, allows natural mouse selection
-        -- try disabling if plugin causes lag, function uses vim.on_key
-        disable_on_mouse = true,
-      })
-    end
   }
 }
