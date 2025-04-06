@@ -366,8 +366,7 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    commit = "d90956833d7c27e73c621a61f20b29fdb7122709",
-    -- tag = '0.1.6',
+    branch = 'master',
     dependencies = {
       "nvim-lua/plenary.nvim",
       {
