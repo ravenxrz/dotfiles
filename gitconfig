@@ -56,6 +56,7 @@
 	tar = ! "tar() { git archive --format tar --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; tar"
 	targz = ! "targz() { git archive --format tar.gz --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; targz"
 	zip = ! "zip() { git archive --format zip --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; zip"
+	logtree = log --color --graph --pretty=format:'%C(yellow)%h%C(reset) %C(green)%an%C(reset) %s %C(cyan)@%ai%C(reset) %C(auto)%d%C(reset)'
 
 [init]
 	defaultBranch = master
