@@ -608,10 +608,18 @@ return {
               function()
                 local call_graph = require("call_graph")
                 if call_graph.is_reuse_buf() then
-                  return "bufid:" .. tostring(vim.api.nvim_get_current_buf()) .. " reuse"
+                  return "cg:" .. tostring(vim.api.nvim_get_current_buf()) .. " reuse"
                 else
-                  return "bufid:" .. tostring(vim.api.nvim_get_current_buf()) .. " not reuse"
+                  return "cg:" .. tostring(vim.api.nvim_get_current_buf()) .. " not reuse"
                 end
+              end,
+            },
+            {
+              function()
+                if Make_flying_make_job_id then
+                  return "compile:" .. tostring(Make_flying_make_job_id)
+                end
+                return ""
               end,
             },
             "lsp_progress",
