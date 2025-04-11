@@ -232,7 +232,7 @@ local function execute_command(cmd)
   -- 打开日志文件以写入输出
   local log_file = io.open(log_file_path, "w")
   if not log_file then
-    print("无法打开日志文件: " .. log_file_path)
+    vim.notify("open log file failed" .. log_file_path, vim.log.levels.ERROR)
     return
   end
 
@@ -297,7 +297,6 @@ vim.api.nvim_create_user_command('Run', function(opts)
       end
     end
 
-    -- 使用 vim.ui.select 提供选择
     if #files > 0 then
       vim.ui.select(files, {
         prompt = 'Choose executable file',
@@ -308,12 +307,11 @@ vim.api.nvim_create_user_command('Run', function(opts)
         end
       end)
     else
-      print('No exec files found')
+      vim.notify('No exec files found', vim.log.levels.ERROR)
     end
   elseif stat and stat.type == 'file' and vim.fn.executable(path) == 1 then
-    -- 直接执行可执行文件
     execute_command(path)
   else
-    print('Invalid path')
+    vim.notify('Invalid path', vim.log.levels.ERROR)
   end
 end, { nargs = 1 })
