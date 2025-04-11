@@ -138,6 +138,12 @@ vim.api.nvim_create_user_command("Make", function(opts)
   local root_path = args[2]
   local target = #args > 2 and args[3] or ''
 
+  if root_path:sub(1, 1) ~= '/' then
+    -- 相对路径
+    local cwd = vim.fn.getcwd()
+    root_path = cwd .. '/' .. root_path
+  end
+
   local qf_open = false
   -- build the compile commands
   local docker_command = string.format(
