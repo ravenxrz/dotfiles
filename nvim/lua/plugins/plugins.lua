@@ -378,8 +378,7 @@ return {
         dependencies = {
           "tpope/vim-fugitive",
         },
-      },
-      "nvim-telescope/telescope-frecency.nvim",
+      }
     },
     config = function()
       local actions = require("telescope.actions")
@@ -412,7 +411,6 @@ return {
       })
       telescope.load_extension("live_grep_args")
       telescope.load_extension("git_file_history")
-      telescope.load_extension("frecency")
     end,
   },
   -- {

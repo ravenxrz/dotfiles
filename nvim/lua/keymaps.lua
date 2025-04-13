@@ -71,8 +71,7 @@ keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
 keymap("n", "<leader>gf", "<cmd>Telescope git_file_history<cr>", opts)
 
 -- Telescope
--- keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
-keymap("n", "<leader>r", "<cmd>Telescope frecency<cr>", opts)
+keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
@@ -186,6 +185,7 @@ keymap("n", "<leader>zf", "<cmd>FocusToggle<cr>", opts)
 -- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
 keymap("n", "<leader>ci", "<cmd>CallGraphI<cr>", opts)
 keymap("n", "<leader>cr", "<cmd>CallGraphR<cr>", opts)
+keymap("n", "<leader>co", "<cmd>CallGraphO<cr>", opts)
 keymap("n", "<leader>cb", "<cmd>CallGraphToggleReuseBuf<cr>", opts)
 keymap("n", "<leader>cm", "<cmd>CallGraphOpenMermaidGraph<cr>", opts)
 
