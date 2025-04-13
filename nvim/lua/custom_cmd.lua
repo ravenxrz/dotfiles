@@ -154,6 +154,9 @@ local function auto_scroll_quickfix(quickfix_win_id)
 end
 
 local function do_make(container_name, root_path, target)
+  Make.last_container_name = container_name
+  Make.last_root_path = root_path
+  Make.last_target = target
   local qf_open = false
   -- build the compile commands
   local docker_command = string.format(
@@ -161,9 +164,9 @@ local function do_make(container_name, root_path, target)
   print(string.format("exec cmd:%s", docker_command))
   -- clear quickfix window
   vim.fn.setqflist({}, 'r')
-  Make_flying_make_job_id = vim.fn.jobstart(docker_command, {
+  Make.flying_make_job_id = vim.fn.jobstart(docker_command, {
     on_exit = function(_, exit_code)
-      Make_flying_make_job_id = nil
+      Make.flying_make_job_id = nil
       local qwinid = get_quickfix_win_id()
       if not qf_open and exit_code == 0 then
         -- 打开 quickfix 窗口
@@ -211,10 +214,17 @@ local function do_make(container_name, root_path, target)
   })
 end
 
-Make_flying_make_job_id = nil
+Make = {
+  flying_make_job_id = nil,
+  last_container_name = nil,
+  last_root_path = nil,
+  last_target = nil
+}
+
+Make.flying_make_job_id = nil
 vim.api.nvim_create_user_command("Make", function(opts)
-  if Make_flying_make_job_id and vim.fn.jobwait({ Make_flying_make_job_id }, 0)[1] == -1 then
-    vim.notify('There is already a job running with ID: ' .. Make_flying_make_job_id, vim.log.levels.ERROR)
+  if Make.flying_make_job_id and vim.fn.jobwait({ Make.flying_make_job_id }, 0)[1] == -1 then
+    vim.notify('There is already a job running with ID: ' .. Make.flying_make_job_id, vim.log.levels.ERROR)
     return
   end
 
@@ -280,12 +290,23 @@ end, {
   nargs = '+'
 })
 
+vim.api.nvim_create_user_command("MakeLast", function(opts)
+  if Make.last_container_name ~= nil and Make.last_root_path ~= nil and Make.last_target ~= nil then
+    do_make(Make.last_container_name, Make.last_root_path, Make.last_target)
+  else
+    vim.notify("no last make info", vim.log.levels.WARN)
+  end
+end, {
+  nargs = 0
+})
+
+
 vim.api.nvim_create_user_command('KillMake', function(opts)
-  if Make_flying_make_job_id and vim.fn.jobwait({ Make_flying_make_job_id }, 0)[1] == -1 then
+  if Make.flying_make_job_id and vim.fn.jobwait({ Make.flying_make_job_id }, 0)[1] == -1 then
     -- kill neovim job itself
-    vim.fn.jobstop(Make_flying_make_job_id)
-    vim.notify('Job with ID ' .. Make_flying_make_job_id .. ' has been killed', vim.log.levels.INFO)
-    Make_flying_make_job_id = nil
+    vim.fn.jobstop(Make.flying_make_job_id)
+    vim.notify('Job with ID ' .. Make.flying_make_job_id .. ' has been killed', vim.log.levels.INFO)
+    Make.flying_make_job_id = nil
   end
   -- kill container compile process
   local commands_to_kill = {

@@ -188,6 +188,8 @@ keymap("n", "<leader>ci", "<cmd>CallGraphI<cr>", opts)
 keymap("n", "<leader>cr", "<cmd>CallGraphR<cr>", opts)
 keymap("n", "<leader>cb", "<cmd>CallGraphToggleReuseBuf<cr>", opts)
 keymap("n", "<leader>cm", "<cmd>CallGraphOpenMermaidGraph<cr>", opts)
+
+keymap("n", "<leader>ml", "<cmd>MakeLast<cr>", opts)
 -- keymap("n", "<leader>ih", "<cmd>CallGraphToggleAutoHighlight<cr>", opts)
 -- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
 
