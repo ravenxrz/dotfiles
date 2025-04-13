@@ -121,6 +121,96 @@ vim.api.nvim_create_user_command("CopyFuncName", copy_cursor_func_name, {})
 --- custom Make command: use docker to compile project
 --- and output to quicklist(so that I can quick nagivate to the error)
 ---
+
+local function get_quickfix_win_id()
+  -- 获取所有窗口信息
+  local wins = vim.fn.getwininfo()
+  local quickfix_win_id = nil
+  -- 查找 Quickfix 窗口的 ID
+  for _, win in ipairs(wins) do
+    if win.quickfix == 1 then
+      quickfix_win_id = win.winid
+      break
+    end
+  end
+  return quickfix_win_id
+end
+
+local function is_quickfix_active(quickfix_win_id)
+  return quickfix_win_id and quickfix_win_id ~= vim.api.nvim_get_current_win()
+end
+
+-- 自动刷新 Quickfix 列表可见范围到最后一行的函数
+local function auto_scroll_quickfix(quickfix_win_id)
+  if quickfix_win_id then
+    -- 获取 Quickfix 列表的总行数
+    local line_count = vim.api.nvim_buf_line_count(vim.fn.getwininfo(quickfix_win_id)[1].bufnr)
+    -- 设置 Quickfix 窗口的滚动位置到最后一行
+    vim.fn.setwinvar(quickfix_win_id, '&scrollbind', 0)
+    vim.fn.setwinvar(quickfix_win_id, '&scl', 'yes')
+    vim.api.nvim_win_set_cursor(quickfix_win_id, { line_count, 0 })
+    vim.fn.setwinvar(quickfix_win_id, '&scrollbind', 1)
+  end
+end
+
+local function do_make(container_name, root_path, target)
+  local qf_open = false
+  -- build the compile commands
+  local docker_command = string.format(
+    'docker exec %s bash -c "cd %s; make %s -j"', container_name, root_path, target)
+  print(string.format("exec cmd:%s", docker_command))
+  -- clear quickfix window
+  vim.fn.setqflist({}, 'r')
+  Make_flying_make_job_id = vim.fn.jobstart(docker_command, {
+    on_exit = function(_, exit_code)
+      Make_flying_make_job_id = nil
+      local qwinid = get_quickfix_win_id()
+      if not qf_open and exit_code == 0 then
+        -- 打开 quickfix 窗口
+        vim.cmd('copen')
+        if is_quickfix_active(qwinid) then
+          auto_scroll_quickfix(qwinid)
+        end
+      else
+        if not is_quickfix_active(qwinid) then
+          vim.cmd("cclose")
+        end
+      end
+      print("compile finished, with exit code", exit_code)
+    end,
+    -- 当有标准输出时的回调函数
+    on_stdout = function(_, data)
+      if data then
+        -- 将标准输出数据添加到 quickfix 列表
+        vim.fn.setqflist({}, 'a', { lines = data })
+        if not qf_open then
+          vim.cmd('copen')
+          qf_open = true
+        end
+        local qwinid = get_quickfix_win_id()
+        if is_quickfix_active(qwinid) then
+          auto_scroll_quickfix(qwinid)
+        end
+      end
+    end,
+    -- 当有标准错误输出时的回调函数
+    on_stderr = function(_, data)
+      if data then
+        -- 将标准错误输出数据添加到 quickfix 列表
+        vim.fn.setqflist({}, 'a', { lines = data })
+        if not qf_open then
+          vim.cmd('copen')
+          qf_open = true
+        end
+        local qwinid = get_quickfix_win_id()
+        if is_quickfix_active(qwinid) then
+          auto_scroll_quickfix(qwinid)
+        end
+      end
+    end
+  })
+end
+
 Make_flying_make_job_id = nil
 vim.api.nvim_create_user_command("Make", function(opts)
   if Make_flying_make_job_id and vim.fn.jobwait({ Make_flying_make_job_id }, 0)[1] == -1 then
@@ -137,52 +227,55 @@ vim.api.nvim_create_user_command("Make", function(opts)
   local container_name = args[1]
   local root_path = args[2]
   local target = #args > 2 and args[3] or ''
+  if root_path:sub(1, 1) ~= '/' then
+    -- 相对路径
+    local cwd = vim.fn.getcwd()
+    root_path = cwd .. '/' .. root_path
+  end
+  do_make(container_name, root_path, target)
+end, {
+  nargs = '+'
+})
 
+vim.api.nvim_create_user_command("MakeSelect", function(opts)
+  -- setup args
+  local args = vim.split(opts.args, ' ', { trimempty = true })
+  if #args ~= 2 then
+    vim.notify('MakeSelect command requires 2 arguments: container_name and compile_root_path', vim.log.levels.ERROR)
+  end
+  local container_name = args[1]
+  local root_path = args[2]
   if root_path:sub(1, 1) ~= '/' then
     -- 相对路径
     local cwd = vim.fn.getcwd()
     root_path = cwd .. '/' .. root_path
   end
 
-  local qf_open = false
-  -- build the compile commands
-  local docker_command = string.format(
-    'docker exec %s bash -c "cd %s; make %s -j"', container_name, root_path, target)
-  print(string.format("exec cmd:%s", docker_command))
-  -- clear quickfix window
-  vim.fn.setqflist({}, 'r')
-  Make_flying_make_job_id = vim.fn.jobstart(docker_command, {
-    on_exit = function(_, exit_code)
-      Make_flying_make_job_id = nil
-      if not qf_open then
-        -- 打开 quickfix 窗口
-        vim.cmd('copen')
-      end
-      print("compile finished, with exit code", exit_code)
-    end,
-    -- 当有标准输出时的回调函数
-    on_stdout = function(_, data)
-      if data then
-        -- 将标准输出数据添加到 quickfix 列表
-        vim.fn.setqflist({}, 'a', { lines = data })
-        if not qf_open then
-          vim.cmd('copen')
-          qf_open = true
-        end
-      end
-    end,
-    -- 当有标准错误输出时的回调函数
-    on_stderr = function(_, data)
-      if data then
-        -- 将标准错误输出数据添加到 quickfix 列表
-        vim.fn.setqflist({}, 'a', { lines = data })
-        if not qf_open then
-          vim.cmd('copen')
-          qf_open = true
-        end
-      end
+  local cmd = string.format("docker exec %s bash -c 'cd %s; cmake --build . --target help'", container_name, root_path)
+  local output = vim.fn.system(cmd)
+  local exit_code = vim.v.shell_error
+  if exit_code ~= 0 then
+    print(string.format("get targets list failed, exit_code:%d output:%s", exit_code, output))
+    return
+  end
+
+  -- 解析输出，提取所有的target
+  local targets = {}
+  for line in output:gmatch("[^\n]+") do
+    local target = line:match("^%s-%.%.%.%s+(%S+)")
+    if target then
+      table.insert(targets, target)
     end
-  })
+  end
+
+  -- 使用vim.ui.select供用户选择
+  vim.ui.select(targets, {
+    prompt = "Choose target",
+  }, function(choice)
+    if choice then
+      do_make(container_name, root_path, choice)
+    end
+  end)
 end, {
   nargs = '+'
 })
