@@ -190,6 +190,9 @@ keymap("n", "<leader>cb", "<cmd>CallGraphToggleReuseBuf<cr>", opts)
 keymap("n", "<leader>cm", "<cmd>CallGraphOpenMermaidGraph<cr>", opts)
 
 keymap("n", "<leader>ml", "<cmd>MakeLast<cr>", opts)
+keymap("n", "<leader>mm", ":Make ", opts)
+keymap("n", "<leader>ms", "<cmd>MakeSelect<cr>", opts)
+keymap("n", "<leader>mk", "<cmd>KillMake<cr>", opts)
 -- keymap("n", "<leader>ih", "<cmd>CallGraphToggleAutoHighlight<cr>", opts)
 -- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
 

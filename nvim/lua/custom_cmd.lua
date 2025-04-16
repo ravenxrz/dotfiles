@@ -175,7 +175,7 @@ local function do_make(container_name, root_path, target)
           auto_scroll_quickfix(qwinid)
         end
       else
-        if not is_quickfix_active(qwinid) then
+        if exit_code == 0 then
           vim.cmd("cclose")
         end
       end
@@ -248,17 +248,25 @@ end, {
 })
 
 vim.api.nvim_create_user_command("MakeSelect", function(opts)
+  local container_name
+  local root_path
+
   -- setup args
   local args = vim.split(opts.args, ' ', { trimempty = true })
-  if #args ~= 2 then
+  if # args == 0 and Make.last_container_name ~= nil and Make.last_root_path ~= nil then
+    container_name = Make.last_container_name
+    root_path = Make.last_root_path
+  elseif #args == 2 then
+    container_name = args[1]
+    root_path = args[2]
+    if root_path:sub(1, 1) ~= '/' then
+      -- 相对路径
+      local cwd = vim.fn.getcwd()
+      root_path = cwd .. '/' .. root_path
+    end
+  else
     vim.notify('MakeSelect command requires 2 arguments: container_name and compile_root_path', vim.log.levels.ERROR)
-  end
-  local container_name = args[1]
-  local root_path = args[2]
-  if root_path:sub(1, 1) ~= '/' then
-    -- 相对路径
-    local cwd = vim.fn.getcwd()
-    root_path = cwd .. '/' .. root_path
+    return
   end
 
   local cmd = string.format("docker exec %s bash -c 'cd %s; cmake --build . --target help'", container_name, root_path)
@@ -287,7 +295,7 @@ vim.api.nvim_create_user_command("MakeSelect", function(opts)
     end
   end)
 end, {
-  nargs = '+'
+  nargs = '*'
 })
 
 vim.api.nvim_create_user_command("MakeLast", function(opts)
@@ -314,14 +322,22 @@ vim.api.nvim_create_user_command('KillMake', function(opts)
     "ld",
     "cc1plus"
   }
-  local container_name = opts.args
+  local container_name = nil
+  if opts.args ~= nil then
+    container_name = opts.args
+  elseif Make.last_container_name ~= nil then
+    container_name = Make.last_container_name
+  else
+    vim.notify("no container name", vim.log.levels.WARN)
+    return
+  end
   for _, command in pairs(commands_to_kill) do
     local kill_command = string.format('docker exec %s pkill -f "%s"', container_name, command)
     print(kill_command)
     vim.fn.system(kill_command)
   end
 end, {
-  nargs = 1,
+  nargs = "?",
   -- 命令的描述
   desc = 'Kill the currently running Make job'
 })

@@ -614,8 +614,8 @@ return {
             },
             {
               function()
-                if Make_flying_make_job_id then
-                  return "compile:" .. tostring(Make_flying_make_job_id)
+                if Make.flying_make_job_id then
+                  return "compile:" .. tostring(Make.flying_make_job_id)
                 end
                 return ""
               end,
