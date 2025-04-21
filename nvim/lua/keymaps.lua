@@ -68,7 +68,12 @@ keymap("n", "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>", opts)
 keymap("n", "<leader>gl", "<cmd>Gitsigns blame_line<cr>", opts)
 keymap("n", "]g", "<cmd>Gitsigns next_hunk<cr>", opts)
 keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
-keymap("n", "<leader>gf", "<cmd>Telescope git_file_history<cr>", opts)
+
+-- diffview
+keymap("n", "<leader>gc", "<cmd>DiffviewFileHistory<cr>", opts)
+keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory --follow %<cr>", opts)
+keymap("n", "<leader>gh", "<cmd>DiffviewOpen origin/dbstore2.0_dev<cr>", opts)
+keymap("n", "<leader>go", "<cmd>DiffviewClose<cr>", opts)
 
 -- Telescope
 keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
@@ -166,8 +171,34 @@ keymap("n", "T", "<Plug>(leap-backward)", opts)
 keymap("n", "gs", "<Plug>(leap-from-window)", opts)
 
 -- quickfix
-keymap("n", "]c", "<cmd>cn<cr>", opts)
-keymap("n", "[c", "<cmd>cp<cr>", opts)
+local function is_quickfix_open()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].buftype == 'quickfix' then
+      return true
+    end
+  end
+  return false
+end
+
+local function goto_next_qf_or_diff()
+  if is_quickfix_open() then
+    vim.cmd("cnext")
+  else
+    vim.cmd("normal! ]c")
+  end
+end
+
+local function goto_prev_qf_or_diff()
+  if is_quickfix_open() then
+    vim.cmd("cprev")
+  else
+    vim.cmd("normal! [c")
+  end
+end
+
+keymap("n", "]c", goto_next_qf_or_diff, opts)
+keymap("n", "[c", goto_prev_qf_or_diff, opts)
 
 -- zenmode
 keymap("n", "<leader>zz", "<cmd>ZenMode<cr>", opts)

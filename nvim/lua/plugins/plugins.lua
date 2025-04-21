@@ -318,6 +318,12 @@ return {
     end,
   },
   {
+    "sindrets/diffview.nvim"
+  },
+  {
+    "rickhowe/diffchar.vim"
+  },
+  {
     "numToStr/Comment.nvim",
     event = { "BufReadPost" },
     opts = {
@@ -373,12 +379,6 @@ return {
         "nvim-telescope/telescope-live-grep-args.nvim",
         version = "^1.0.0",
       },
-      {
-        "isak102/telescope-git-file-history.nvim",
-        dependencies = {
-          "tpope/vim-fugitive",
-        },
-      }
     },
     config = function()
       local actions = require("telescope.actions")
@@ -410,7 +410,6 @@ return {
         },
       })
       telescope.load_extension("live_grep_args")
-      telescope.load_extension("git_file_history")
     end,
   },
   -- {
