@@ -743,7 +743,7 @@ return {
           local fn = vim.fn
           local utils = require("auto-save.utils.data")
           -- don't save for `sql` file types
-          if utils.not_in(fn.getbufvar(buf, "&filetype"), { "lua", "NvimTree", "neo-tree" }) then
+          if utils.not_in(fn.getbufvar(buf, "&filetype"), { "lua", "NvimTree", "neo-tree", "mysql" }) then
             return true
           end
           return false
@@ -1096,5 +1096,25 @@ return {
       },
       show_borders = true,
     }
+  },
+  {
+    "tpope/vim-dadbod"
+  },
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod',                     lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+    },
+    cmd = {
+      'DBUI',
+      'DBUIToggle',
+      'DBUIAddConnection',
+      'DBUIFindBuffer',
+    },
+    init = function()
+      -- Your DBUI configuration
+      vim.g.db_ui_use_nerd_fonts = 1
+    end,
   }
 }
