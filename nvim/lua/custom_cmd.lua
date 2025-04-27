@@ -137,7 +137,7 @@ local function get_quickfix_win_id()
 end
 
 local function is_quickfix_active(quickfix_win_id)
-  return quickfix_win_id and quickfix_win_id ~= vim.api.nvim_get_current_win()
+  return quickfix_win_id and quickfix_win_id == vim.api.nvim_get_current_win()
 end
 
 -- 自动刷新 Quickfix 列表可见范围到最后一行的函数
@@ -151,6 +151,12 @@ local function auto_scroll_quickfix(quickfix_win_id)
     vim.api.nvim_win_set_cursor(quickfix_win_id, { line_count, 0 })
     vim.fn.setwinvar(quickfix_win_id, '&scrollbind', 1)
   end
+end
+
+local function copen_but_remain_cur_win()
+  local cur_win = vim.api.nvim_get_current_win()
+  vim.cmd('copen')
+  vim.api.nvim_set_current_win(cur_win)
 end
 
 local function do_make(container_name, root_path, target)
@@ -170,10 +176,8 @@ local function do_make(container_name, root_path, target)
       local qwinid = get_quickfix_win_id()
       if not qf_open and exit_code == 0 then
         -- 打开 quickfix 窗口
-        vim.cmd('copen')
-        if is_quickfix_active(qwinid) then
-          auto_scroll_quickfix(qwinid)
-        end
+        copen_but_remain_cur_win()
+        auto_scroll_quickfix(qwinid)
       else
         if exit_code == 0 then
           vim.cmd("cclose")
@@ -187,11 +191,11 @@ local function do_make(container_name, root_path, target)
         -- 将标准输出数据添加到 quickfix 列表
         vim.fn.setqflist({}, 'a', { lines = data })
         if not qf_open then
-          vim.cmd('copen')
+          copen_but_remain_cur_win()
           qf_open = true
         end
         local qwinid = get_quickfix_win_id()
-        if is_quickfix_active(qwinid) then
+        if not is_quickfix_active(qwinid) then
           auto_scroll_quickfix(qwinid)
         end
       end
@@ -202,11 +206,11 @@ local function do_make(container_name, root_path, target)
         -- 将标准错误输出数据添加到 quickfix 列表
         vim.fn.setqflist({}, 'a', { lines = data })
         if not qf_open then
-          vim.cmd('copen')
+          copen_but_remain_cur_win()
           qf_open = true
         end
         local qwinid = get_quickfix_win_id()
-        if is_quickfix_active(qwinid) then
+        if not is_quickfix_active(qwinid) then
           auto_scroll_quickfix(qwinid)
         end
       end
@@ -336,6 +340,7 @@ vim.api.nvim_create_user_command('KillMake', function(opts)
     print(kill_command)
     vim.fn.system(kill_command)
   end
+  vim.cmd('cclose')
 end, {
   nargs = "?",
   -- 命令的描述
