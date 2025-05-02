@@ -86,7 +86,7 @@ return {
       },
       -- Disable cmdline completions
       cmdline = {},
-      signature = { enabled = false },
+      signature = { enabled = true },
     },
     opts_extend = { "sources.default" },
   },
