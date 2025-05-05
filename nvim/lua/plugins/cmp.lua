@@ -39,6 +39,9 @@ return {
       -- See the full "keymap" documentation for information on defining your own keymap.
       keymap = { preset = "enter" },
       completion = {
+        trigger = {
+          show_on_blocked_trigger_characters = { ' ', '\n', '\t' },
+        },
         menu = {
           draw = {
             -- We don't need label_description now because label and label_description are already
@@ -92,6 +95,17 @@ return {
   },
   {
     "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
+    cond = function()
+      local handle = io.popen("uname -s")
+      if handle then
+        local result = handle:read("*a")
+        handle:close() -- 只在linux环境下生效
+        if string.find(result, "Linux", 1, true) then
+          return True
+        end
+      end
+      return False
+    end,
     dependencies = {
       "hrsh7th/nvim-cmp",
     },
