@@ -95,17 +95,7 @@ return {
   },
   {
     "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
-    cond = function()
-      local handle = io.popen("uname -s")
-      if handle then
-        local result = handle:read("*a")
-        handle:close() -- 只在linux环境下生效
-        if string.find(result, "Linux", 1, true) then
-          return True
-        end
-      end
-      return False
-    end,
+    cond = get_os_platform() == "Linux",
     dependencies = {
       "hrsh7th/nvim-cmp",
     },

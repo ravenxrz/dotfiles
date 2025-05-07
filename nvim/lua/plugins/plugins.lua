@@ -1059,6 +1059,7 @@ return {
   },
   {
     "echasnovski/mini.animate",
+    cond = get_os_platform() == "MacOS",
     opts = function(_, opts)
       -- don't use animate when scrolling with the mouse
       local mouse_scrolled = false
