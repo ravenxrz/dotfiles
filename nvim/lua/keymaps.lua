@@ -72,7 +72,7 @@ keymap("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", opts)
 -- diffview
 keymap("n", "<leader>gc", "<cmd>DiffviewFileHistory<cr>", opts)
 keymap("n", "<leader>gf", "<cmd>DiffviewFileHistory --follow %<cr>", opts)
-keymap("n", "<leader>gh", "<cmd>DiffviewOpen origin/dbstore2.0_dev<cr>", opts)
+keymap("n", "<leader>gh", "<cmd>DiffviewOpen HEAD<cr>", opts)
 keymap("n", "<leader>go", "<cmd>DiffviewClose<cr>", opts)
 
 -- Telescope
