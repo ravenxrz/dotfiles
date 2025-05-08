@@ -204,6 +204,20 @@ cdfzf() {
   fi
 }
 
+# custom cd, if given a file, cd to the file parent dir
+# else cd to the dir itself
+cdd() {
+  dir=$1
+  if [ -z "${dir}" ]; then
+    return
+  fi
+  if [ -d "${dir}" ]; then
+    cd ${dir}
+    return
+  fi
+  cd $(dirname $dir)
+}
+
 myssh() {
   /usr/bin/kinit -kt ~/.ssh/keytab zhangxingrui.leo@BYTEDANCE.COM
   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $@
