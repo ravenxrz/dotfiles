@@ -17,4 +17,10 @@ return {
     cmd = { "CallGraphI", "CallGraphR", "CallGraphLog", "CallGraphToggleReuseBuf", "CallGraphOpenMermaidGraph" },
     branch = "main",
   },
+  {
+    "ravenxrz/custom_make.nvim",
+    config = function ()
+        require("custom_make").setup({})
+    end
+  }
 }
