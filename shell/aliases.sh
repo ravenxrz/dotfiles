@@ -131,6 +131,13 @@ alias clc="clear"
 # docker x86 on mac
 alias dockerx86="DOCKER_DEFAULT_PLATFORM=linux/amd64 docker"
 
+alias armzsh="arch -arm64 zsh" # switch to arm
+alias x86zsh="arch -x86_64 zsh" # switch to x86
+
+platform() {
+  python3 -c 'import platform; print(platform.machine())'
+}
+
 # lazygit
 alias lazygit="lazygit -ucd ~/.config/lazygit/"
 
