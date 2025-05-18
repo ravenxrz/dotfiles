@@ -117,9 +117,16 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 source ~/.shell/functions.sh
+source ~/.shell/fzf-completion.zsh
+source ~/.shell/fzf-key-bindings.zsh
 source ~/.shell/bootstrap.sh
 source ~/.shell/aliases.sh
 source ~/.shell/external.sh
-source ~/.shell/fzf-completion.zsh
-source ~/.shell/fzf-key-bindings.zsh
 export PATH=$HOME/.local/bin:$PATH
+
+if [[ $OSTYPE == 'darwin'* ]]; then
+   # 强制当前 shell 会话使用 ARM64 架构
+  if [[ "$(uname -m)" == "x86_64" && "$(sysctl -n sysctl.proc_translated)" == "1" ]]; then
+      exec arch -arm64 zsh 
+  fi
+fi
