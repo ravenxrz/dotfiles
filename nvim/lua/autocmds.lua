@@ -3,7 +3,7 @@ local function detect_python_indent()
   for line in io.lines(vim.fn.expand("%")) do
     local spaces = line:match("^(%s*)") -- 匹配每行开头的空格
     if spaces then
-      local tabsize = #spaces -- 计算空格数
+      local tabsize = #spaces           -- 计算空格数
       if tabsize > 0 then
         vim.opt_local.expandtab = true
         vim.opt_local.shiftwidth = tabsize
@@ -102,5 +102,15 @@ vim.api.nvim_create_autocmd("BufRead", {
         return
       end
     end
+  end,
+})
+
+-- call grpah mark mode shortcuts
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("callgraph_mark_mode", { clear = true }),
+  pattern = { "callgraph" },
+  callback = function()
+    vim.keymap.set("n", "cs", "<cmd>CallGraphMarkNode<cr>", { buffer = true })
+    vim.keymap.set("n", "ce", "<cmd>CallGraphMarkEnd<cr>", { buffer = true })
   end,
 })

@@ -217,12 +217,17 @@ keymap("n", "<leader>zf", "<cmd>FocusToggle<cr>", opts)
 -- keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", opts)
 -- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
 -- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
+
+-- call_graph.nvim plugin
 keymap("n", "<leader>ci", "<cmd>CallGraphI<cr>", opts)
 keymap("n", "<leader>cr", "<cmd>CallGraphR<cr>", opts)
 keymap("n", "<leader>co", "<cmd>CallGraphO<cr>", opts)
-keymap("n", "<leader>cb", "<cmd>CallGraphToggleReuseBuf<cr>", opts)
 keymap("n", "<leader>cm", "<cmd>CallGraphOpenMermaidGraph<cr>", opts)
+keymap("n", "<leader>ch", "<cmd>CallGraphHistory<cr>", opts)
+keymap("n", "<leader>cl", "<cmd>CallGraphOpenLastestGraph<cr>", opts)
 
+
+-- custom_make.plugin
 keymap("n", "<leader>mm", "<cmd>Make<cr> ", opts)
 keymap("n", "<leader>ms", "<cmd>MakeSelect<cr>", opts)
 keymap("n", "<leader>mk", "<cmd>KillMake<cr>", opts)
