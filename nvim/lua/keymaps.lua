@@ -229,6 +229,7 @@ keymap("n", "<leader>cl", "<cmd>CallGraphOpenLastestGraph<cr>", opts)
 
 -- custom_make.plugin
 keymap("n", "<leader>mm", "<cmd>Make<cr> ", opts)
+keymap("n", "<leader>mr", "<cmd>MakeRun<cr>", opts)
 keymap("n", "<leader>ms", "<cmd>MakeSelect<cr>", opts)
 keymap("n", "<leader>mk", "<cmd>KillMake<cr>", opts)
 -- keymap("n", "<leader>ih", "<cmd>CallGraphToggleAutoHighlight<cr>", opts)
