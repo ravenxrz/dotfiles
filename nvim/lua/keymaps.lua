@@ -84,13 +84,13 @@ keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
 keymap(
   "n",
   "<leader>fw",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=''})<cr>",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=' -g!test*'})<cr>",
   opts
 )
 keymap(
   "v",
   "<leader>fw",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=''})<cr>",
+  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=' -g!*test*})<cr>",
   opts
 )
 keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
