@@ -108,6 +108,7 @@ return {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
+    tag = "3.33",
     cmd = {
       "Neotree",
     },
