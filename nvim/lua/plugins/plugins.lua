@@ -564,6 +564,7 @@ return {
           lualine_x = {
             --[[ 'diff', ]]
             "diagnostics",
+            "filetype",
             "encoding",
             {
               function()
@@ -1059,7 +1060,8 @@ return {
   },
   {
     "echasnovski/mini.animate",
-    cond = get_os_platform() == "MacOS",
+    -- cond = get_os_platform() == "MacOS",
+    cond = false,
     opts = function(_, opts)
       -- don't use animate when scrolling with the mouse
       local mouse_scrolled = false

@@ -112,5 +112,6 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.keymap.set("n", "cs", "<cmd>CallGraphMarkNode<cr>", { buffer = true })
     vim.keymap.set("n", "ce", "<cmd>CallGraphMarkEnd<cr>", { buffer = true })
+    vim.keymap.set("n", "cc", "<cmd>CallGraphMarkExit<cr>", { buffer = true })
   end,
 })

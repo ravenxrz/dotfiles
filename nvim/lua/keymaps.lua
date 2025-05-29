@@ -223,8 +223,9 @@ keymap("n", "<leader>ci", "<cmd>CallGraphI<cr>", opts)
 keymap("n", "<leader>cr", "<cmd>CallGraphR<cr>", opts)
 keymap("n", "<leader>co", "<cmd>CallGraphO<cr>", opts)
 keymap("n", "<leader>cm", "<cmd>CallGraphOpenMermaidGraph<cr>", opts)
-keymap("n", "<leader>ch", "<cmd>CallGraphHistory<cr>", opts)
 keymap("n", "<leader>cl", "<cmd>CallGraphOpenLastestGraph<cr>", opts)
+keymap("n", "<leader>ch", "<cmd>CallGraphHistory<cr>", opts)
+keymap("n", "<leader>cc", "<cmd>CallGraphClearHistory<cr>", opts)
 
 
 -- custom_make.plugin
