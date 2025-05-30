@@ -120,11 +120,19 @@ return {
     },
     config = function()
       require("neo-tree").setup({
-        close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
-        enable_git_status = false,
-        enable_diagnostics = false,
+        winborder = "winborder",
+        close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
+        enable_git_status = true,
+        enable_diagnostics = true,
         open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
         sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
+        filesystem = {
+          follow_current_file = {
+            enabled = true,              -- This will find and focus the file in the active buffer every time
+            leave_dirs_open = false,     -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+          },
+          use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
+        },
         window = {
           position = "left",
           width = 40,
@@ -1112,7 +1120,7 @@ return {
         -- * a percentage of the width / height of the editor when <= 1
         -- * a function that returns the width or the height
         width = 160, -- width of the Zen window
-        height = 1, -- height of the Zen window
+        height = 1,  -- height of the Zen window
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
         options = {
