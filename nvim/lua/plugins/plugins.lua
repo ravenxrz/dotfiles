@@ -1,5 +1,9 @@
 return {
   {
+    "cbochs/portal.nvim",
+    -- Optional dependencies
+  },
+  {
     "tamton-aquib/keys.nvim",
     opts = {
       enable_on_startup = false,
