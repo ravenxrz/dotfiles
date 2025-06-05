@@ -47,9 +47,13 @@ keymap("n", "<C-q>", "<cmd>wqa!<cr>", opts)
 -- p does not replace reigster
 keymap("v", "p", '"_dP', opts)
 
+-- Neo tree
+-- keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", opts)
+-- keymap("n", "<leader>fo", "<cmd>Neotree reveal<cr>", opts)
+
 -- Nvim tree
-keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", opts)
-keymap("n", "<leader>fo", "<cmd>Neotree reveal<cr>", opts)
+keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
+keymap("n", "<leader>fo", "<cmd>NvimTreeFindFile<cr>", opts)
 
 -- Buffer
 -- keymap("n", "E", "<cmd>BufferPrevious<cr>", opts)

@@ -1,3 +1,13 @@
+
+-- nvim tree requirements begin
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- optionally enable 24-bit colour
+vim.opt.termguicolors = true
+-- nvim tree requirements end
+
 local opts = {
   -- eadirection = 'ver',                                                                             -- keep other window to a fixed size when vsplit (keep grug-far plugin to a fixed size)
   backup = false,                                                                                   -- creates a backup file

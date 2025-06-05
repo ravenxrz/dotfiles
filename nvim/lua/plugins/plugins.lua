@@ -111,146 +111,38 @@ return {
     end
   },
   {
-    "nvim-neo-tree/neo-tree.nvim",
-    tag = "3.33",
-    cmd = {
-      "Neotree",
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-      "MunifTanjim/nui.nvim",
-      -- "3rd/image.nvim",              -- Optional image support in preview window: See `# Preview Mode` for more information
-    },
+    "nvim-tree/nvim-tree.lua",
     config = function()
-      require("neo-tree").setup({
-        winborder = "winborder",
-        close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
-        enable_git_status = true,
-        enable_diagnostics = true,
-        open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
-        sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
-        filesystem = {
-          follow_current_file = {
-            enabled = true,              -- This will find and focus the file in the active buffer every time
-            leave_dirs_open = false,     -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
-          },
-          use_libuv_file_watcher = true, -- This will use the OS level file watchers to detect changes
-          filtered_items = {
-            visible = true,              -- when true, they will just be displayed differently than normal items
-            hide_dotfiles = true,
-            hide_gitignored = false,
-            hide_hidden = true, -- only works on Windows for hidden files/directories
-            hide_by_name = {
-              --"node_modules"
-            },
-            hide_by_pattern = { -- uses glob style patterns
-              --"*.meta",
-              --"*/src/*/tsconfig.json",
-              -- ".calltree.*",
-            },
-            always_show = { -- remains visible even if other settings would normally hide it
-              ".gitignored",
-            },
-            always_show_by_pattern = { -- uses glob style patterns
-              --".env*",
-            },
-            never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
-              ".DS_Store",
-              "thumbs.db"
-            },
-            never_show_by_pattern = { -- uses glob style patterns
-              --".null-ls_*",
-            },
-          },
+      require("nvim-tree").setup({
+        sort = {
+          sorter = "case_sensitive",
         },
-        window = {
-          position = "left",
+        view = {
           width = 40,
-          mapping_options = {
-            noremap = true,
-            nowait = true,
-          },
-          mappings = {
-            ["<cr>"] = "open",
-            ["o"] = "open",
-            ["l"] = "open",
-            ["<esc>"] = "cancel", -- close preview or floating neo-tree window
-            -- Read `# Preview Mode` for more information
-            ["<C-h>"] = "open_split",
-            ["<C-v>"] = "open_vsplit",
-            ["h"] = "close_node",
-            -- ['C'] = 'close_all_subnodes',
-            ["z"] = "close_all_nodes",
-            --["Z"] = "expand_all_nodes",
-            ["a"] = {
-              "add",
-              -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
-              -- some commands may take optional config options, see `:h neo-tree-mappings` for details
-              config = {
-                show_path = "none", -- "none", "relative", "absolute"
-              },
-            },
-            ["A"] = "add_directory", -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
-            ["d"] = "delete",
-            ["r"] = "rename",
-            ["y"] = "copy_to_clipboard",
-            ["x"] = "cut_to_clipboard",
-            ["p"] = "paste_from_clipboard",
-            ["c"] = "copy", -- takes text input for destination, also accepts the optional config.show_path option like "add":
-            -- ["c"] = {
-            --  "copy",
-            --  config = {
-            --    show_path = "none" -- "none", "relative", "absolute"
-            --  }
-            --}
-            ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
-            ["q"] = "close_window",
-            ["R"] = "refresh",
-            ["g?"] = "show_help",
-            ["<"] = "prev_source",
-            [">"] = "next_source",
-            ["i"] = "show_file_details",
-            ["/"] = "noop",
-            ["?"] = "noop",
-            ["Y"] = function(state)
-              -- NeoTree is based on [NuiTree](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/tree)
-              -- The node is based on [NuiNode](https://github.com/MunifTanjim/nui.nvim/tree/main/lua/nui/tree#nuitreenode)
-              local node = state.tree:get_node()
-              local filepath = node:get_id()
-              local filename = node.name
-              local modify = vim.fn.fnamemodify
-
-              local results = {
-                filepath,
-                modify(filepath, ":."),
-                modify(filepath, ":~"),
-                filename,
-                modify(filename, ":r"),
-                modify(filename, ":e"),
-              }
-
-              vim.ui.select({
-                "1. Absolute path: " .. results[1],
-                "2. Path relative to CWD: " .. results[2],
-                "3. Path relative to HOME: " .. results[3],
-                "4. Filename: " .. results[4],
-                "5. Filename without extension: " .. results[5],
-                "6. Extension of the filename: " .. results[6],
-              }, { prompt = "Choose to copy to clipboard:" }, function(choice)
-                if choice == nil then
-                  return
-                end
-                local i = tonumber(choice:sub(1, 1))
-                local result = results[i]
-                vim.fn.setreg("*", result)
-                vim.notify("Copied: " .. result)
-              end)
-            end,
-          },
         },
+        renderer = {
+          group_empty = true,
+        },
+        filters = {
+          dotfiles = true,
+        },
+        on_attach = function(bufnr)
+          local api = require "nvim-tree.api"
+          local function opts(desc)
+            return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+          end
+          -- default mappings
+          api.config.mappings.default_on_attach(bufnr)
+          -- custom mappings
+          vim.keymap.set('n', '<BS>', api.tree.change_root_to_parent, opts('Up'))
+          vim.keymap.set('n', '.', api.tree.change_root_to_node, opts("CD"))
+          vim.keymap.set('n', 'w', api.node.open.edit, opts('Open'))
+          vim.keymap.set('n', 'o', api.node.open.no_window_picker, opts('Open'))
+          vim.keymap.set('n', 'l', api.node.open.no_window_picker, opts('Open'))
+          vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Parent Close'))
+        end
       })
-    end,
+    end
   },
   {
     "lewis6991/gitsigns.nvim",
