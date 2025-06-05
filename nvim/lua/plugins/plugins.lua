@@ -140,6 +140,7 @@ return {
           vim.keymap.set('n', 'o', api.node.open.no_window_picker, opts('Open'))
           vim.keymap.set('n', 'l', api.node.open.no_window_picker, opts('Open'))
           vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Parent Close'))
+          vim.keymap.set('n', 'i', api.node.show_info_popup, opts('Info'))
         end
       })
     end
