@@ -33,8 +33,6 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      enabled = function() return vim.tbl_contains({ "NvimTree" }, vim.bo.filetype) end,
-
       -- 'default' for mappings similar to built-in completion
       -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
       -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
@@ -45,6 +43,10 @@ return {
           show_on_blocked_trigger_characters = { ' ', '\n', '\t' },
         },
         menu = {
+          auto_show = function()
+            local disabled_filetypes = { "TelescopePrompt", "NvimTree", "DressingInput" }
+            return not vim.tbl_contains(disabled_filetypes, vim.bo.filetype) and vim.b.completion ~= false
+          end,
           draw = {
             -- We don't need label_description now because label and label_description are already
             -- combined together in label by colorful-menu.nvim.

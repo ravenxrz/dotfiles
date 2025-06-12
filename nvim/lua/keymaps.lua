@@ -53,7 +53,7 @@ keymap("v", "p", '"_dP', opts)
 
 -- Nvim tree
 keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
-keymap("n", "<leader>fo", "<cmd>NvimTreeFindFile<cr>", opts)
+keymap("n", "<leader>o", "<cmd>NvimTreeFindFile!<cr>", opts)
 
 -- Buffer
 -- keymap("n", "E", "<cmd>BufferPrevious<cr>", opts)
@@ -294,10 +294,6 @@ inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
 ]])
 -- keymap("i", "<C-[", "<Plug>(codeverse-previous)", opts)
 -- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
-
--- portal jumplist
-keymap("n", "<leader>o", "<cmd>Portal jumplist backward<cr>")
-keymap("n", "<leader>i", "<cmd>Portal jumplist forward<cr>")
 
 keymap("n", "yb", "<cmd>CopyBreakPoint<cr>", opts)
 keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)
