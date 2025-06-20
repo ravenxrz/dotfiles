@@ -166,7 +166,7 @@ keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts)
 -- keymap("n", "<leader>d<cr>", "<cmd>lua require'dap'.run_last()<cr>", opts)
 --
 -- DB
-keymap("n", "<leader>db", "<cmd>DBUIToggle<cr>", opts)
+keymap("n", "<leader>dB", "<cmd>DBUIToggle<cr>", opts)
 
 -- diff
 keymap("n", "<leader>dd", "<cmd>diffthis<cr>", opts)

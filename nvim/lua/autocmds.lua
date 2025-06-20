@@ -115,3 +115,14 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "cc", "<cmd>CallGraphMarkExit<cr>", { buffer = true })
   end,
 })
+
+
+-- 为nvimgdb文件类型创建自动命令组
+local group = vim.api.nvim_create_augroup("NVIMGDBConfig", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "nvimgdb",
+  group = group,
+  callback = function()
+    vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { buffer = true, desc = "GDB → Code" })
+  end,
+})

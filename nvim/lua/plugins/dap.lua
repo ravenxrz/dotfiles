@@ -1,5 +1,28 @@
 return {
   {
+    "sakhnik/nvim-gdb",
+    config = function()
+      vim.cmd([[
+       let g:nvimgdb_use_cmake_to_find_executables = 0
+       let g:nvimgdb_use_find_executables = 0
+       let g:nvimgdb_config = {
+        \ 'sign_current_line': '▶',
+        \ 'sign_breakpoint': [ '●', '●²', '●³', '●⁴', '●⁵', '●⁶', '●⁷', '●⁸', '●⁹', '●ⁿ' ],
+        \ 'sign_breakpoint_priority': 10,
+        \ 'termwin_command': 'rightbelow vnew',
+        \ 'codewin_command': 'vnew',
+        \ 'set_scroll_off': 5,
+        \ 'jump_bottom_gdb_buf': v:false,
+        \ }
+     ]])
+      -- nvim gdb debug
+      local opts = { noremap = true, silent = true }
+      vim.keymap.set("n", "<leader>db", "<cmd>GdbBreakpointToggle<cr>", opts)
+      vim.keymap.set("n", "<leader>dc", "<cmd>ElfCoreDebug<cr>", opts)
+      vim.keymap.set("n", "<leader>dt", "<cmd>GdbDebugUt<cr>", opts)
+    end
+  },
+  {
     "jay-babu/mason-nvim-dap.nvim",
     -- event = "VeryLazy",
     dependencies = {
