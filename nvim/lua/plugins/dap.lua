@@ -15,9 +15,29 @@ return {
         \ 'jump_bottom_gdb_buf': v:false,
         \ }
      ]])
+     -- 对于一些非常复杂的程序，需要使用高版本的gdb
+     -- 编译时需要带上python扩展
+     --[[
+       wget https://ftp.gnu.org/gnu/gdb/gdb-13.2.tar.xz
+       tar xf gdb-13.2.tar.xz
+       cd gdb-13.2
+       mkdir build && cd build
+       ../configure \
+        --prefix=$HOME/.local \
+        --with-system-readline \
+        --with-python=/usr/bin/python3 \
+        --enable-tui \
+        --enable-gdbserver \
+        --enable-werror=no
+       make -j
+       make install
+     ]]--
+     -- 如果安装gdb无法方便调试stl, 尝试以下命令
+     -- ln -s /usr/share/gdb/auto-load ~/.local/share/gdb/auto-load/
+     
       -- nvim gdb debug
       local opts = { noremap = true, silent = true }
-      vim.keymap.set("n", "<leader>db", "<cmd>GdbBreakpointToggle<cr>", opts)
+      vim.keymap.set("n", "<F5>", ":GdbBreakpointToggle<cr>", opts)
       vim.keymap.set("n", "<leader>dc", "<cmd>ElfCoreDebug<cr>", opts)
       vim.keymap.set("n", "<leader>dt", "<cmd>GdbDebugUt<cr>", opts)
     end
