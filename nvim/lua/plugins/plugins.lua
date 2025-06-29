@@ -296,6 +296,23 @@ return {
           -- layout_config = {
           --   prompt_position = "top",
           -- },
+
+          -- nvim-grey theme settings start
+          prompt_prefix = '',
+          entry_prefix = ' ',
+          selection_caret = ' ',
+          layout_strategy = 'grey',
+          layout_config = {
+            -- The extension supports both "top" and "bottom" for the prompt.
+            prompt_position = 'bottom',
+
+            -- You can adjust these settings to your liking.
+            width = 0.9,
+            height = 0.8,
+            preview_width = 0.6,
+          },
+          -- nvim-grey theme settings end
+
           path_display = function(_, path)
             local tail = vim.fs.basename(path)
             local parent = vim.fs.dirname(path)
@@ -317,6 +334,7 @@ return {
         },
       })
       telescope.load_extension("live_grep_args")
+      telescope.load_extension('grey')
     end,
   },
   -- {
