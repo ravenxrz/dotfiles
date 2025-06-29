@@ -83,6 +83,7 @@ return {
           "pyright",
           "lua_ls",
           "yamlls",
+          "rust-analyzer"
         },
       })
       require("mason-lspconfig").setup_handlers({
