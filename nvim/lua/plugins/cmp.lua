@@ -9,17 +9,20 @@ return {
     "saghen/blink.cmp",
     -- optional: provides snippets for the snippet source
     dependencies = {
-      "rafamadriz/friendly-snippets",
+
       {
-        "folke/lazydev.nvim",
-        ft = "lua", -- only load on lua files
-        opts = {
-          library = {
-            -- See the configuration section for more details
-            -- Load luvit types when the `vim.uv` word is found
-            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-          },
-        },
+        'L3MON4D3/LuaSnip',
+        version = 'v2.*',
+        dependencies = { "rafamadriz/friendly-snippets" },
+        config = function()
+          local ls = require("luasnip")
+          require("luasnip.loaders.from_vscode").lazy_load()
+          ls.config.set_config({
+            history = true,
+            updateevents = "TextChanged,TextChangedI",
+            enable_autosnippets = true,
+          })
+        end,
       },
     },
 
@@ -37,7 +40,12 @@ return {
       -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
       -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
       -- See the full "keymap" documentation for information on defining your own keymap.
-      keymap = { preset = "enter" },
+      snippets = { preset = 'luasnip' },
+      keymap = {
+        preset = "enter",
+        ["<Tab>"] = { "fallback" },
+        ["<S-Tab>"] = { "fallback" },
+      },
       completion = {
         trigger = {
           show_on_blocked_trigger_characters = { ' ', '\n', '\t' },
@@ -73,7 +81,7 @@ return {
         -- Sets the fallback highlight groups to nvim-cmp's highlight groups
         -- Useful for when your theme doesn't support blink.cmp
         -- Will be removed in a future release
-        use_nvim_cmp_as_default = true,
+        use_nvim_cmp_as_default = false,
         -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
