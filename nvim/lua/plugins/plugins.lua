@@ -1,5 +1,49 @@
 return {
   {
+    'saecki/crates.nvim',
+    tag = 'stable',
+    config = function()
+      require('crates').setup()
+    end,
+  },
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^6', -- Recommended
+    lazy = false,   -- This plugin is already lazy
+  },
+  -- {
+  --   "nwiizo/cargo.nvim",
+  --   build = "cargo build --release",
+  --   config = function()
+  --     require("cargo").setup({
+  --       float_window = true,
+  --       window_width = 0.8,
+  --       window_height = 0.8,
+  --       border = "rounded",
+  --       auto_close = true,
+  --       close_timeout = 5000,
+  --     })
+  --   end,
+  --   ft = { "rust" },
+  --   cmd = {
+  --     "CargoBench",
+  --     "CargoBuild",
+  --     "CargoClean",
+  --     "CargoDoc",
+  --     "CargoNew",
+  --     "CargoRun",
+  --     "CargoRunTerm",
+  --     "CargoTest",
+  --     "CargoUpdate",
+  --     "CargoCheck",
+  --     "CargoClippy",
+  --     "CargoAdd",
+  --     "CargoRemove",
+  --     "CargoFmt",
+  --     "CargoFix"
+  --   }
+  -- },
+  {
     "andrewferrier/debugprint.nvim",
     opts = {
       keymaps = {
@@ -987,6 +1031,7 @@ return {
   },
   {
     'dgagn/diagflow.nvim',
+    cond = false,
     event = 'LspAttach',
     opts = {
       enable = true,
@@ -1110,5 +1155,9 @@ return {
         },
       },
     }
+  },
+  {
+    "norcalli/nvim-colorizer.lua",
+    opts = {}
   }
 }

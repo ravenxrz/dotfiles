@@ -35,9 +35,9 @@ require("lazy").setup("plugins", {
 })
 
 -- color scheme
-vim.cmd([[
-  set background=light
-]])
-vim.cmd.colorscheme("grey")
+-- vim.cmd([[
+--   set background=light
+-- ]])
+vim.cmd.colorscheme("modus_operandi")
 -- vim.cmd.colorscheme("gruvbox-baby")
 -- vim.cmd.colorscheme "eldritch"

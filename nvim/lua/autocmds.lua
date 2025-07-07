@@ -126,3 +126,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { buffer = true, desc = "GDB → Code" })
   end,
 })
+
+-- format for rust
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("rust setup", { clear = true }),
+  pattern = { "rust" },
+  callback = function()
+    vim.keymap.set({ "n" }, "<leader>lf", "<cmd>RustFmt<cr>", { buffer = true })
+    vim.keymap.set({ "v" }, "<leader>lf", ":RustFmtRange<cr>", { buffer = true })
+  end,
+})

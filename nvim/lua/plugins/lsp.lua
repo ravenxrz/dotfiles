@@ -192,12 +192,17 @@ return {
               },
             },
           }
+          local skipped_servers = {
+            "rust_analyzer" -- rustacean.nvim will setup for us
+          }
           if opts[server_name] then
             local server_opt = opts[server_name]
             require("lspconfig")[server_name].setup(vim.tbl_deep_extend("force", {
               capabilities = capabilities,
               -- capabilities = require("cmp_nvim_lsp").default_capabilities(),
             }, server_opt))
+          elseif vim.tbl_contains(skipped_servers, server_name) then
+            -- skip server setup
           else
             require("lspconfig")[server_name].setup({
               capabilities = capabilities,
