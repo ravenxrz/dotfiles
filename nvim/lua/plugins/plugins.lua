@@ -574,6 +574,11 @@ return {
             "lsp_progress",
           },
           lualine_x = {
+            {
+              function()
+                return "TS:" ..  require('telescope_search').current_search_mode
+              end,
+            },
             --[[ 'diff', ]]
             "diagnostics",
             "filetype",

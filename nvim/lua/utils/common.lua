@@ -27,3 +27,13 @@ function get_os_platform()
   end
   return "Unknown"
 end
+
+-- 获取项目根目录
+function get_project_root()
+  local output = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null")
+  if vim.v.shell_error ~= 0 then
+    -- print("Error: Not in a git repository")
+    return "."
+  end
+  return vim.fn.trim(output)
+end

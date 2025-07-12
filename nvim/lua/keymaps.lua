@@ -83,41 +83,20 @@ keymap("n", "<leader>go", "<cmd>DiffviewClose<cr>", opts)
 keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
-keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
-keymap(
-  "n",
-  "<leader>fw",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=' -g!test* -g!*test'})<cr>",
-  opts
-)
-keymap(
-  "v",
-  "<leader>fw",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=' -g!test* -g!*test'})<cr>",
-  opts
-)
-keymap("n", "<leader>fg", "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", opts)
--- no ignore, no config
-keymap(
-  "n",
-  "<leader>fF",
-  "<cmd>Telescope find_files find_command=rg,--no-ignore,--hidden,--files,--no-config<cr>",
-  opts
-)
-keymap(
-  "n",
-  "<leader>fW",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_word_under_cursor({postfix=' --no-ignore --no-config'})<cr>",
-  opts
-)
 
-keymap(
-  "v",
-  "<leader>fW",
-  "<cmd>lua require('telescope-live-grep-args.shortcuts').grep_visual_selection({postfix=' --no-ignore --no-config'})<cr>",
-  opts
-)
+
+-- telescope
+local ts = require('telescope_search')
+-- Keymap to set the mode
+keymap("n", "<leader>fm", ts.set_search_mode, { desc = "Set Telescope search mode" })
+-- Keymaps for searching, which now use the selected mode
+keymap("n", "<leader>ff", function() ts.search('find_files') end, { desc = "Find files (using current mode)" })
+keymap("n", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep word (using current mode)" })
+keymap("v", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep selected word (using current mode)" })
+keymap("n", "<leader>fg", function() ts.search('live_grep') end, { desc = "Live grep (using current mode)" })
+-- Command to set the mode
+vim.api.nvim_create_user_command('SetTelescopeSearchMode', ts.set_search_mode, {})
 keymap(
   "n",
   "<leader>s",
@@ -127,6 +106,7 @@ keymap(
 keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
+
 
 -- outline
 -- keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
@@ -304,4 +284,3 @@ keymap("n", "ym", "<cmd>CopyFuncName<cr>", opts)
 
 -- plugin dev
 keymap("n", "<leader>t", "<cmd>PlenaryBustedFile %<cr>", opts)
-
