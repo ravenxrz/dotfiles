@@ -78,7 +78,7 @@ function M.search(search_type)
         local ripignore = setup_project_ripignore()
         if ripignore then
           local opts = {
-            postfix = string.format(' --no-ignore --no-config --no-ignore-vcs --ignore-file %s',
+            prefix = string.format('--no-ignore --no-config --no-ignore-vcs --ignore-file %s ',
               vim.fn.shellescape(ripignore))
           }
           if vim.fn.mode() == 'n' then
@@ -89,7 +89,7 @@ function M.search(search_type)
         end
       end,
       All = function()
-        local opts = { postfix = ' --no-ignore --no-config' }
+        local opts = { prefix = '--no-ignore --no-config ' }
         if vim.fn.mode() == 'n' then
           lga_shortcuts.grep_word_under_cursor(opts)
         else
