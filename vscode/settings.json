@@ -186,69 +186,14 @@
 	"vim.incsearch": true,
 	"vim.leader": ";",
 	"vim.normalModeKeyBindings": [
-		{ 	
+		{ // which key
 			"before": [
-				"<space>",
-				"e"
+				"<space>"
 			],
 			"commands": [
-				"workbench.view.explorer"
+				"whichkey.show"
 			]
-		},
-		{ 	
-			"before": [
-				"<space>",
-				"E"
-			],
-			"commands": [
-				"workbench.action.toggleSidebarVisibility"
-			]
-		},
-		{ 	
-			"before": [
-				"<space>",
-				"o"
-			],
-			"commands": [
-				"workbench.action.toggleAuxiliaryBar"
-			]
-		},
-		{ 	
-			"before": [
-				"<space>",
-				"h"
-			],
-			"commands": [
-				"lineHighlightBookmark.toogleBookmarks"
-			]
-		},
-		{ 	
-			"before": [
-				"<space>",
-				"g"
-			],
-			"commands": [
-				"workbench.view.scm"
-			]
-		},
-		{ 	
-			"before": [
-				"<space>",
-				"f"
-			],
-			"commands": [
-				"workbench.action.quickOpen"
-			]
-		},
-		{ 	
-			"before": [
-				"<space>",
-				"F"
-			],
-			"commands": [
-				"workbench.view.search"
-			]
-		},
+		}
 	],
 	"vim.normalModeKeyBindingsNonRecursive": [
 		{
@@ -384,8 +329,8 @@
 		// -- git hunk nav
 		{
 			"before": [
-				"<leader>",
-				"k"
+				"[",
+				"g"
 			],
 			"commands": [
 				"workbench.action.editor.previousChange",
@@ -394,8 +339,8 @@
 		},
 		{
 			"before": [
-				"<leader>",
-				"j"
+				"]",
+				"g"
 			],
 			"commands": [
 				"workbench.action.editor.nextChange",
@@ -406,7 +351,7 @@
 		{
 			"before": [
 				"<leader>",
-				"h",
+				"g",
 				"s"
 			],
 			"commands": [
@@ -416,7 +361,7 @@
 		{
 			"before": [
 				"<leader>",
-				"h",
+				"g",
 				"u"
 			],
 			"commands": [
@@ -426,7 +371,7 @@
 		{
 			"before": [
 				"<leader>",
-				"h",
+				"g",
 				"r"
 			],
 			"commands": [
@@ -471,6 +416,14 @@
 		},
 	],
 	"vim.visualModeKeyBindings": [
+		{ // which key
+			"before": [
+				"<space>"
+			],
+			"commands": [
+				"whichkey.show"
+			]
+		},
 		// repeatly indent in visual mode
 		{
 			"before": [
@@ -525,75 +478,88 @@
 	/* vim settings end */
 	"vsicons.dontShowNewVersionMessage": true,
 	/* which key bindings */
-	// "whichkey.bindings": [
-	// 	{
-	// 		"key": "e",
-	// 		"name": "Show tree/explorer view",
-	// 		"type": "conditional",
-	// 		"bindings": [
-	// 			{
-	// 				"key": "",
-	// 				"name": "default",
-	// 				"type": "command",
-	// 				"command": "workbench.view.explorer"
-	// 			},
-	// 			{
-	// 				"key": "when:sideBarVisible && explorerViewletVisible",
-	// 				"name": "Hide explorer",
-	// 				"type": "command",
-	// 				"command": "workbench.action.toggleSidebarVisibility"
-	// 			}
-	// 		],
-	// 	},
-	// 	{
-	// 		"key": "o",
-	// 		"name": "Outline",
-	// 		"type": "command",
-	// 		"command": "workbench.action.toggleAuxiliaryBar"
-	// 	},
-	// 	{
-	// 		"key": "h",
-	// 		"name": "bookmark",
-	// 		"type": "command",
-	// 		"command": "lineHighlightBookmark.toogleBookmarks"
-	// 	},
-	// 	{
-	// 		"key": "g",
-	// 		"name": "Source contrl",
-	// 		"type": "command",
-	// 		"command": "workbench.view.scm",
-	// 	},
-	// 	{
-	// 		"command": "workbench.action.quickOpen",
-	// 		"key": "f",
-	// 		"name": "Find file",
-	// 		"type": "command"
-	// 	},
-	// 	{
-	// 		"command": "workbench.view.search",
-	// 		"key": "F",
-	// 		"name": "Search Word",
-	// 		"type": "command"
-	// 	},
-	// 	{
-	// 		"command": "search.action.openEditor",
-	// 		"key": "w",
-	// 		"name": "New Search Editor",
-	// 		"type": "command"
-	// 	},
-	// 	{
-	// 		"command": "workbench.action.gotoSymbol",
-	// 		"key": "s",
-	// 		"name": "Search document symbol",
-	// 		"type": "command"
-	// 	},
-	// 	{
-	// 		"command": "workbench.action.showAllSymbols",
-	// 		"key": "S",
-	// 		"name": "Search project symbol",
-	// 		"type": "command"
-	// 	},
-	// ],
+	"whichkey.bindings": [
+		{
+			"key": "e",
+			"name": "Show tree/explorer view",
+			"type": "conditional",
+			"bindings": [
+				{
+					"key": "",
+					"name": "default",
+					"type": "command",
+					"command": "workbench.view.explorer"
+				},
+				{ // this does't work now (2025-7-19)
+					"key": "when:sideBarVisible && explorerViewletVisible",
+					"name": "Hide explorer",
+					"type": "command",
+					"command": "workbench.action.toggleSidebarVisibility"
+				}
+			],
+		},
+		{
+			"key": "E",
+			"name": "Close tree/explorer view",
+			"type": "conditional",
+			"bindings": [
+				{
+					"key": "",
+					"name": "default",
+					"type": "command",
+					"command": "workbench.action.toggleSidebarVisibility",
+				}
+			],
+		},
+		{
+			"key": "o",
+			"name": "Outline",
+			"type": "command",
+			"command": "workbench.action.toggleAuxiliaryBar"
+		},
+		// {
+		// 	"key": "h",
+		// 	"name": "bookmark",
+		// 	"type": "command",
+		// 	"command": "lineHighlightBookmark.toogleBookmarks"
+		// },
+		{
+			"key": "g",
+			"name": "Source contrl",
+			"type": "command",
+			"command": "workbench.view.scm",
+		},
+		{
+			"command": "workbench.action.quickOpen",
+			"key": "f",
+			"name": "Find file",
+			"type": "command"
+		},
+		{
+			"command": "workbench.view.search",
+			"key": "F",
+			"name": "Search Word",
+			"type": "command"
+		},
+		{
+			"command": "search.action.openEditor",
+			"key": "w",
+			"name": "New Search Editor",
+			"type": "command"
+		},
+		{
+			"command": "workbench.action.gotoSymbol",
+			"key": "s",
+			"name": "Search document symbol",
+			"type": "command"
+		},
+		{
+			"command": "workbench.action.showAllSymbols",
+			"key": "S",
+			"name": "Search project symbol",
+			"type": "command"
+		},
+	],
 	"workbench.iconTheme": "vscode-icons",
 	"workbench.list.automaticKeyboardNavigation": false,
 	"workbench.panel.defaultLocation": "bottom",
@@ -654,6 +620,7 @@
 	"go.inlayHints.compositeLiteralTypes": true,
 	"go.inlayHints.compositeLiteralFields": true,
 	"go.inlayHints.assignVariableTypes": true,
+	"audioCues.noInlayHints": "off",
 	"Lua.hint.enable": true,
 	"C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": false,
 	"C_Cpp.autocomplete": "disabled",
@@ -685,6 +652,7 @@
 	"cSpell.userWords": [
 		"explaination"
 	],
+	"workbench.colorTheme": "Visual Studio Light - C++",
 	"editor.fontSize": 13,
 	"diffEditor.ignoreTrimWhitespace": false,
 	"extensions.experimental.affinity": {
@@ -697,14 +665,4 @@
 	"vscode-neovim.neovimInitVimPaths.darwin": "/Users/leo/.config/nvim/init.lua",
 	"cmake.options.statusBarVisibility": "compact",
 	"redhat.telemetry.enabled": false,
-	"explorer.autoReveal": true,
-	"search.followSymlinks": false,
-	"cmake.showOptionsMovedNotification": false,
-	"terminal.integrated.gpuAcceleration": "off",
-	"workbench.colorTheme": "Default Light Modern",
-	"cmake.configureOnEdit": false,
-	"cmake.showConfigureWithDebuggerNotification": false,
-	"accessibility.signals.noInlayHints": {
-		"sound": "off"
-	},
 }
