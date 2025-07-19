@@ -1,6 +1,6 @@
 [
 	{ // make cursor back to editor
-		"key": "ctrl+shift+c",
+		"key": "ctrl+c",
 		"command": "workbench.action.focusActiveEditorGroup",
 		"when": "!terminalFocus"
 	},
@@ -17,7 +17,8 @@
 	{ // window move down
 		"key": "ctrl+j",
 		"command": "vim.remap",
-		"when": "vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen", "args": {
+		"when": "vim.mode == 'Normal' && !suggestWidgetVisible && !inQuickOpen",
+		"args": {
 			"after": [
 				"<c-w>",
 				"j"
@@ -264,7 +265,7 @@
 	{ // delete file or folder
 		"key": "d",
 		"command": "deleteFile",
-		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+		"when": "filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
 	},
 	{ // toggle terminal
 		"key": "ctrl+\\",
@@ -312,10 +313,10 @@
 		},
 	},
 	// -- disable a bunch of keybindings which may have conflicts with above keybindings
-	{
-		"key": "ctrl+p",
-		"command": "workbench.action.togglePanel"
-	},
+	// {
+	// 	"key": "ctrl+p",
+	// 	"command": "workbench.action.togglePanel"
+	// },
 	{
 		"key": "ctrl+j",
 		"command": "-editor.action.insertLineAfter",
@@ -543,11 +544,11 @@
 		"command": "-revealReference",
 		"when": "listFocus && referenceSearchVisible && !inputFocus && !treeElementCanCollapse && !treeElementCanExpand"
 	},
-	// {
-	// 	"key": "space",
-	// 	"command": "whichkey.show",
-	// 	"when": "!inputFocus"
-	// },
+	{
+		"key": "space",
+		"command": "whichkey.show",
+		"when": "!inputFocus"
+	},
 	{
 		"key": "alt+backspace",
 		"command": "git.stageChange"
