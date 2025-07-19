@@ -50,7 +50,7 @@
 		// 输入建议中，已包含头文件的项与还未包含头文件的项会以圆点加以区分
 		"--header-insertion-decorators",
 		"-j=12",
-		"--pretty",
+		"--pretty"
 		// 建议排序模型
 	],
 	"cmake.cmakePath": "cmake",
@@ -180,7 +180,7 @@
 		"<C-v>": true,
 		"<C-w>": true,
 		"<C-u>": false,
-		"<C-d>": false,
+		"<C-d>": false
 	},
 	"vim.hlsearch": true,
 	"vim.incsearch": true,
@@ -198,16 +198,16 @@
 	"vim.normalModeKeyBindingsNonRecursive": [
 		{
 			"before": [
-				"E",
+				"E"
 			],
 			"after": [
 				"g",
-				"T",
+				"T"
 			]
 		},
 		{
 			"before": [
-				"R",
+				"R"
 			],
 			"after": [
 				"g",
@@ -227,7 +227,7 @@
 			"before": [
 				"<leader>",
 				"g",
-				"q",
+				"q"
 			],
 			"commands": [
 				"workbench.action.closeEditorsInGroup"
@@ -333,7 +333,7 @@
 				"d"
 			],
 			"commands": [
-				"editor.action.marker.nextInFiles",
+				"editor.action.marker.nextInFiles"
 			]
 		},
 		{
@@ -342,7 +342,7 @@
 				"d"
 			],
 			"commands": [
-				"editor.action.marker.prevInFiles",
+				"editor.action.marker.prevInFiles"
 			]
 		},
 		// -- git hunk nav
@@ -374,7 +374,7 @@
 				"s"
 			],
 			"commands": [
-				"git.stage",
+				"git.stage"
 			]
 		},
 		{
@@ -384,7 +384,7 @@
 				"u"
 			],
 			"commands": [
-				"git.unstage",
+				"git.unstage"
 			]
 		},
 		{
@@ -394,7 +394,7 @@
 				"r"
 			],
 			"commands": [
-				"git.revertSelectedRanges",
+				"git.revertSelectedRanges"
 			]
 		},
 		// -- rename symbol
@@ -405,7 +405,7 @@
 				"n"
 			],
 			"commands": [
-				"editor.action.rename",
+				"editor.action.rename"
 			]
 		},
 		// search
@@ -417,22 +417,22 @@
 			],
 			// need install https://marketplace.visualstudio.com/items?itemName=kylpo.vscode-find-in-files-with-selection extension
 			"commands": [
-				"extension.findInFilesWithSelection",
+				"extension.findInFilesWithSelection"
 			]
 		},
 		// gg and G jump mark
 		{
 			"before": [
 				"g",
-				"g",
+				"g"
 			],
 			"after": [
 				"m",
 				"a",
 				"g",
-				"g",
+				"g"
 			]
-		},
+		}
 	],
 	"vim.visualModeKeyBindings": [
 		{ // which key
@@ -468,9 +468,9 @@
 			],
 			// need install https://marketplace.visualstudio.com/items?itemName=kylpo.vscode-find-in-files-with-selection extension
 			"commands": [
-				"extension.findInFilesWithSelection",
+				"extension.findInFilesWithSelection"
 			]
-		},
+		}
 	],
 	"vim.visualModeKeyBindingsNonRecursive": [
 		{
@@ -490,9 +490,9 @@
 				"p",
 				"g",
 				"v",
-				"y",
+				"y"
 			]
-		},
+		}
 	],
 	/* vim settings end */
 	/* which key bindings */
@@ -514,7 +514,7 @@
 					"type": "command",
 					"command": "workbench.action.toggleSidebarVisibility"
 				}
-			],
+			]
 		},
 		{
 			"key": "E",
@@ -525,9 +525,9 @@
 					"key": "",
 					"name": "default",
 					"type": "command",
-					"command": "workbench.action.toggleSidebarVisibility",
+					"command": "workbench.action.toggleSidebarVisibility"
 				}
-			],
+			]
 		},
 		{
 			"key": "o",
@@ -545,7 +545,7 @@
 			"key": "g",
 			"name": "Source contrl",
 			"type": "command",
-			"command": "workbench.view.scm",
+			"command": "workbench.view.scm"
 		},
 		{
 			"command": "workbench.action.quickOpen",
@@ -576,7 +576,7 @@
 			"key": "S",
 			"name": "Search project symbol",
 			"type": "command"
-		},
+		}
 	],
 	"workbench.list.automaticKeyboardNavigation": false,
 	"workbench.panel.defaultLocation": "bottom",
