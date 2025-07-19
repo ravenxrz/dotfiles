@@ -326,6 +326,25 @@
 				"editor.action.marker.next"
 			]
 		},
+		// -- file problem nav
+		{
+			"before": [
+				"]",
+				"d"
+			],
+			"commands": [
+				"editor.action.marker.nextInFiles",
+			]
+		},
+		{
+			"before": [
+				"[",
+				"d"
+			],
+			"commands": [
+				"editor.action.marker.prevInFiles",
+			]
+		},
 		// -- git hunk nav
 		{
 			"before": [
@@ -664,5 +683,5 @@
 	"vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
 	"vscode-neovim.neovimInitVimPaths.darwin": "/Users/leo/.config/nvim/init.lua",
 	"cmake.options.statusBarVisibility": "compact",
-	"redhat.telemetry.enabled": false,
+	"redhat.telemetry.enabled": false
 }
