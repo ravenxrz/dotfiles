@@ -55,7 +55,7 @@
 	],
 	"cmake.cmakePath": "cmake",
 	"cmake.build.workspaceTargets": [],
-	"cmake.configureOnOpen": true,
+	"cmake.configureOnOpen": false,
 	"cmake.copyCompileCommands": "${workspaceFolder}/build/compile_commands.json",
 	"cmake.cpptools.intelliSenseMode": "gcc-x64",
 	"debug.console.fontSize": 12,
@@ -495,7 +495,6 @@
 		},
 	],
 	/* vim settings end */
-	"vsicons.dontShowNewVersionMessage": true,
 	/* which key bindings */
 	"whichkey.bindings": [
 		{
@@ -579,7 +578,6 @@
 			"type": "command"
 		},
 	],
-	"workbench.iconTheme": "vscode-icons",
 	"workbench.list.automaticKeyboardNavigation": false,
 	"workbench.panel.defaultLocation": "bottom",
 	"workbench.startupEditor": "newUntitledFile",
@@ -639,12 +637,10 @@
 	"go.inlayHints.compositeLiteralTypes": true,
 	"go.inlayHints.compositeLiteralFields": true,
 	"go.inlayHints.assignVariableTypes": true,
-	"audioCues.noInlayHints": "off",
 	"Lua.hint.enable": true,
 	"C_Cpp.inlayHints.parameterNames.suppressWhenArgumentContainsName": false,
 	"C_Cpp.autocomplete": "disabled",
 	"C_Cpp.codeFolding": "disabled",
-	"vsicons.presets.jsOfficial": true,
 	"extensions.supportUntrustedWorkspaces": {
 		"byted-ide.dev-environment-manager": {
 			"supported": true
@@ -654,7 +650,6 @@
 		"byted-ide.gallery"
 	],
 	"errorLens.statusBarIconsEnabled": true,
-	"errorLens.enabled": false,
 	"git.openRepositoryInParentFolders": "never",
 	"projectManager.git.baseFolders": [
 		"/data05",
@@ -663,25 +658,26 @@
 	"terminal.external.linuxExec": "zsh",
 	"markdown.editor.drop.enabled": false,
 	"git.confirmSync": false,
-	"commentAnchors.epic.provideAutoCompletion": false,
 	"gitlens.graph.minimap.enabled": false,
 	"gitlens.graph.minimap.additionalTypes": [
 		"localBranches"
 	],
-	"cSpell.userWords": [
-		"explaination"
-	],
-	"workbench.colorTheme": "Visual Studio Light - C++",
+	"workbench.colorTheme": "Visual Studio Light",
 	"editor.fontSize": 13,
 	"diffEditor.ignoreTrimWhitespace": false,
 	"extensions.experimental.affinity": {
 		"asvetliakov.vscode-neovim": 1
 	},
-	"vscode-neovim.completionDelay": 1000,
-	"vscode-neovim.logLevel": "debug",
-	"vscode-neovim.logPath": "~/.local/log/vscode-nvim.log",
-	"vscode-neovim.neovimExecutablePaths.darwin": "/usr/local/bin/nvim",
-	"vscode-neovim.neovimInitVimPaths.darwin": "/Users/leo/.config/nvim/init.lua",
 	"cmake.options.statusBarVisibility": "compact",
-	"redhat.telemetry.enabled": false
+	"redhat.telemetry.enabled": false,
+	"diffEditor.hideUnchangedRegions.enabled": true,
+	"cmake.buildDirectory": "${workspaceFolder}/build_vsc",
+	"accessibility.signals.noInlayHints": {
+		"sound": "off"
+	},
+	"cmake.automaticReconfigure": false,
+	"cmake.configureOnEdit": false,
+	"trae.internal.chatLanguage": "cn",
+	"errorLens.enabled": false,
+	"problems.showCurrentInStatus": true
 }
