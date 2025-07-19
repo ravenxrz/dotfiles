@@ -22,7 +22,7 @@
 			"after": [
 				"<c-w>",
 				"j"
-			],
+			]
 		}
 	},
 	{ // window move up
@@ -33,7 +33,7 @@
 			"after": [
 				"<c-w>",
 				"k"
-			],
+			]
 		}
 	},
 	{ // window move left
@@ -44,7 +44,7 @@
 			"after": [
 				"<c-w>",
 				"h"
-			],
+			]
 		}
 	},
 	{ // window move right
@@ -55,7 +55,7 @@
 			"after": [
 				"<c-w>",
 				"l"
-			],
+			]
 		}
 	},
 	// -----searching pane start------
@@ -77,7 +77,7 @@
 				"search.focus.previousInputBox",
 				"search.focus.previousInputBox",
 				"search.focus.previousInputBox",
-				"search.focus.previousInputBox",
+				"search.focus.previousInputBox"
 			]
 		},
 		"when": "hasSearchResult && searchViewletFocus"
@@ -93,7 +93,7 @@
 		"args": {
 			"sequence": [
 				"list.select",
-				"workbench.action.toggleAuxiliaryBar",
+				"workbench.action.toggleAuxiliaryBar"
 			]
 		},
 		"when": "listFocus && !inputFocus && hasSearchResult && searchViewletFocus"
@@ -107,7 +107,7 @@
 		"args": {
 			"key": "e",
 			"when": "sideBarVisible && explorerViewletVisible"
-		},
+		}
 	},
 	{ // rename file
 		"key": "r",
@@ -187,7 +187,7 @@
 		"command": "extension.multiCommand.execute",
 		"args": {
 			"sequence": [
-				"list.focusDown",
+				"list.focusDown"
 				// "list.toggleExpand",	// TODO: this will coallse the tree node
 			]
 		},
@@ -198,7 +198,7 @@
 		"command": "extension.multiCommand.execute",
 		"args": {
 			"sequence": [
-				"list.focusUp",
+				"list.focusUp"
 				// "list.toggleExpand", // TODO: this will coallse the tree node
 			]
 		},
@@ -220,7 +220,7 @@
 		"command": "extension.multiCommand.execute",
 		"args": {
 			"sequence": [
-				"list.select",
+				"list.select"
 				// "workbench.action.togglePanel"
 			]
 		},
@@ -301,7 +301,7 @@
 			"to": "down",
 			"by": "line",
 			"value": 34
-		},
+		}
 	},
 	{
 		"key": "ctrl+u",
@@ -310,7 +310,7 @@
 			"to": "up",
 			"by": "line",
 			"value": 34
-		},
+		}
 	},
 	// -- disable a bunch of keybindings which may have conflicts with above keybindings
 	// {
