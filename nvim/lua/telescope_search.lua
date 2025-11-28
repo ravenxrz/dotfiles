@@ -11,6 +11,9 @@ local function setup_project_ripignore()
     if file then
       file:write("build/\n")
       file:write("third_party/\n")
+      file:write(".cache/\n")
+      file:write("*.idx/\n")
+      file:write(".calltree*/\n")
       file:close()
     else
       vim.notify("Error: Could not create .ripignore file at " .. ripignore_path, vim.log.levels.ERROR)
