@@ -1,31 +1,27 @@
 ; extends
 
-; 函数声明
-[
-;; local func
-local_declaration: (function_declaration 
-  name: (identifier) @custom.function.declare) 
-
-;; global func
-(function_declaration 
-  name: (method_index_expression
+; function M.foo() ... end
+(function_declaration
+  name: (dot_index_expression
     table: (identifier)
-    method: (identifier) @custom.function.declare))
+    field: (identifier) @custom.function.declare)
+  )
 
-; 先声明，再赋值的func
-(assignment_statement 
-  (variable_list  
-    name: (identifier) @custom.function.declare)
-    (expression_list 
-      value: (function_definition)))
+; function foo() ... end
+(function_declaration
+  name: (identifier) @custom.function.declare)
 
-; M.func = xxx
-(function_declaration 
-  name: (method_index_expression 
-    table: (identifier)
-    method: (identifier) @custom.function.declaration)
-)
-]
+; local foo = function() ... end
+(assignment_statement
+  (variable_list
+    (identifier) @custom.function.declare)
+  (expression_list
+    (function_definition)))
 
-
-
+; M.foo = function() ... end
+(assignment_statement
+  (variable_list
+    (dot_index_expression
+      field: (identifier) @custom.function.declare))
+  (expression_list
+    (function_definition)))
