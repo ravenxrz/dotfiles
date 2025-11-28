@@ -1,15 +1,15 @@
 return {
   {
-    'saecki/crates.nvim',
-    tag = 'stable',
+    "saecki/crates.nvim",
+    tag = "stable",
     config = function()
-      require('crates').setup()
+      require("crates").setup()
     end,
   },
   {
-    'mrcjkb/rustaceanvim',
-    version = '^6', -- Recommended
-    lazy = false,   -- This plugin is already lazy
+    "mrcjkb/rustaceanvim",
+    version = "^6", -- Recommended
+    lazy = false, -- This plugin is already lazy
   },
   -- {
   --   "nwiizo/cargo.nvim",
@@ -74,11 +74,11 @@ return {
       },
     },
     dependencies = {
-      "echasnovski/mini.nvim",         -- Optional: Needed for line highlighting (full mini.nvim plugin)
+      "echasnovski/mini.nvim", -- Optional: Needed for line highlighting (full mini.nvim plugin)
       "nvim-telescope/telescope.nvim", -- Optional: If you want to use the `:Debugprint search` command with telescope.nvim
     },
-    lazy = false,                      -- Required to make line highlighting work before debugprint is first used
-    version = "*",                     -- Remove if you DON'T want to use the stable version
+    lazy = false, -- Required to make line highlighting work before debugprint is first used
+    version = "*", -- Remove if you DON'T want to use the stable version
   },
   {
     "tamton-aquib/keys.nvim",
@@ -93,10 +93,10 @@ return {
   },
   {
     "amitds1997/remote-nvim.nvim",
-    version = "*",                     -- Pin to GitHub releases
+    version = "*", -- Pin to GitHub releases
     dependencies = {
-      "nvim-lua/plenary.nvim",         -- For standard functions
-      "MunifTanjim/nui.nvim",          -- To build the plugin UI
+      "nvim-lua/plenary.nvim", -- For standard functions
+      "MunifTanjim/nui.nvim", -- To build the plugin UI
       "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
     },
     enabled = false,
@@ -133,9 +133,9 @@ return {
   {
     "hedyhli/outline.nvim",
     config = function()
-      require("outline").setup {
+      require("outline").setup({
         -- Your setup opts here (leave empty to use defaults)
-      }
+      })
     end,
   },
   {
@@ -173,19 +173,19 @@ return {
     config = function()
       require("hlchunk").setup({
         chunk = {
-          enable = false
+          enable = false,
         },
         indent = {
-          enable = true
+          enable = true,
         },
         blank = {
-          enable = false
+          enable = false,
         },
         line_num = {
-          enable = false
-        }
+          enable = false,
+        },
       })
-    end
+    end,
   },
   {
     "nvim-tree/nvim-tree.lua",
@@ -204,24 +204,24 @@ return {
           dotfiles = true,
         },
         on_attach = function(bufnr)
-          local api = require "nvim-tree.api"
+          local api = require("nvim-tree.api")
           local function opts(desc)
             return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
           end
           -- default mappings
           api.config.mappings.default_on_attach(bufnr)
           -- custom mappings
-          vim.keymap.set('n', '<BS>', api.tree.change_root_to_parent, opts('Up'))
-          vim.keymap.set('n', '.', api.tree.change_root_to_node, opts("CD"))
-          vim.keymap.set('n', 'w', api.node.open.edit, opts('Open'))
-          vim.keymap.set('n', 'o', api.node.open.no_window_picker, opts('Open'))
-          vim.keymap.set('n', 'l', api.node.open.no_window_picker, opts('Open'))
-          vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Parent Close'))
-          vim.keymap.set('n', 'i', api.node.show_info_popup, opts('Info'))
-          vim.keymap.del('n', '<C-e>', { buffer = bufnr })
-        end
+          vim.keymap.set("n", "<BS>", api.tree.change_root_to_parent, opts("Up"))
+          vim.keymap.set("n", ".", api.tree.change_root_to_node, opts("CD"))
+          vim.keymap.set("n", "w", api.node.open.edit, opts("Open"))
+          vim.keymap.set("n", "o", api.node.open.no_window_picker, opts("Open"))
+          vim.keymap.set("n", "l", api.node.open.no_window_picker, opts("Open"))
+          vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("Parent Close"))
+          vim.keymap.set("n", "i", api.node.show_info_popup, opts("Info"))
+          vim.keymap.del("n", "<C-e>", { buffer = bufnr })
+        end,
       })
-    end
+    end,
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -236,8 +236,8 @@ return {
           untracked = { text = "┆" },
         },
         signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
+        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
         word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
         watch_gitdir = {
           follow_files = true,
@@ -255,7 +255,7 @@ return {
         current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
         sign_priority = 6,
         update_debounce = 100,
-        status_formatter = nil,  -- Use default
+        status_formatter = nil, -- Use default
         max_file_length = 40000, -- Disable if file is longer than this (in lines)
         preview_config = {
           -- Options passed to nvim_open_win
@@ -269,10 +269,10 @@ return {
     end,
   },
   {
-    "sindrets/diffview.nvim"
+    "sindrets/diffview.nvim",
   },
   {
-    "rickhowe/diffchar.vim"
+    "rickhowe/diffchar.vim",
   },
   {
     "numToStr/Comment.nvim",
@@ -323,7 +323,7 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    branch = 'master',
+    branch = "master",
     dependencies = {
       "nvim-lua/plenary.nvim",
       {
@@ -496,7 +496,7 @@ return {
   {
     "romgrk/barbar.nvim",
     dependencies = {
-      "lewis6991/gitsigns.nvim",     -- OPTIONAL: for git status
+      "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
       "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
     },
     init = function()
@@ -512,7 +512,7 @@ return {
       -- …etc.
     },
     version = "^1.0.0", -- optional: only update when a new 1.x version is released
-    enabled = false
+    enabled = false,
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -576,7 +576,7 @@ return {
           lualine_x = {
             {
               function()
-                return "TS:" ..  require('telescope_search').current_search_mode
+                return "TS:" .. require("telescope_search").current_search_mode
               end,
             },
             --[[ 'diff', ]]
@@ -683,15 +683,15 @@ return {
   },
   {
     "okuuva/auto-save.nvim",
-    cmd = "ASToggle",                         -- optional for lazy loading on command
+    cmd = "ASToggle", -- optional for lazy loading on command
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     config = function()
       require("auto-save").setup({
-        enabled = true,                                                -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
-        trigger_events = {                                             -- See :h events
+        enabled = true, -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
+        trigger_events = { -- See :h events
           immediate_save = { "BufLeave", "FocusLost", "InsertLeave" }, -- vim events that trigger an immediate save
-          defer_save = { "TextChanged" },                              -- vim events that trigger a deferred save (saves after `debounce_delay`)
-          cancel_deferred_save = { "InsertEnter" },                    -- vim events that cancel a pending deferred save
+          defer_save = { "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
+          cancel_deferred_save = { "InsertEnter" }, -- vim events that cancel a pending deferred save
         },
         -- function that takes the buffer handle and determines whether to save the current buffer or not
         -- return true: if buffer is ok to be saved
@@ -707,8 +707,8 @@ return {
           return false
         end,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
-        noautocmd = false,         -- do not execute autocmds when saving
-        debounce_delay = 500,      -- delay after which a pending save is executed
+        noautocmd = false, -- do not execute autocmds when saving
+        debounce_delay = 500, -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
         debug = false,
       })
@@ -731,16 +731,16 @@ return {
         -- session_filename_to_dir = session_filename_to_dir,     -- Function that replaces symbols into separators and colons to transform filename into a session directory.
         -- dir_to_session_filename = dir_to_session_filename,     -- Function that replaces separators and colons into special symbols to transform session directory into a filename. Should use `vim.loop.cwd()` if the passed `dir` is `nil`.
         autoload_mode = config.AutoloadMode.CurrentDir, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-        autosave_last_session = true,                   -- Automatically save last session on exit and on session switch.
-        autosave_ignore_not_normal = true,              -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-        autosave_ignore_dirs = {},                      -- A list of directories where the session will not be autosaved.
-        autosave_ignore_filetypes = {                   -- All buffers of these file types will be closed before the session is saved.
+        autosave_last_session = true, -- Automatically save last session on exit and on session switch.
+        autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+        autosave_ignore_dirs = {}, -- A list of directories where the session will not be autosaved.
+        autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
           "gitcommit",
           "gitrebase",
         },
-        autosave_ignore_buftypes = {},    -- All buffers of these bufer types will be closed before the session is saved.
+        autosave_ignore_buftypes = {}, -- All buffers of these bufer types will be closed before the session is saved.
         autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-        max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+        max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
     end,
   },
@@ -843,6 +843,8 @@ return {
           "cpp",
           "json",
           "yaml",
+          "python",
+          "lua",
         },
         sync_install = false,
         highlight = {
@@ -866,83 +868,195 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
     },
     config = function()
-      require("nvim-treesitter.configs").setup({
-        textobjects = {
-          select = {
-            enable = true,
-            -- Automatically jump forward to textobj, similar to targets.vim
-            lookahead = true,
-            keymaps = {
-              -- You can use the capture groups defined in textobjects.scm
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              -- You can optionally set descriptions to the mappings (used in the desc parameter of
-              -- nvim_buf_set_keymap) which plugins like which-key display
-              ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-              -- You can also use captures from other query groups like `locals.scm`
-              ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
-            },
-            -- You can choose the select mode (default is charwise 'v')
-            --
-            -- Can also be a function which gets passed a table with the keys
-            -- * query_string: eg '@function.inner'
-            -- * method: eg 'v' or 'o'
-            -- and should return the mode ('v', 'V', or '<c-v>') or a table
-            -- mapping query_strings to modes.
-            selection_modes = {
-              ["@parameter.outer"] = "v", -- charwise
-              ["@function.outer"] = "V",  -- linewise
-              ["@class.outer"] = "<c-v>", -- blockwise
-            },
-            -- If you set this to `true` (default is `false`) then any textobject is
-            -- extended to include preceding or succeeding whitespace. Succeeding
-            -- whitespace has priority in order to act similarly to eg the built-in
-            -- `ap`.
-            --
-            -- Can also be a function which gets passed a table with the keys
-            -- * query_string: eg '@function.inner'
-            -- * selection_mode: eg 'v'
-            -- and should return true or false
-            include_surrounding_whitespace = true,
+      require("nvim-treesitter-textobjects").setup({
+        select = {
+          -- Automatically jump forward to textobj, similar to targets.vim
+          lookahead = true,
+          -- You can choose the select mode (default is charwise 'v')
+          --
+          -- Can also be a function which gets passed a table with the keys
+          -- * query_string: eg '@function.inner'
+          -- * method: eg 'v' or 'o'
+          -- and should return the mode ('v', 'V', or '<c-v>') or a table
+          -- mapping query_strings to modes.
+          selection_modes = {
+            ["@parameter.outer"] = "v", -- charwise
+            ["@function.outer"] = "V", -- linewise
+            ["@class.outer"] = "<c-v>", -- blockwise
           },
-          move = {
-            enable = true,
-            set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-              ["]f"] = "@custom.function.declare",
-              -- ["]f"] = "@function.outer",
-              ["]]"] = { query = "@class.outer", desc = "Next class start" },
-              --
-              -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
-              ["]o"] = "@loop.*",
-              -- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
-              --
-              -- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
-              -- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
-              ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-              ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-            },
-            goto_next_end = {
-              ["]F"] = "@function.outer",
-              ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-              ["[f"] = "@custom.function.declare",
-              -- ["[f"] = "@function.outer",
-              ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-              ["[F"] = "@function.outer",
-              ["[]"] = "@class.outer",
-            },
-          },
+          -- If you set this to `true` (default is `false`) then any textobject is
+          -- extended to include preceding or succeeding whitespace. Succeeding
+          -- whitespace has priority in order to act similarly to eg the built-in
+          -- `ap`.
+          --
+          -- Can also be a function which gets passed a table with the keys
+          -- * query_string: eg '@function.inner'
+          -- * selection_mode: eg 'v'
+          -- and should return true of false
+          include_surrounding_whitespace = false,
+        },
+        move = {
+          -- whether to set jumps in the jumplist
+          set_jumps = true,
         },
       })
+
+      -- keymaps
+      -- You can use the capture groups defined in `textobjects.scm`
+      -- for select
+      vim.keymap.set({ "x", "o" }, "af", function()
+        require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "x", "o" }, "if", function()
+        require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects")
+      end)
+      vim.keymap.set({ "x", "o" }, "ac", function()
+        require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects")
+      end)
+      vim.keymap.set({ "x", "o" }, "ic", function()
+        require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects")
+      end)
+      -- You can also use captures from other query groups like `locals.scm`
+      vim.keymap.set({ "x", "o" }, "as", function()
+        require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals")
+      end)
+
+      -- for move
+      vim.keymap.set({ "n", "x", "o" }, "]f", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@custom.function.declare", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[f", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_start("@custom.function.declare", "textobjects")
+      end)
+
+
+      --
+      vim.keymap.set({ "n", "x", "o" }, "]m", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "]]", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects")
+      end)
+      -- You can also pass a list to group multiple queries.
+      vim.keymap.set({ "n", "x", "o" }, "]o", function()
+        move.goto_next_start({ "@loop.inner", "@loop.outer" }, "textobjects")
+      end)
+      -- You can also use captures from other query groups like `locals.scm` or `folds.scm`
+      vim.keymap.set({ "n", "x", "o" }, "]s", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@local.scope", "locals")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "]z", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@fold", "folds")
+      end)
+
+      vim.keymap.set({ "n", "x", "o" }, "]M", function()
+        require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "][", function()
+        require("nvim-treesitter-textobjects.move").goto_next_end("@class.outer", "textobjects")
+      end)
+
+      vim.keymap.set({ "n", "x", "o" }, "[m", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[[", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer", "textobjects")
+      end)
+
+      vim.keymap.set({ "n", "x", "o" }, "[M", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_end("@function.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[]", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_end("@class.outer", "textobjects")
+      end)
+
+      -- Go to either the start or the end, whichever is closer.
+      -- Use if you want more granular movements
+      vim.keymap.set({ "n", "x", "o" }, "]d", function()
+        require("nvim-treesitter-textobjects.move").goto_next("@conditional.outer", "textobjects")
+      end)
+      vim.keymap.set({ "n", "x", "o" }, "[d", function()
+        require("nvim-treesitter-textobjects.move").goto_previous("@conditional.outer", "textobjects")
+      end)
+
+      --   require("nvim-treesitter.configs").setup({
+      --     textobjects = {
+      --       select = {
+      --         enable = true,
+      --         -- Automatically jump forward to textobj, similar to targets.vim
+      --         lookahead = true,
+      --         keymaps = {
+      --           -- You can use the capture groups defined in textobjects.scm
+      --           ["af"] = "@function.outer",
+      --           ["if"] = "@function.inner",
+      --           ["ac"] = "@class.outer",
+      --           -- You can optionally set descriptions to the mappings (used in the desc parameter of
+      --           -- nvim_buf_set_keymap) which plugins like which-key display
+      --           ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+      --           -- You can also use captures from other query groups like `locals.scm`
+      --           ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
+      --         },
+      --         -- You can choose the select mode (default is charwise 'v')
+      --         --
+      --         -- Can also be a function which gets passed a table with the keys
+      --         -- * query_string: eg '@function.inner'
+      --         -- * method: eg 'v' or 'o'
+      --         -- and should return the mode ('v', 'V', or '<c-v>') or a table
+      --         -- mapping query_strings to modes.
+      --         selection_modes = {
+      --           ["@parameter.outer"] = "v", -- charwise
+      --           ["@function.outer"] = "V",  -- linewise
+      --           ["@class.outer"] = "<c-v>", -- blockwise
+      --         },
+      --         -- If you set this to `true` (default is `false`) then any textobject is
+      --         -- extended to include preceding or succeeding whitespace. Succeeding
+      --         -- whitespace has priority in order to act similarly to eg the built-in
+      --         -- `ap`.
+      --         --
+      --         -- Can also be a function which gets passed a table with the keys
+      --         -- * query_string: eg '@function.inner'
+      --         -- * selection_mode: eg 'v'
+      --         -- and should return true or false
+      --         include_surrounding_whitespace = true,
+      --       },
+      --       move = {
+      --         enable = true,
+      --         set_jumps = true, -- whether to set jumps in the jumplist
+      --         goto_next_start = {
+      --           ["]f"] = "@custom.function.declare",
+      --           -- ["]f"] = "@function.outer",
+      --           ["]]"] = { query = "@class.outer", desc = "Next class start" },
+      --           --
+      --           -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queires.
+      --           ["]o"] = "@loop.*",
+      --           -- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
+      --           --
+      --           -- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
+      --           -- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
+      --           ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
+      --           ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
+      --         },
+      --         goto_next_end = {
+      --           ["]F"] = "@function.outer",
+      --           ["]["] = "@class.outer",
+      --         },
+      --         goto_previous_start = {
+      --           ["[f"] = "@custom.function.declare",
+      --           -- ["[f"] = "@function.outer",
+      --           ["[["] = "@class.outer",
+      --         },
+      --         goto_previous_end = {
+      --           ["[F"] = "@function.outer",
+      --           ["[]"] = "@class.outer",
+      --         },
+      --       },
+      --     },
+      --   })
     end,
   },
   -- ,
@@ -981,7 +1095,7 @@ return {
     config = function()
       local handler = function(virtText, lnum, endLnum, width, truncate)
         local newVirtText = {}
-        local suffix = (' 󰁂 %d '):format(endLnum - lnum)
+        local suffix = (" 󰁂 %d "):format(endLnum - lnum)
         local sufWidth = vim.fn.strdisplaywidth(suffix)
         local targetWidth = width - sufWidth
         local curWidth = 0
@@ -997,34 +1111,34 @@ return {
             chunkWidth = vim.fn.strdisplaywidth(chunkText)
             -- str width returned from truncate() may less than 2nd argument, need padding
             if curWidth + chunkWidth < targetWidth then
-              suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
+              suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
             end
             break
           end
           curWidth = curWidth + chunkWidth
         end
-        table.insert(newVirtText, { suffix, 'MoreMsg' })
+        table.insert(newVirtText, { suffix, "MoreMsg" })
         return newVirtText
       end
 
-      local ufo = require('ufo')
+      local ufo = require("ufo")
       ufo.setup({
-        fold_virt_text_handler = handler
+        fold_virt_text_handler = handler,
       })
       vim.api.nvim_set_hl(0, "UfoFoldedBg", { bg = nil, fg = nil })
       vim.api.nvim_set_hl(0, "UfoFoldedFg", { link = "Comment" })
-      vim.keymap.set('n', 'zR', ufo.openAllFolds)
-      vim.keymap.set('n', 'zM', ufo.closeAllFolds)
-    end
+      vim.keymap.set("n", "zR", ufo.openAllFolds)
+      vim.keymap.set("n", "zM", ufo.closeAllFolds)
+    end,
   },
   {
-    'dgagn/diagflow.nvim',
+    "dgagn/diagflow.nvim",
     cond = false,
-    event = 'LspAttach',
+    event = "LspAttach",
     opts = {
       enable = true,
-      max_width = 60,     -- The maximum width of the diagnostic messages
-      max_height = 10,    -- the maximum height per diagnostics
+      max_width = 60, -- The maximum width of the diagnostic messages
+      max_height = 10, -- the maximum height per diagnostics
       severity_colors = { -- The highlight groups to use for each diagnostic severity level
         error = "DiagnosticFloatingError",
         warning = "DiagnosticFloatingWarn",
@@ -1035,41 +1149,41 @@ return {
         return diagnostic.message
       end,
       gap_size = 1,
-      scope = 'line', -- 'cursor', 'line' this changes the scope, so instead of showing errors under the cursor, it shows errors on the entire line.
+      scope = "line", -- 'cursor', 'line' this changes the scope, so instead of showing errors under the cursor, it shows errors on the entire line.
       padding_top = 0,
       padding_right = 0,
-      text_align = 'right',                                  -- 'left', 'right'
-      placement = 'top',                                     -- 'top', 'inline'
-      inline_padding_left = 0,                               -- the padding left when the placement is inline
-      update_event = { 'DiagnosticChanged', 'BufReadPost' }, -- the event that updates the diagnostics cache
-      toggle_event = {},                                     -- if InsertEnter, can toggle the diagnostics on inserts
-      show_sign = true,                                      -- set to true if you want to render the diagnostic sign before the diagnostic message
-      render_event = { 'DiagnosticChanged', 'CursorMoved' },
+      text_align = "right", -- 'left', 'right'
+      placement = "top", -- 'top', 'inline'
+      inline_padding_left = 0, -- the padding left when the placement is inline
+      update_event = { "DiagnosticChanged", "BufReadPost" }, -- the event that updates the diagnostics cache
+      toggle_event = {}, -- if InsertEnter, can toggle the diagnostics on inserts
+      show_sign = true, -- set to true if you want to render the diagnostic sign before the diagnostic message
+      render_event = { "DiagnosticChanged", "CursorMoved" },
       border_chars = {
         top_left = "┌",
         top_right = "┐",
         bottom_left = "└",
         bottom_right = "┘",
         horizontal = "─",
-        vertical = "│"
+        vertical = "│",
       },
       show_borders = true,
-    }
+    },
   },
   {
-    "tpope/vim-dadbod"
+    "tpope/vim-dadbod",
   },
   {
-    'kristijanhusak/vim-dadbod-ui',
+    "kristijanhusak/vim-dadbod-ui",
     dependencies = {
-      { 'tpope/vim-dadbod',                     lazy = true },
-      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+      { "tpope/vim-dadbod", lazy = true },
+      { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true }, -- Optional
     },
     cmd = {
-      'DBUI',
-      'DBUIToggle',
-      'DBUIAddConnection',
-      'DBUIFindBuffer',
+      "DBUI",
+      "DBUIToggle",
+      "DBUIAddConnection",
+      "DBUIFindBuffer",
     },
     init = function()
       -- Your DBUI configuration
@@ -1116,7 +1230,7 @@ return {
           }),
         },
       })
-    end
+    end,
   },
   -- Lua
   {
@@ -1129,7 +1243,7 @@ return {
         -- * a percentage of the width / height of the editor when <= 1
         -- * a function that returns the width or the height
         width = 160, -- width of the Zen window
-        height = 1,  -- height of the Zen window
+        height = 1, -- height of the Zen window
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
         options = {
@@ -1142,10 +1256,10 @@ return {
           -- list = false, -- disable whitespace characters
         },
       },
-    }
+    },
   },
   {
     "norcalli/nvim-colorizer.lua",
-    opts = {}
-  }
+    opts = {},
+  },
 }
