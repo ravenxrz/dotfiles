@@ -29,7 +29,7 @@ M.current_search_mode = "Project"
 
 -- Function to set the search mode
 function M.set_search_mode()
-  local modes = { "Default(Use Global and Git)", "Project", "All", "Edit .ripignore" }
+  local modes = { "Default(使用全局+Git的忽略规则)", "Project(项目目录下的ripignore)", "All(不忽略)", "Edit .ripignore" }
   vim.ui.select(modes, { prompt = "Select search mode:" }, function(choice)
     if not choice then return end
 
@@ -60,7 +60,6 @@ function M.search(search_type)
         if ripignore then
           local find_cmd = { 'rg', '--files', '--hidden', '--no-ignore-parent', '--no-ignore-vcs', '--no-config', string
               .format('--ignore-file=%s', ripignore) }
-          P(find_cmd)
           telescope_builtin.find_files({ find_command = { 'rg', '--files', '--hidden', '--no-ignore-parent', '--no-ignore-vcs', '--no-config', string.format('--ignore-file=%s', ripignore) } })
         end
       end,
@@ -89,7 +88,7 @@ function M.search(search_type)
         end
       end,
       All = function()
-        local opts = { prefix = '--no-ignore --no-config ' }
+        local opts = { prefix = '--no-ignore --no-config --no-ignore-vsc ' }
         if vim.fn.mode() == 'n' then
           lga_shortcuts.grep_word_under_cursor(opts)
         else
@@ -119,7 +118,7 @@ function M.search(search_type)
           })
         end
       end,
-      All = function() live_grep_args({ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--no-ignore', '--no-config' } }) end,
+      All = function() live_grep_args({ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--no-ignore', '--no-config', '--no-ignore-vsc' } }) end,
     },
   }
 
