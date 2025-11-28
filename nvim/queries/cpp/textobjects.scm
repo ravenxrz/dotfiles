@@ -1,77 +1,44 @@
-; extends 
+; extends
 
-; 函数声明
+; A robust, hybrid query for C++ function names.
+; This version correctly identifies member functions inside classes
+; while still avoiding matches inside function bodies or return types.
+
 [
-  ;; 普通函数定义
-  (function_definition
-    type: (primitive_type)
-    declarator: (function_declarator
-      declarator: (identifier) @custom.function.declare
-      parameters: (parameter_list))
-    ) 
+  ; --- Primary Declarators ---
+  ; This single rule captures most cases by looking at what the declarator IS.
+  ; It handles:
+  ; - Member functions: void simple_method(); -> (field_identifier)
+  ; - Global functions: int global_func(); -> (identifier)
+  ; - Constructors: MyClass(); -> (type_identifier)
+  ; - Destructors: ~MyClass(); -> (destructor_name)
+  ; - Operators: operator==(); -> (operator_name)
+  (function_declarator
+    declarator: [
+      (field_identifier)
+      (identifier)
+      (type_identifier)
+      (destructor_name)
+      (operator_name)
+    ] @custom.function.declare)
 
-  ;; 带命名空间的普通函数定义
-  (function_definition
-    declarator: (function_declarator
-      declarator: (qualified_identifier
-        scope: (namespace_identifier)
-        name: (identifier) @custom.function.declare))
-    ) 
+  ; --- Qualified Declarators (Out-of-line definitions) ---
+  ; This handles `void MyClass::func()`. We only want `func`.
+  (function_declarator
+    declarator: (qualified_identifier
+      name: [
+        (identifier)
+        (type_identifier) ; For MyClass::MyClass()
+        (destructor_name)
+        (operator_name)
+      ] @custom.function.declare))
 
-  ;; 多层嵌套命名空间函数定义
-  (function_definition
-    type: (primitive_type)
-    declarator: (function_declarator
-      declarator: (qualified_identifier
-        scope: (namespace_identifier)
-        name: (qualified_identifier
-          scope: (namespace_identifier)
-          name: (identifier) @custom.function.declare)))
-    ) 
-
-  ;; 析构函数定义
-  (function_definition
-        declarator: (function_declarator
-            declarator: (qualified_identifier
-                name: (destructor_name) @custom.function.declare
-            )
-        )
-    ) 
-
-  ;; 普通成员函数定义(out define)
-  (function_definition
-    type: (primitive_type)
-    declarator: (function_declarator
-      declarator: (field_identifier) @custom.function.declare
-      )) 
-
-  ;; 类定义中的函数定义(inner define)
-(class_specifier
-    body: (field_declaration_list
-        (function_definition
-            declarator: (function_declarator
-                declarator: (identifier) @custom.function.declare
-            )
-        )
-    )
-) 
-
-; 函数声明
-(declaration 
-  declarator: (function_declarator 
-    declarator: (identifier) @custom.function.declare
-    ))
-
-; 析构函数声明
-(declaration
-  declarator: (function_declarator 
-    declarator: (destructor_name) @custom.function.declare
-    ))
-
-; 函数声明
-(field_declaration 
-type: (primitive_type) 
-declarator: (function_declarator 
-  declarator: (field_identifier) @custom.function.declare 
-  ))
+  ; --- Trailing Return Type Declarators ---
+  ; This handles `auto func() -> int`.
+  ; (trailing_return_type_declarator
+  ;   declarator: [
+  ;     (field_identifier) ; For members
+  ;     (identifier)       ; For non-members
+  ;     (operator_name)
+  ;   ] @custom.function.declare)
 ]
