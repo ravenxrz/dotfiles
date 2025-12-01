@@ -5,11 +5,13 @@ return {
     config = function()
       require("crates").setup()
     end,
+    enabled = false,
   },
   {
     "mrcjkb/rustaceanvim",
     version = "^6", -- Recommended
     lazy = false, -- This plugin is already lazy
+    enabled = false,
   },
   -- {
   --   "nwiizo/cargo.nvim",
@@ -934,7 +936,6 @@ return {
         require("nvim-treesitter-textobjects.move").goto_previous_start("@custom.function.declare", "textobjects")
       end)
 
-
       --
       vim.keymap.set({ "n", "x", "o" }, "]m", function()
         require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
@@ -1261,5 +1262,144 @@ return {
   {
     "norcalli/nvim-colorizer.lua",
     opts = {},
+  },
+  {
+    {
+      "akinsho/bufferline.nvim",
+      version = "*",
+      lazy = false,
+      dependencies = { "nvim-tree/nvim-web-devicons" }, -- 可选图标
+      config = function()
+        local bufferline = require("bufferline")
+        local file_access_count = {}
+        local count_save_path = vim.fn.stdpath("data") .. "/file_access_count.json"
+
+        -- 加载持久化计数
+        local load_count = function()
+          if vim.fn.filereadable(count_save_path) == 1 then
+            local json_str = vim.fn.readfile(count_save_path)[1]
+            local ok, data = pcall(vim.json.decode, json_str)
+            if ok then
+              file_access_count = data
+            end
+          end
+        end
+
+        -- 保存计数
+        local save_count = function()
+          local json_str = vim.json.encode(file_access_count)
+          vim.fn.writefile({ json_str }, count_save_path)
+        end
+
+        load_count()
+        vim.api.nvim_create_autocmd("VimLeave", {
+          once = true,
+          callback = save_count,
+        })
+
+        -- 监听BufEnter更新计数
+        vim.api.nvim_create_autocmd("BufEnter", {
+          pattern = "*",
+          callback = function(args)
+            local buf_num = args.buf
+            local file_path = vim.api.nvim_buf_get_name(buf_num)
+            if file_path ~= "" and vim.fn.isdirectory(file_path) == 0 then
+              local abs_path = vim.fn.fnamemodify(file_path, ":p")
+              file_access_count[abs_path] = (file_access_count[abs_path] or 1) + 1
+            end
+          end,
+        })
+
+        local get_access_count = function(file_path)
+          if not file_path or file_path == "" or vim.fn.isdirectory(file_path) == 1 then
+            return 0
+          end
+          local abs_path = vim.fn.fnamemodify(file_path, ":p")
+          return file_access_count[abs_path] or 0
+        end
+
+        bufferline.setup({
+          options = {
+            -- 修正排序逻辑：仅基于路径判断文件，放弃buf.id的buftype
+            sort_by = function(buf_a, buf_b)
+              -- 步骤1：判断是否为普通文件（非空路径 + 非目录）
+              local is_file_a = buf_a.path ~= "" and not vim.fn.isdirectory(buf_a.path)
+              local is_file_b = buf_b.path ~= "" and not vim.fn.isdirectory(buf_b.path)
+
+              -- 非文件Buffer排后面，文件Buffer排前面
+              if not is_file_a and is_file_b then
+                return false
+              end
+              if is_file_a and not is_file_b then
+                return true
+              end
+
+              -- 步骤2：按访问次数排序（次数多的在前）
+              local count_a = get_access_count(buf_a.path)
+              local count_b = get_access_count(buf_b.path)
+              if count_a ~= count_b then
+                return count_a > count_b
+              end
+
+              -- 步骤3：次数相同按最近使用时间排序
+              local last_used_a = buf_a.last_used or 0
+              local last_used_b = buf_b.last_used or 0
+              return last_used_a > last_used_b
+            end,
+
+            custom_filter = function(buf_num)
+              local ft = vim.bo.filetype
+              return not (ft == "terminal" or ft == "NvimTree" or ft == "neo-tree" or ft == "quickfix")
+            end,
+
+            -- 标签显示访问次数
+            name_formatter = function(buffer)
+              -- 1. 获取当前Buffer的基础信息
+              local buf_name = buffer.name -- 文件名（如init.lua）
+              local buf_path = buffer.path -- 文件绝对路径
+              local buf_id = buffer.id -- Bufferline内部ID
+              local get_buffer_index = function(buffer_id)
+                local all_buffers = require("bufferline.utils").get_valid_buffers()
+                for idx, buf in ipairs(all_buffers) do
+                  if buf == buffer_id then
+                    return idx
+                  end
+                end
+                return 0
+              end
+
+              -- 2. 获取访问次数和索引
+              local access_count = get_access_count(buf_path)
+              local buf_index = get_buffer_index(buf_id)
+
+              -- 3. 拼接显示内容（标记+计数+文件名）
+              local display_parts = {}
+              -- 访问次数≥1加[次数]
+              if access_count >= 1 then
+                table.insert(display_parts, string.format("[%d]", access_count))
+              end
+              -- 文件名（核心）
+              table.insert(display_parts, buf_name)
+
+              -- 4. 拼接所有部分，返回最终显示文本
+              return table.concat(display_parts, " ")
+            end,
+          },
+
+          highlights = {
+            buffer_selected = { bold = true, italic = false },
+            indicator_selected = { fg = "#61afef", bold = true },
+            modified_selected = { fg = "#98c379", bold = true },
+          },
+        })
+
+        -- 重置计数命令
+        vim.api.nvim_create_user_command("ResetFileAccessCount", function()
+          file_access_count = {}
+          save_count()
+          vim.notify("reset file access counter", vim.log.levels.INFO)
+        end, { desc = "reset file access counter" })
+      end,
+    },
   },
 }

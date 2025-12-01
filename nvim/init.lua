@@ -35,9 +35,10 @@ require("lazy").setup("plugins", {
 })
 
 -- color scheme
--- vim.cmd([[
---   set background=light
--- ]])
+vim.cmd([[
+  set background=light
+]])
 vim.cmd.colorscheme("modus_operandi")
+vim.cmd.colorscheme("modus_operandi") -- I don't know why I have to call this twice to let bufferline works as expect
 -- vim.cmd.colorscheme("gruvbox-baby")
 -- vim.cmd.colorscheme "eldritch"

@@ -56,11 +56,11 @@ keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
 keymap("n", "<leader>o", "<cmd>NvimTreeFindFile!<cr>", opts)
 
 -- Buffer
--- keymap("n", "E", "<cmd>BufferPrevious<cr>", opts)
--- keymap("n", "R", "<cmd>BufferNext<cr>", opts)
+keymap("n", "E", "<cmd>BufferLineCyclePrev<cr>", opts)
+keymap("n", "R", "<cmd>BufferLineCycleNext<cr>", opts)
 
--- keymap("n", "<leader>bp", "<cmd>BufferPin<cr>", opts)
--- keymap("n", "<leader>bb", "<cmd>BufferPick<cr>", opts)
+keymap("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", opts)
+keymap("n", "<leader>bb", "<cmd>BufferLinePick<cr>", opts)
 -- buffer delete
 keymap("n", "<leader>bd", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
 -- keymap("n", "<leader>bd", "<cmd>BufferClose<cr>", opts)
@@ -238,7 +238,7 @@ keymap(
 keymap("v", "<leader><enter>", "<Plug>SnipRun", opts)
 
 -- highlight current line
-keymap("n", "<leader>bb", function()
+keymap("n", "<leader>bm", function()
   require("bookmarks").toggle_bookmark()
 end, opts)
 keymap("n", "<leader>bc", function()
