@@ -265,7 +265,7 @@ keymap("n", "[b", function()
 end, opts)
 
 -- cppp header/source switch
-keymap("n", "<leader>j", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
+keymap("n", "<leader>j", "<cmd>LspClangdSwitchSourceHeader<cr>", opts)
 
 -- codeverse
 vim.cmd([[
