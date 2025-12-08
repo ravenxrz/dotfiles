@@ -10,7 +10,7 @@ return {
   {
     "mrcjkb/rustaceanvim",
     version = "^6", -- Recommended
-    lazy = false, -- This plugin is already lazy
+    lazy = false,   -- This plugin is already lazy
     enabled = false,
   },
   -- {
@@ -76,11 +76,11 @@ return {
       },
     },
     dependencies = {
-      "echasnovski/mini.nvim", -- Optional: Needed for line highlighting (full mini.nvim plugin)
+      "echasnovski/mini.nvim",         -- Optional: Needed for line highlighting (full mini.nvim plugin)
       "nvim-telescope/telescope.nvim", -- Optional: If you want to use the `:Debugprint search` command with telescope.nvim
     },
-    lazy = false, -- Required to make line highlighting work before debugprint is first used
-    version = "*", -- Remove if you DON'T want to use the stable version
+    lazy = false,                      -- Required to make line highlighting work before debugprint is first used
+    version = "*",                     -- Remove if you DON'T want to use the stable version
   },
   {
     "tamton-aquib/keys.nvim",
@@ -95,10 +95,10 @@ return {
   },
   {
     "amitds1997/remote-nvim.nvim",
-    version = "*", -- Pin to GitHub releases
+    version = "*",                     -- Pin to GitHub releases
     dependencies = {
-      "nvim-lua/plenary.nvim", -- For standard functions
-      "MunifTanjim/nui.nvim", -- To build the plugin UI
+      "nvim-lua/plenary.nvim",         -- For standard functions
+      "MunifTanjim/nui.nvim",          -- To build the plugin UI
       "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
     },
     enabled = false,
@@ -238,8 +238,8 @@ return {
           untracked = { text = "┆" },
         },
         signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-        numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-        linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+        numhl = false,     -- Toggle with `:Gitsigns toggle_numhl`
+        linehl = false,    -- Toggle with `:Gitsigns toggle_linehl`
         word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
         watch_gitdir = {
           follow_files = true,
@@ -257,7 +257,7 @@ return {
         current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
         sign_priority = 6,
         update_debounce = 100,
-        status_formatter = nil, -- Use default
+        status_formatter = nil,  -- Use default
         max_file_length = 40000, -- Disable if file is longer than this (in lines)
         preview_config = {
           -- Options passed to nvim_open_win
@@ -386,7 +386,7 @@ return {
     version = "*",
     config = function()
       require("toggleterm").setup({
-        size = 40,
+        size = 30,
         open_mapping = [[<c-\>]],
         hide_numbers = false,
         shade_filetypes = {},
@@ -498,7 +498,7 @@ return {
   {
     "romgrk/barbar.nvim",
     dependencies = {
-      "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
+      "lewis6991/gitsigns.nvim",     -- OPTIONAL: for git status
       "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
     },
     init = function()
@@ -685,15 +685,15 @@ return {
   },
   {
     "okuuva/auto-save.nvim",
-    cmd = "ASToggle", -- optional for lazy loading on command
+    cmd = "ASToggle",                         -- optional for lazy loading on command
     event = { "InsertLeave", "TextChanged" }, -- optional for lazy loading on trigger events
     config = function()
       require("auto-save").setup({
-        enabled = true, -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
-        trigger_events = { -- See :h events
+        enabled = true,                                                -- start auto-save when the plugin is loaded (i.e. when your package manager loads it)
+        trigger_events = {                                             -- See :h events
           immediate_save = { "BufLeave", "FocusLost", "InsertLeave" }, -- vim events that trigger an immediate save
-          defer_save = { "TextChanged" }, -- vim events that trigger a deferred save (saves after `debounce_delay`)
-          cancel_deferred_save = { "InsertEnter" }, -- vim events that cancel a pending deferred save
+          defer_save = { "TextChanged" },                              -- vim events that trigger a deferred save (saves after `debounce_delay`)
+          cancel_deferred_save = { "InsertEnter" },                    -- vim events that cancel a pending deferred save
         },
         -- function that takes the buffer handle and determines whether to save the current buffer or not
         -- return true: if buffer is ok to be saved
@@ -709,7 +709,6 @@ return {
           return false
         end,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
-        noautocmd = false, -- do not execute autocmds when saving
         debounce_delay = 500, -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
         debug = false,
@@ -733,16 +732,16 @@ return {
         -- session_filename_to_dir = session_filename_to_dir,     -- Function that replaces symbols into separators and colons to transform filename into a session directory.
         -- dir_to_session_filename = dir_to_session_filename,     -- Function that replaces separators and colons into special symbols to transform session directory into a filename. Should use `vim.loop.cwd()` if the passed `dir` is `nil`.
         autoload_mode = config.AutoloadMode.CurrentDir, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-        autosave_last_session = true, -- Automatically save last session on exit and on session switch.
-        autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-        autosave_ignore_dirs = {}, -- A list of directories where the session will not be autosaved.
-        autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
+        autosave_last_session = true,                   -- Automatically save last session on exit and on session switch.
+        autosave_ignore_not_normal = true,              -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+        autosave_ignore_dirs = {},                      -- A list of directories where the session will not be autosaved.
+        autosave_ignore_filetypes = {                   -- All buffers of these file types will be closed before the session is saved.
           "gitcommit",
           "gitrebase",
         },
-        autosave_ignore_buftypes = {}, -- All buffers of these bufer types will be closed before the session is saved.
+        autosave_ignore_buftypes = {},    -- All buffers of these bufer types will be closed before the session is saved.
         autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-        max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+        max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
     end,
   },
@@ -888,7 +887,7 @@ return {
           -- mapping query_strings to modes.
           selection_modes = {
             ["@parameter.outer"] = "v", -- charwise
-            ["@function.outer"] = "V", -- linewise
+            ["@function.outer"] = "V",  -- linewise
             ["@class.outer"] = "<c-v>", -- blockwise
           },
           -- If you set this to `true` (default is `false`) then any textobject is
@@ -974,15 +973,6 @@ return {
       end)
       vim.keymap.set({ "n", "x", "o" }, "[]", function()
         require("nvim-treesitter-textobjects.move").goto_previous_end("@class.outer", "textobjects")
-      end)
-
-      -- Go to either the start or the end, whichever is closer.
-      -- Use if you want more granular movements
-      vim.keymap.set({ "n", "x", "o" }, "]d", function()
-        require("nvim-treesitter-textobjects.move").goto_next("@conditional.outer", "textobjects")
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "[d", function()
-        require("nvim-treesitter-textobjects.move").goto_previous("@conditional.outer", "textobjects")
       end)
 
       --   require("nvim-treesitter.configs").setup({
@@ -1138,8 +1128,8 @@ return {
     event = "LspAttach",
     opts = {
       enable = true,
-      max_width = 60, -- The maximum width of the diagnostic messages
-      max_height = 10, -- the maximum height per diagnostics
+      max_width = 60,     -- The maximum width of the diagnostic messages
+      max_height = 10,    -- the maximum height per diagnostics
       severity_colors = { -- The highlight groups to use for each diagnostic severity level
         error = "DiagnosticFloatingError",
         warning = "DiagnosticFloatingWarn",
@@ -1153,12 +1143,12 @@ return {
       scope = "line", -- 'cursor', 'line' this changes the scope, so instead of showing errors under the cursor, it shows errors on the entire line.
       padding_top = 0,
       padding_right = 0,
-      text_align = "right", -- 'left', 'right'
-      placement = "top", -- 'top', 'inline'
-      inline_padding_left = 0, -- the padding left when the placement is inline
+      text_align = "right",                                  -- 'left', 'right'
+      placement = "top",                                     -- 'top', 'inline'
+      inline_padding_left = 0,                               -- the padding left when the placement is inline
       update_event = { "DiagnosticChanged", "BufReadPost" }, -- the event that updates the diagnostics cache
-      toggle_event = {}, -- if InsertEnter, can toggle the diagnostics on inserts
-      show_sign = true, -- set to true if you want to render the diagnostic sign before the diagnostic message
+      toggle_event = {},                                     -- if InsertEnter, can toggle the diagnostics on inserts
+      show_sign = true,                                      -- set to true if you want to render the diagnostic sign before the diagnostic message
       render_event = { "DiagnosticChanged", "CursorMoved" },
       border_chars = {
         top_left = "┌",
@@ -1177,7 +1167,7 @@ return {
   {
     "kristijanhusak/vim-dadbod-ui",
     dependencies = {
-      { "tpope/vim-dadbod", lazy = true },
+      { "tpope/vim-dadbod",                     lazy = true },
       { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true }, -- Optional
     },
     cmd = {
@@ -1244,7 +1234,7 @@ return {
         -- * a percentage of the width / height of the editor when <= 1
         -- * a function that returns the width or the height
         width = 160, -- width of the Zen window
-        height = 1, -- height of the Zen window
+        height = 1,  -- height of the Zen window
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
         options = {
@@ -1269,137 +1259,47 @@ return {
       version = "*",
       lazy = false,
       dependencies = { "nvim-tree/nvim-web-devicons" }, -- 可选图标
-      config = function()
-        local bufferline = require("bufferline")
-        local file_access_count = {}
-        local count_save_path = vim.fn.stdpath("data") .. "/file_access_count.json"
-
-        -- 加载持久化计数
-        local load_count = function()
-          if vim.fn.filereadable(count_save_path) == 1 then
-            local json_str = vim.fn.readfile(count_save_path)[1]
-            local ok, data = pcall(vim.json.decode, json_str)
-            if ok then
-              file_access_count = data
-            end
-          end
-        end
-
-        -- 保存计数
-        local save_count = function()
-          local json_str = vim.json.encode(file_access_count)
-          vim.fn.writefile({ json_str }, count_save_path)
-        end
-
-        load_count()
-        vim.api.nvim_create_autocmd("VimLeave", {
-          once = true,
-          callback = save_count,
-        })
-
-        -- 监听BufEnter更新计数
-        vim.api.nvim_create_autocmd("BufEnter", {
-          pattern = "*",
-          callback = function(args)
-            local buf_num = args.buf
-            local file_path = vim.api.nvim_buf_get_name(buf_num)
-            if file_path ~= "" and vim.fn.isdirectory(file_path) == 0 then
-              local abs_path = vim.fn.fnamemodify(file_path, ":p")
-              file_access_count[abs_path] = (file_access_count[abs_path] or 1) + 1
-            end
-          end,
-        })
-
-        local get_access_count = function(file_path)
-          if not file_path or file_path == "" or vim.fn.isdirectory(file_path) == 1 then
-            return 0
-          end
-          local abs_path = vim.fn.fnamemodify(file_path, ":p")
-          return file_access_count[abs_path] or 0
-        end
-
-        bufferline.setup({
-          options = {
-            -- 修正排序逻辑：仅基于路径判断文件，放弃buf.id的buftype
-            sort_by = function(buf_a, buf_b)
-              -- 步骤1：判断是否为普通文件（非空路径 + 非目录）
-              local is_file_a = buf_a.path ~= "" and not vim.fn.isdirectory(buf_a.path)
-              local is_file_b = buf_b.path ~= "" and not vim.fn.isdirectory(buf_b.path)
-
-              -- 非文件Buffer排后面，文件Buffer排前面
-              if not is_file_a and is_file_b then
-                return false
-              end
-              if is_file_a and not is_file_b then
-                return true
-              end
-
-              -- 步骤2：按访问次数排序（次数多的在前）
-              local count_a = get_access_count(buf_a.path)
-              local count_b = get_access_count(buf_b.path)
-              if count_a ~= count_b then
-                return count_a > count_b
-              end
-
-              -- 步骤3：次数相同按最近使用时间排序
-              local last_used_a = buf_a.last_used or 0
-              local last_used_b = buf_b.last_used or 0
-              return last_used_a > last_used_b
-            end,
-
-            custom_filter = function(buf_num)
-              local ft = vim.bo.filetype
-              return not (ft == "terminal" or ft == "NvimTree" or ft == "neo-tree" or ft == "quickfix")
-            end,
-
-            -- 标签显示访问次数
-            name_formatter = function(buffer)
-              -- 1. 获取当前Buffer的基础信息
-              local buf_name = buffer.name -- 文件名（如init.lua）
-              local buf_path = buffer.path -- 文件绝对路径
-              local buf_id = buffer.id -- Bufferline内部ID
-              local get_buffer_index = function(buffer_id)
-                local all_buffers = require("bufferline.utils").get_valid_buffers()
-                for idx, buf in ipairs(all_buffers) do
-                  if buf == buffer_id then
-                    return idx
-                  end
-                end
-                return 0
-              end
-
-              -- 2. 获取访问次数和索引
-              local access_count = get_access_count(buf_path)
-              local buf_index = get_buffer_index(buf_id)
-
-              -- 3. 拼接显示内容（标记+计数+文件名）
-              local display_parts = {}
-              -- 访问次数≥1加[次数]
-              if access_count >= 1 then
-                table.insert(display_parts, string.format("[%d]", access_count))
-              end
-              -- 文件名（核心）
-              table.insert(display_parts, buf_name)
-
-              -- 4. 拼接所有部分，返回最终显示文本
-              return table.concat(display_parts, " ")
-            end,
-          },
-
-          highlights = {
-            buffer_selected = { bold = true, italic = false },
-            indicator_selected = { fg = "#61afef", bold = true },
-            modified_selected = { fg = "#98c379", bold = true },
-          },
-        })
-
-        -- 重置计数命令
-        vim.api.nvim_create_user_command("ResetFileAccessCount", function()
-          file_access_count = {}
-          save_count()
-          vim.notify("reset file access counter", vim.log.levels.INFO)
-        end, { desc = "reset file access counter" })
-      end,
+      opts = {}
     },
+  },
+  {
+    "nvim-telescope/telescope-frecency.nvim",
+    -- install the latest stable version
+    version = "*",
+    config = function()
+      require("telescope").load_extension "frecency"
+    end,
+  },
+  {
+    "coffebar/transfer.nvim",
+    lazy = true,
+    event = "BufWritePost",
+    cmd = { "TransferInit", "DiffRemote", "TransferUpload", "TransferDownload", "TransferDirDiff", "TransferRepeat" },
+    config = function()
+      require("transfer").setup({})
+
+      -- 1. 创建事件组：避免重复注册（多次加载插件时不会重复执行）
+      local transfer_augroup = vim.api.nvim_create_augroup("TransferAutoUpload", { clear = true })
+
+      vim.api.nvim_create_autocmd("BufWritePost", {
+        group = transfer_augroup,
+        pattern = "*", -- 对所有文件生效（可改为 { "*.lua", "*.py" } 限制文件类型）
+        callback = function()
+          local deployment_file = vim.fn.expand(vim.fn.getcwd() .. "/.nvim/deployment")
+          if vim.fn.filereadable(deployment_file) == 0 then
+            return
+          end
+          local file_path = vim.fn.expand("%:p")
+          if file_path == "" then
+            return
+          end
+          local success, err = pcall(vim.cmd, string.format("TransferUpload %s", vim.fn.fnameescape(file_path)))
+          if not success then
+            print(string.format("[Transfer] 上传失败：%s", err))
+          end
+        end,
+        desc = "保存文件后自动调用 TransferUpload 上传",
+      })
+    end,
   },
 }

@@ -61,9 +61,9 @@ function M.search(search_type)
       Project = function()
         local ripignore = setup_project_ripignore()
         if ripignore then
-          local find_cmd = { 'rg', '--files', '--hidden', '--no-ignore-parent', '--no-ignore-vcs', '--no-config', string
+          local find_cmd = { 'rg', '--files', '--hidden', '--no-ignore-parent', '--no-config', string
               .format('--ignore-file=%s', ripignore) }
-          telescope_builtin.find_files({ find_command = { 'rg', '--files', '--hidden', '--no-ignore-parent', '--no-ignore-vcs', '--no-config', string.format('--ignore-file=%s', ripignore) } })
+          telescope_builtin.find_files({ find_command = { 'rg', '--files', '--hidden', '--no-ignore-parent',  '--no-config', string.format('--ignore-file=%s', ripignore) } })
         end
       end,
       All = function() telescope_builtin.find_files({ find_command = { 'rg', '--files', '--hidden', '--no-ignore', '--no-config' } }) end,
@@ -80,7 +80,7 @@ function M.search(search_type)
         local ripignore = setup_project_ripignore()
         if ripignore then
           local opts = {
-            prefix = string.format('--no-ignore --no-config --no-ignore-vcs --ignore-file %s ',
+            prefix = string.format('--no-ignore --no-config --ignore-file %s ',
               vim.fn.shellescape(ripignore))
           }
           if vim.fn.mode() == 'n' then
@@ -91,7 +91,7 @@ function M.search(search_type)
         end
       end,
       All = function()
-        local opts = { prefix = '--no-ignore --no-config --no-ignore-vsc ' }
+        local opts = { prefix = '--no-ignore --no-config ' }
         if vim.fn.mode() == 'n' then
           lga_shortcuts.grep_word_under_cursor(opts)
         else
@@ -115,13 +115,12 @@ function M.search(search_type)
               '--smart-case',
               '--no-ignore',
               '--no-config',
-              '--no-ignore-vcs',
               string.format('--ignore-file=%s', ripignore),
             },
           })
         end
       end,
-      All = function() live_grep_args({ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--no-ignore', '--no-config', '--no-ignore-vsc' } }) end,
+      All = function() live_grep_args({ vimgrep_arguments = { 'rg', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case', '--no-ignore', '--no-config' } }) end,
     },
   }
 

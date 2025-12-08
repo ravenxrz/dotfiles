@@ -80,7 +80,8 @@ keymap("n", "<leader>gh", "<cmd>DiffviewOpen HEAD<cr>", opts)
 keymap("n", "<leader>go", "<cmd>DiffviewClose<cr>", opts)
 
 -- Telescope
-keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
+keymap("n", "<leader>r", "<cmd>Telescope frecency theme=ivy<cr>", opts)
+-- keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
