@@ -708,6 +708,7 @@ return {
           end
           return false
         end,
+        noautocmd = true,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
         debounce_delay = 500,      -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
@@ -1272,25 +1273,25 @@ return {
   },
   {
     "coffebar/transfer.nvim",
-    lazy = true,
+    lazy = false,
     event = "BufWritePost",
     cmd = { "TransferInit", "DiffRemote", "TransferUpload", "TransferDownload", "TransferDirDiff", "TransferRepeat" },
     config = function()
       require("transfer").setup({})
-
-      -- 1. 创建事件组：避免重复注册（多次加载插件时不会重复执行）
-      local transfer_augroup = vim.api.nvim_create_augroup("TransferAutoUpload", { clear = true })
-
-      vim.api.nvim_create_autocmd("BufWritePost", {
-        group = transfer_augroup,
-        pattern = "*", -- 对所有文件生效（可改为 { "*.lua", "*.py" } 限制文件类型）
-        callback = function()
-          local deployment_file = vim.fn.expand(vim.fn.getcwd() .. "/.nvim/deployment.lua")
-          if vim.fn.filereadable(deployment_file) == 0 then
+      local group = vim.api.nvim_create_augroup('autosave', {})
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'AutoSaveWritePost',
+        group = group,
+        callback = function(opts)
+          if opts.data.saved_buffer == nil then
             return
           end
-          local file_path = vim.fn.expand("%:p")
+          local file_path = vim.api.nvim_buf_get_name(opts.data.saved_buffer)
           if file_path == "" then
+            return
+          end
+          local deployment_file = vim.fn.expand(vim.fn.getcwd() .. "/.nvim/deployment.lua")
+          if vim.fn.filereadable(deployment_file) == 0 then
             return
           end
           local success, err = pcall(vim.cmd, string.format("TransferUpload %s", vim.fn.fnameescape(file_path)))
@@ -1298,7 +1299,6 @@ return {
             print(string.format("[Transfer] 上传失败：%s", err))
           end
         end,
-        desc = "保存文件后自动调用 TransferUpload 上传",
       })
     end,
   },
