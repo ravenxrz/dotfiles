@@ -709,7 +709,7 @@ return {
           return false
         end,
         write_all_buffers = false, -- write all buffers when the current one meets `condition`
-        debounce_delay = 500, -- delay after which a pending save is executed
+        debounce_delay = 500,      -- delay after which a pending save is executed
         -- log debug messages to 'auto-save.log' file in neovim cache directory, set to `true` to enable
         debug = false,
       })
@@ -1285,7 +1285,7 @@ return {
         group = transfer_augroup,
         pattern = "*", -- 对所有文件生效（可改为 { "*.lua", "*.py" } 限制文件类型）
         callback = function()
-          local deployment_file = vim.fn.expand(vim.fn.getcwd() .. "/.nvim/deployment")
+          local deployment_file = vim.fn.expand(vim.fn.getcwd() .. "/.nvim/deployment.lua")
           if vim.fn.filereadable(deployment_file) == 0 then
             return
           end
