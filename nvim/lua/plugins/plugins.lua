@@ -1272,7 +1272,7 @@ return {
     end,
   },
   {
-    "coffebar/transfer.nvim",
+    "ravenxrz/transfer.nvim",
     lazy = false,
     event = "BufWritePost",
     cmd = { "TransferInit", "DiffRemote", "TransferUpload", "TransferDownload", "TransferDirDiff", "TransferRepeat" },
