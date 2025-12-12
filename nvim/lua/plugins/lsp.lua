@@ -76,141 +76,136 @@ return {
     --   "hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
     -- },
     config = function()
-      require("mason-lspconfig").setup({
+      local mason_lspconfig = require("mason-lspconfig")
+
+      mason_lspconfig.setup({
         ensure_installed = {
           "jsonls",
           "clangd",
           "pyright",
           "lua_ls",
           "yamlls",
-          "rust_analyzer"
-        },
-        handlers = {
-          -- The first entry (without a key) will be the default handler
-          -- and will be called for each installed server that doesn't have
-          -- a dedicated handler.
-          function(server_name) -- default handler (optional)
-            local capabilities = require("blink.cmp").get_lsp_capabilities()
-            -- for plugin nvim-ufo
-            capabilities.textDocument.foldingRange = {
-              dynamicRegistration = false,
-              lineFoldingOnly = true
-            }
-            local opts = {
-              clangd = {
-                cmd = {
-                  "clangd",
-                  "--background-index", -- 后台建立索引，并持久化到disk
-                  "--clang-tidy",       -- 开启clang-tidy
-                  -- 指定clang-tidy的检查参数， 摘抄自cmu15445. 全部参数可参考 https://clang.llvm.org/extra/clang-tidy/checks
-                  "--clang-tidy-checks=bugprone-*, clang-analyzer-*, google-*, modernize-*, performance-*, portability-*, readability-*, -bugprone-too-small-loop-variable, -clang-analyzer-cplusplus.NewDelete, -clang-analyzer-cplusplus.NewDeleteLeaks, -modernize-use-nodiscard, -modernize-avoid-c-arrays, -readability-magic-numbers, -bugprone-branch-clone, -bugprone-signed-char-misuse, -bugprone-unhandled-self-assignment, -clang-diagnostic-implicit-int-float-conversion, -modernize-use-auto, -modernize-use-trailing-return-type, -readability-convert-member-functions-to-static, -readability-make-member-function-const, -readability-qualified-auto, -readability-redundant-access-specifiers,",
-                  "--completion-style=detailed",
-                  "--cross-file-rename=true",
-                  "--header-insertion=never",
-                  "--pch-storage=memory",
-                  -- 启用这项时，补全函数时，将会给参数提供占位符，键入后按 Tab 可以切换到下一占位符
-                  "--function-arg-placeholders=false",
-                  "--log=verbose",
-                  "--ranking-model=decision_forest",
-                  -- 输入建议中，已包含头文件的项与还未包含头文件的项会以圆点加以区分
-                  "--header-insertion-decorators",
-                  "-j=12",
-                  "--pretty",
-                  "--offset-encoding=utf-16",
-                },
-                InlayHints = {
-                  Designators = true,
-                  Enabled = true,
-                  ParameterNames = true,
-                  DeducedTypes = true,
-                },
-                fallbackFlags = { "-std=c++20" },
-              },
-              pyright = {
-                filetypes = { "python" },
-                settings = {
-                  python = {
-                    analysis = {
-                      autoImportCompletions = true,
-                      autoSearchPaths = true,
-                      diagnosticMode = "openFilesOnly",
-                      -- These diagnostics are useless, therefore disable them.
-                      diagnosticSeverityOverrides = {
-                        reportArgumentType = "none",
-                        reportAttributeAccessIssue = "none",
-                        reportCallIssue = "none",
-                        reportFunctionMemberAccess = "none",
-                        reportGeneralTypeIssues = "none",
-                        reportIncompatibleMethodOverride = "none",
-                        reportIncompatibleVariableOverride = "none",
-                        reportIndexIssue = "none",
-                        reportOptionalMemberAccess = "none",
-                        reportOptionalSubscript = "none",
-                        reportPrivateImportUsage = "none",
-                      },
-                      indexing = true,
-                      inlayHints = {
-                        functionReturnTypes = true,
-                        variableTypes = true,
-                      },
-                      typeCheckingMode = "standard",
-                      useLibraryCodeForTypes = true,
-                    },
-                  },
-                },
-                single_file_support = true,
-              },
-              lua_ls = {
-                settings = {
-                  Lua = {
-                    hint = {
-                      enable = true,
-                      arrayIndex = "Auto",
-                      await = true,
-                      paramName = "All",
-                      paramType = true,
-                      semicolon = "SameLine",
-                      setType = false,
-                    },
-                  },
-                },
-              },
-              yamlls = {
-                on_attach = function(client, bufnr)
-                  client.server_capabilities.documentFormattingProvider = true
-                end,
-                settings = {
-                  yaml = {
-                    format = {
-                      enable = true,
-                    },
-                    schemaStore = {
-                      enable = true,
-                    },
-                  },
-                },
-              },
-            }
-            local skipped_servers = {
-              "rust_analyzer" -- rustacean.nvim will setup for us
-            }
-            if opts[server_name] then
-              local server_opt = opts[server_name]
-              require("lspconfig")[server_name].setup(vim.tbl_deep_extend("force", {
-                capabilities = capabilities,
-                -- capabilities = require("cmp_nvim_lsp").default_capabilities(),
-              }, server_opt))
-            elseif vim.tbl_contains(skipped_servers, server_name) then
-              -- skip server setup
-            else
-              require("lspconfig")[server_name].setup({
-                capabilities = capabilities,
-                -- capabilities = require("cmp_nvim_lsp").default_capabilities(),
-              })
-            end
-          end,
+          "rust_analyzer",
         },
       })
+
+      local capabilities = require("blink.cmp").get_lsp_capabilities()
+      -- for plugin nvim-ufo
+      capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      }
+
+      local opts = {
+        clangd = {
+          cmd = {
+            "clangd",
+            "--background-index", -- 后台建立索引，并持久化到disk
+            "--clang-tidy",       -- 开启clang-tidy
+            -- 指定clang-tidy的检查参数， 摘抄自cmu15445. 全部参数可参考 https://clang.llvm.org/extra/clang-tidy/checks
+            "--clang-tidy-checks=bugprone-*, clang-analyzer-*, google-*, modernize-*, performance-*, portability-*, readability-*, -bugprone-too-small-loop-variable, -clang-analyzer-cplusplus.NewDelete, -clang-analyzer-cplusplus.NewDeleteLeaks, -modernize-use-nodiscard, -modernize-avoid-c-arrays, -readability-magic-numbers, -bugprone-branch-clone, -bugprone-signed-char-misuse, -bugprone-unhandled-self-assignment, -clang-diagnostic-implicit-int-float-conversion, -modernize-use-auto, -modernize-use-trailing-return-type, -readability-convert-member-functions-to-static, -readability-make-member-function-const, -readability-qualified-auto, -readability-redundant-access-specifiers,",
+            "--completion-style=detailed",
+            "--cross-file-rename=true",
+            "--header-insertion=never",
+            "--pch-storage=memory",
+            -- 启用这项时，补全函数时，将会给参数提供占位符，键入后按 Tab 可以切换到下一占位符
+            "--function-arg-placeholders=false",
+            "--log=verbose",
+            "--ranking-model=decision_forest",
+            -- 输入建议中，已包含头文件的项与还未包含头文件的项会以圆点加以区分
+            "--header-insertion-decorators",
+            "-j=12",
+            "--pretty",
+            "--offset-encoding=utf-16",
+          },
+          InlayHints = {
+            Designators = true,
+            Enabled = true,
+            ParameterNames = true,
+            DeducedTypes = true,
+          },
+          fallbackFlags = { "-std=c++20" },
+        },
+        pyright = {
+          filetypes = { "python" },
+          settings = {
+            python = {
+              analysis = {
+                autoImportCompletions = true,
+                autoSearchPaths = true,
+                diagnosticMode = "openFilesOnly",
+                -- These diagnostics are useless, therefore disable them.
+                diagnosticSeverityOverrides = {
+                  reportArgumentType = "none",
+                  reportAttributeAccessIssue = "none",
+                  reportCallIssue = "none",
+                  reportFunctionMemberAccess = "none",
+                  reportGeneralTypeIssues = "none",
+                  reportIncompatibleMethodOverride = "none",
+                  reportIncompatibleVariableOverride = "none",
+                  reportIndexIssue = "none",
+                  reportOptionalMemberAccess = "none",
+                  reportOptionalSubscript = "none",
+                  reportPrivateImportUsage = "none",
+                },
+                indexing = true,
+                inlayHints = {
+                  functionReturnTypes = true,
+                  variableTypes = true,
+                },
+                typeCheckingMode = "standard",
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+          single_file_support = true,
+        },
+        lua_ls = {
+          settings = {
+            Lua = {
+              hint = {
+                enable = true,
+                arrayIndex = "Auto",
+                await = true,
+                paramName = "All",
+                paramType = true,
+                semicolon = "SameLine",
+                setType = false,
+              },
+            },
+          },
+        },
+        yamlls = {
+          on_attach = function(client, bufnr)
+            client.server_capabilities.documentFormattingProvider = true
+          end,
+          settings = {
+            yaml = {
+              format = {
+                enable = true,
+              },
+              schemaStore = {
+                enable = true,
+              },
+            },
+          },
+        },
+      }
+
+      local skipped = {
+        rust_analyzer = true, -- rustacean.nvim 会自己处理
+      }
+
+      for _, server_name in ipairs(mason_lspconfig.get_installed_servers()) do
+        if not skipped[server_name] then
+          local server_opt = vim.tbl_deep_extend("force", {
+            capabilities = capabilities,
+          }, opts[server_name] or {})
+
+          vim.lsp.config(server_name, server_opt)
+          vim.lsp.enable(server_name)
+        end
+      end
     end,
   },
   {
