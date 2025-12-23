@@ -1352,7 +1352,7 @@ return {
         vim.tbl_extend("force", opts, { desc = "Add current file" }))
 
       -- 2. 打开Harpoon的快速菜单（可视化选择标记文件）
-      keymap("n", "<leader>hm", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
+      keymap("n", "<leader>hf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
         vim.tbl_extend("force", opts, { desc = "Toggle menu" }))
 
       -- 3. 快速切换到第1-4个标记的文件（高频使用，可扩展到更多）
@@ -1366,9 +1366,9 @@ return {
         vim.tbl_extend("force", opts, { desc = "Select file 4" }))
 
       -- 4. 扩展功能：切换到上一个/下一个标记的文件（循环切换）
-      keymap("n", "<leader>hp", function() harpoon:list():prev() end,
+      keymap("n", "<leader>hj", function() harpoon:list():prev() end,
         vim.tbl_extend("force", opts, { desc = "Previous file" }))
-      keymap("n", "<leader>hn", function() harpoon:list():next() end,
+      keymap("n", "<leader>hk", function() harpoon:list():next() end,
         vim.tbl_extend("force", opts, { desc = "Next file" }))
     end,
   }
