@@ -142,7 +142,7 @@ platform() {
 alias lazygit="lazygit -ucd ~/.config/lazygit/"
 
 # ripgrep without ignore
-alias rgn="rg --no-ignore"
+alias rgn="rg --no-ignore --no-config"
 
 # alias ctree="calltree.pl"
 
@@ -249,6 +249,5 @@ zkinit() {
 # alias opencwd="explorer.exe ."
 # alias img="Honeyview.exe"
 # alias typora="Typora.exe"
-# alias vim="lvim"
 
-alias nv="nvim"
+alias nv="/data04/zhangxingrui/Projects/tmp/nvim-linux-x86_64/bin/nvim"

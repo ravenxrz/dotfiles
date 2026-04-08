@@ -10,6 +10,7 @@ if [[ $OSTYPE == 'darwin'* ]]; then
   path_prepend "$HOME/.dotfiles/bin/macos"
 else
   path_prepend "$HOME/.dotfiles/bin/linux/"
+  path_prepend "$HOME/.dotfiles/bin/linux/bin"
 fi
 
 path_prepend "$HOME/.dotfiles/remote_dev/"

@@ -217,8 +217,8 @@ return {
           vim.keymap.set("n", ".", api.tree.change_root_to_node, opts("CD"))
           vim.keymap.set("n", "w", api.node.open.edit, opts("Open"))
           vim.keymap.set("n", "o", api.node.open.no_window_picker, opts("Open"))
-          vim.keymap.set("n", "l", api.node.open.no_window_picker, opts("Open"))
-          vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("Parent Close"))
+          vim.keymap.set("n", "L", api.node.open.no_window_picker, opts("Open"))
+          vim.keymap.set("n", "H", api.node.navigate.parent_close, opts("Parent Close"))
           vim.keymap.set("n", "i", api.node.show_info_popup, opts("Info"))
           vim.keymap.del("n", "<C-e>", { buffer = bufnr })
         end,
