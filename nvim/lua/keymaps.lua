@@ -98,6 +98,7 @@ keymap("v", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep 
 keymap("n", "<leader>fg", function() ts.search('live_grep') end, { desc = "Live grep (using current mode)" })
 -- Command to set the mode
 vim.api.nvim_create_user_command('SetTelescopeSearchMode', ts.set_search_mode, {})
+vim.api.nvim_create_user_command('SetTelescopeSearchRoot', ts.set_search_root, {})
 keymap(
   "n",
   "<leader>s",
