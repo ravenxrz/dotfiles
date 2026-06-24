@@ -140,6 +140,91 @@ local function get_all_vimgrep_arguments(fixed_strings)
   return args
 end
 
+local cpp_function_globs = {
+  '--glob=*.c',
+  '--glob=*.cc',
+  '--glob=*.cpp',
+  '--glob=*.cxx',
+  '--glob=*.h',
+  '--glob=*.hh',
+  '--glob=*.hpp',
+  '--glob=*.hxx',
+}
+
+local function escape_pcre_literal(text)
+  return (text:gsub("([\\%^%$%(%)%%%.%[%]%*%+%-%?%|])", "\\%1"))
+end
+
+local function make_cpp_function_pattern(name)
+  name = vim.trim(name or "")
+  if name == "" then return nil end
+
+  local escaped_name = escape_pcre_literal(name)
+  local cpp_ident = "[A-Za-z_]\\w*"
+  local qualified_prefix = "(?:" .. cpp_ident .. "::)*"
+  local name_boundary = "(?!\\w)"
+  local qualifiers = "(?:(?:template[ \\t]*<[^;{}]*>[ \\t]*)|(?:(?:inline|static|virtual|explicit|constexpr|consteval|constinit|friend|extern)[ \\t]+))*"
+  local return_type = "(?!(?:if|for|while|switch|catch|return|co_return|sizeof|decltype)\\b)[\\w:~*&<>,\\[\\] \\t]+?[ \\t]+[*&]*[ \\t]*"
+  local signature_end = "(?:[^;{}]*\\)[ \\t]*(?:const[ \\t]*)?(?:noexcept(?:[ \\t]*\\([^)]*\\))?[ \\t]*)?(?:(?:override|final)[ \\t]*)?(?:->[ \\t]*[^;{]+[ \\t]*)?(?:=[ \\t]*(?:0|default|delete)[ \\t]*)?(?:[;{:]|$)|[^;{}]*$)"
+  local suffix = name_boundary .. "[ \\t]*\\(" .. signature_end
+
+  return table.concat({
+    "^[ \\t]*+",
+    qualifiers,
+    "(?:",
+    "(?:", return_type, ")", qualified_prefix, "~?", escaped_name,
+    "|",
+    qualified_prefix, "~?", escaped_name,
+    ")",
+    suffix,
+  })
+end
+
+local function cpp_function_search_with_hint(opts)
+  opts = opts or {}
+
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local make_entry = require("telescope.make_entry")
+  local sorters = require("telescope.sorters")
+  local conf = require("telescope.config").values
+
+  opts.entry_maker = opts.entry_maker or make_entry.gen_from_vimgrep(opts)
+  opts.prompt_title = opts.prompt_title or "C++ Function Decl/Def"
+
+  local function tbl_clone(original)
+    local copy = {}
+    for key, value in pairs(original or {}) do
+      copy[key] = value
+    end
+    return copy
+  end
+
+  local cmd_generator = function(prompt)
+    local pattern = make_cpp_function_pattern(prompt)
+    if not pattern then
+      return nil
+    end
+
+    return vim.tbl_flatten({
+      tbl_clone(opts.vimgrep_arguments),
+      '--pcre2',
+      tbl_clone(cpp_function_globs),
+      pattern,
+      opts.force_search_root or opts.cwd,
+    })
+  end
+
+  pickers.new(opts, {
+    prompt_title = opts.prompt_title,
+    results_title = opts.results_title,
+    finder = finders.new_job(cmd_generator, opts.entry_maker, opts.max_results, opts.cwd),
+    previewer = conf.grep_previewer(opts),
+    sorter = sorters.highlighter_only(opts),
+    attach_mappings = opts.attach_mappings,
+  }):find()
+end
+
 local function get_search_hint(root)
   return "Hint: -g/参数放前面, 目录放最后"
 end
@@ -516,6 +601,35 @@ function M.search(search_type)
           force_search_root = root,
           vimgrep_arguments = get_all_vimgrep_arguments(),
         }, search_hint, get_search_title("Live Grep", root)))
+      end,
+    },
+    cpp_functions = {
+      Default = function()
+        cpp_function_search_with_hint(add_prompt_hint({
+          cwd = root,
+          force_search_root = root,
+          default_text = vim.fn.expand("<cword>"),
+          vimgrep_arguments = get_default_vimgrep_arguments(),
+        }, "Hint: 输入函数名，只搜 C/C++ 声明和定义", get_search_title("C++ Functions", root)))
+      end,
+      Project = function()
+        local ripignore, root = setup_project_ripignore()
+        if ripignore then
+          cpp_function_search_with_hint(add_prompt_hint({
+            cwd = root,
+            force_search_root = root,
+            default_text = vim.fn.expand("<cword>"),
+            vimgrep_arguments = get_project_vimgrep_arguments(ripignore),
+          }, "Hint: 输入函数名，只搜 C/C++ 声明和定义", get_search_title("C++ Functions", root)))
+        end
+      end,
+      All = function()
+        cpp_function_search_with_hint(add_prompt_hint({
+          cwd = root,
+          force_search_root = root,
+          default_text = vim.fn.expand("<cword>"),
+          vimgrep_arguments = get_all_vimgrep_arguments(),
+        }, "Hint: 输入函数名，只搜 C/C++ 声明和定义", get_search_title("C++ Functions", root)))
       end,
     },
   }

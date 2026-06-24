@@ -80,7 +80,75 @@ keymap("n", "<leader>gh", "<cmd>DiffviewOpen HEAD<cr>", opts)
 keymap("n", "<leader>go", "<cmd>DiffviewClose<cr>", opts)
 
 -- Telescope
-keymap("n", "<leader>r", "<cmd>Telescope frecency theme=ivy<cr>", opts)
+local function clear_telescope_prompt_if_single_a(prompt_bufnr)
+  local ok, state = pcall(require, "telescope.state")
+  if ok then
+    local status = state.get_status(prompt_bufnr)
+    if status and status.picker then
+      local ok_prompt, prompt = pcall(function()
+        return status.picker:_get_prompt()
+      end)
+      if ok_prompt then
+        if prompt == "A" then
+          status.picker:reset_prompt("")
+          return true
+        end
+      end
+    end
+  end
+
+  return false
+end
+
+local function guard_initial_telescope_prompt_a()
+  local started_at = vim.uv and vim.uv.now() or vim.loop.now()
+  local group = vim.api.nvim_create_augroup("my-telescope-clear-initial-a", { clear = true })
+
+  vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    pattern = "TelescopePrompt",
+    callback = function(event)
+      local prompt_bufnr = event.buf
+
+      vim.api.nvim_create_autocmd({ "TextChangedI", "CursorMovedI" }, {
+        group = group,
+        buffer = prompt_bufnr,
+        callback = function()
+          clear_telescope_prompt_if_single_a(prompt_bufnr)
+
+          local now = vim.uv and vim.uv.now() or vim.loop.now()
+          if now - started_at > 2000 then
+            pcall(vim.api.nvim_del_augroup_by_id, group)
+          end
+        end,
+      })
+
+      for i = 1, 20 do
+        vim.defer_fn(function()
+          clear_telescope_prompt_if_single_a(prompt_bufnr)
+        end, i * 50)
+      end
+    end,
+  })
+
+  for i = 1, 20 do
+    vim.defer_fn(function()
+      local ok, state = pcall(require, "telescope.state")
+      if not ok then return end
+
+      for _, prompt_bufnr in ipairs(state.get_existing_prompt_bufnrs()) do
+        clear_telescope_prompt_if_single_a(prompt_bufnr)
+      end
+    end, i * 50)
+  end
+end
+
+keymap("n", "<leader>r", function()
+  guard_initial_telescope_prompt_a()
+  vim.schedule(function()
+    require("telescope").extensions.frecency.frecency()
+  end)
+end, opts)
 -- keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
@@ -90,12 +158,13 @@ keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
 -- telescope
 local ts = require('telescope_search')
 -- Keymap to set the mode
-keymap("n", "<leader>fm", ts.set_search_mode, { desc = "Set Telescope search mode" })
+keymap("n", "<leader>fM", ts.set_search_mode, { desc = "Set Telescope search mode" })
 -- Keymaps for searching, which now use the selected mode
 keymap("n", "<leader>ff", function() ts.search('find_files') end, { desc = "Find files (using current mode)" })
 keymap("n", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep word (using current mode)" })
 keymap("v", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep selected word (using current mode)" })
 keymap("n", "<leader>fg", function() ts.search('live_grep') end, { desc = "Live grep (using current mode)" })
+keymap("n", "<leader>fm", function() ts.search('cpp_functions') end, { desc = "Find C++ function declaration/definition" })
 -- Command to set the mode
 vim.api.nvim_create_user_command('SetTelescopeSearchMode', ts.set_search_mode, {})
 vim.api.nvim_create_user_command('SetTelescopeSearchRoot', ts.set_search_root, {})
