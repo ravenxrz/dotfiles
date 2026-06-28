@@ -149,8 +149,8 @@ return {
     opts = {
       preview = {
         winblend = 0,
-        win_height = 999,
-        win_vheight = 999,
+        win_height = 30,
+        win_vheight = 30,
       },
       filter = {
         fzf = {
@@ -177,6 +177,8 @@ return {
       },
       func_map = {
         openc = "o",
+        pscrollup = "<C-u>",
+        pscrolldown = "<C-d>",
       },
     },
   },

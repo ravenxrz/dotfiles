@@ -1,7 +1,19 @@
 return {
   {
     "ravenxrz/bookmarks.nvim",
-    config = true,
+    config = function()
+      local function set_bookmark_highlight()
+        vim.api.nvim_set_hl(0, "BookmarkLine", { bg = "#98FB98" })
+      end
+
+      require("bookmarks").setup()
+      set_bookmark_highlight()
+
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        group = vim.api.nvim_create_augroup("BookmarkHighlight", { clear = true }),
+        callback = set_bookmark_highlight,
+      })
+    end,
   },
   {
     "ravenxrz/call-graph.nvim",
