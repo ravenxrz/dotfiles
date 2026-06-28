@@ -676,7 +676,66 @@ local function goto_definition(bufnr)
   
       return nil
     end
-  
+
+    local function current_member_call_receiver()
+      local node = treesitter_node_at_cursor()
+      if not node or treesitter_node_text(node) ~= word then
+        return nil
+      end
+
+      local _, start_col = node:range()
+      local prefix = vim.api.nvim_get_current_line():sub(1, start_col)
+      return prefix:match("([%w_:]+)%s*%-%>%s*$") or prefix:match("([%w_:]+)%s*%.%s*$")
+    end
+
+    local function type_basename(type_name)
+      if not type_name then
+        return nil
+      end
+
+      type_name = type_name:gsub("^%s+", ""):gsub("%s+$", "")
+      type_name = type_name:gsub("^const%s+", ""):gsub("^volatile%s+", "")
+      return type_name:match("([%w_]+)%s*$")
+    end
+
+    local function declaration_type_from_line(line, identifier)
+      local escaped = vim.pesc(identifier)
+      local before = line:match("^(.-)%f[%w_]" .. escaped .. "%f[^%w_]")
+      if not before then
+        return nil
+      end
+
+      before = before:gsub("[&*]%s*$", ""):gsub("%s+$", "")
+      local type_name = before:match("([%w_:<>]+)%s*$")
+      return type_basename(type_name)
+    end
+
+    local function infer_identifier_type(identifier)
+      if not identifier then
+        return nil
+      end
+
+      local files = { vim.api.nvim_buf_get_name(0) }
+      local header = files[1]:gsub("%.cc$", ".h"):gsub("%.cpp$", ".h"):gsub("%.cxx$", ".h")
+      if header ~= files[1] and vim.fn.filereadable(header) == 1 then
+        table.insert(files, header)
+      end
+
+      for _, filename in ipairs(files) do
+        local ok, lines = pcall(vim.fn.readfile, filename)
+        if ok then
+          for _, line in ipairs(lines) do
+            local type_name = declaration_type_from_line(line, identifier)
+            if type_name then
+              return type_name
+            end
+          end
+        end
+      end
+
+      return nil
+    end
+
     local function collect_qualified_member_tags()
       local qualifier = current_word_left_qualifier()
       if not qualifier then
@@ -809,6 +868,20 @@ local function goto_definition(bufnr)
       end
   
       return filtered
+    end
+
+    local function collect_receiver_member_tags()
+      local receiver = current_member_call_receiver()
+      local receiver_type = infer_identifier_type(receiver)
+      if not receiver_type then
+        return {}
+      end
+
+      local matches = collect_filtered_definition_tags(word, nil, function(item)
+        return (item.text or ""):find("%f[%w_]" .. vim.pesc(receiver_type) .. "%f[^%w_]::%s*~?%s*" .. vim.pesc(word) .. "%s*%(")
+      end)
+
+      return filter_by_current_signature(matches)
     end
   
     local function current_word_is_destructor()
@@ -1137,6 +1210,7 @@ local function goto_definition(bufnr)
   
     local function collect_local_declarations()
       local cursor = vim.api.nvim_win_get_cursor(0)
+      local cursor_node = treesitter_node_at_cursor()
       local scope = treesitter_ancestor(treesitter_node_at_cursor(), "function_definition")
           or treesitter_ancestor(treesitter_node_at_cursor(), "lambda_expression")
       if not scope then
@@ -1153,6 +1227,10 @@ local function goto_definition(bufnr)
       end
   
       treesitter_walk(scope, function(node)
+        if cursor_node and node:id() == cursor_node:id() then
+          return nil
+        end
+
         if not before_cursor(node) then
           return nil
         end
@@ -1449,6 +1527,12 @@ local function goto_definition(bufnr)
       end
   
       if current_word_is_identifier() then
+        local receiver_member_tags = collect_receiver_member_tags()
+        if #receiver_member_tags == 1 then
+          jump_to_gtags_item(receiver_member_tags[1])
+          return
+        end
+
         local definition_member_class = current_enclosing_definition_class()
         if definition_member_class then
           local class_member_variables = collect_class_member_variable_declaration(definition_member_class)
@@ -1550,6 +1634,12 @@ local function goto_definition(bufnr)
     end
   
     if current_word_is_identifier() then
+      local receiver_member_tags = collect_receiver_member_tags()
+      if #receiver_member_tags == 1 then
+        jump_to_gtags_item(receiver_member_tags[1])
+        return
+      end
+
       local definition_member_class = current_enclosing_definition_class()
       if definition_member_class then
         local class_member_variables = collect_class_member_variable_declaration(definition_member_class)
@@ -1672,6 +1762,13 @@ local function gtags_reference_picker(command_specs, title, source, fallback_spe
     end
   end
   
+-- This depends on ctags and global
+-- installed by 
+  -- brew install universal-ctags
+  -- brew install global
+-- usage:
+  -- 1. ctags -R --languages=C,C++ --exclude=.git --exclude=build .
+  -- 2. gtags
 function M.setup_buffer(bufnr)
   keymap("n", "gd", function()
     goto_definition(bufnr)
