@@ -136,3 +136,33 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set({ "v" }, "<leader>lf", ":RustFmtRange<cr>", { buffer = true })
   end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("quickfix_keymaps", { clear = true }),
+  pattern = "qf",
+  callback = function(event)
+    vim.api.nvim_set_hl(0, "qfFileName", { fg = "#1d4ed8", bold = true })
+    vim.api.nvim_set_hl(0, "qfLineNr", { fg = "#92400e" })
+    vim.api.nvim_set_hl(0, "qfText", { fg = "#1f2328" })
+
+    vim.keymap.set("n", "o", "<CR><cmd>cclose<CR>", {
+      buffer = event.buf,
+      silent = true,
+      desc = "Open quickfix item and close quickfix",
+    })
+
+    vim.keymap.set("n", "q", "<cmd>cclose<CR>", {
+      buffer = event.buf,
+      silent = true,
+      desc = "Close quickfix",
+    })
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("cpp_navigation_keymaps", { clear = true }),
+  pattern = { "c", "cpp", "objc", "objcpp", "cuda" },
+  callback = function(event)
+    require("cpp_navigation").setup_buffer(event.buf)
+  end,
+})

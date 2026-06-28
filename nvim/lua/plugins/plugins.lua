@@ -144,6 +144,47 @@ return {
     "stevearc/dressing.nvim",
   },
   {
+    "kevinhwang91/nvim-bqf",
+    ft = "qf",
+    opts = {
+      preview = {
+        winblend = 0,
+        win_height = 999,
+        win_vheight = 999,
+      },
+      filter = {
+        fzf = {
+          extra_opts = {
+            "--bind",
+            "ctrl-o:toggle-all",
+            "--color",
+            table.concat({
+              "fg:#1f2328",
+              "fg+:#111827",
+              "bg:-1",
+              "bg+:#dbeafe",
+              "hl:#9a3412",
+              "hl+:#7c2d12",
+              "info:#374151",
+              "prompt:#1d4ed8",
+              "pointer:#b45309",
+              "marker:#047857",
+              "spinner:#6b7280",
+              "header:#374151",
+            }, ","),
+          },
+        },
+      },
+      func_map = {
+        openc = "o",
+      },
+    },
+  },
+  {
+    "junegunn/fzf",
+    build = "./install --bin",
+  },
+  {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
