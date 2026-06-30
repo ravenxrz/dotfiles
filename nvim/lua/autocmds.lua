@@ -137,6 +137,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- quickfix bqf 的fzf模式调色
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("quickfix_keymaps", { clear = true }),
   pattern = "qf",
@@ -159,10 +160,23 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- gd/gr 限定
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("cpp_navigation_keymaps", { clear = true }),
   pattern = { "c", "cpp", "objc", "objcpp", "cuda" },
   callback = function(event)
     require("cpp_navigation").setup_buffer(event.buf)
+  end,
+})
+
+-- 禁用markdown的treessiter, 老是会报错
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "markdown.mdx" },
+  callback = function(args)
+    vim.opt_local.foldmethod = "manual"
+    vim.opt_local.foldexpr = "0"
+
+    -- markdown-preview.nvim 不依赖 Tree-sitter；这里停掉 parser 避免 markdown injections 报错。
+    pcall(vim.treesitter.stop, args.buf)
   end,
 })

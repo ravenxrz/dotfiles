@@ -2,6 +2,14 @@ local M = {}
 
 local keymap = vim.keymap.set
 
+local function echo_status(message)
+  vim.api.nvim_echo({ { message, "ModeMsg" } }, false, {})
+end
+
+local function clear_echo_status()
+  vim.api.nvim_echo({ { "", "None" } }, false, {})
+end
+
 local function sync_systemlist(args, cwd)
   if vim.system then
     local result = vim.system(args, { text = true, cwd = cwd }):wait()
@@ -1384,9 +1392,11 @@ local function goto_definition(bufnr)
     end
   
     local function async_jump_to_gtags()
-      vim.notify("Searching gtags for " .. word .. "...", vim.log.levels.INFO)
+      echo_status("Searching gtags for " .. word .. "...")
   
       async_collect_gtags_definitions(word, function(definitions)
+        clear_echo_status()
+
         if current_word_is_destructor() then
           local definition_class = current_definition_class()
           if definition_class then
@@ -1767,21 +1777,24 @@ local function gtags_reference_picker(command_specs, title, source, fallback_spe
   -- brew install universal-ctags
   -- brew install global
 -- usage:
-  -- 1. ctags -R --languages=C,C++ --exclude=.git --exclude=build .
-  -- 2. gtags
+  -- 1. ctags -R --languages=C,C++ --exclude=.git --exclude=build --exclude=third_party
+  -- 2. rg --files -g '!build/**' -g '!**/build/**' -g '!third_party/**' -g '!**/third_party/**' | gtags -f -
 function M.setup_buffer(bufnr)
   keymap("n", "gd", function()
     goto_definition(bufnr)
   end, { buffer = bufnr, desc = "Go to definition via treesitter, gtags, and ctags" })
 
+  keymap("n", "gD", function()
+    vim.lsp.buf.definition()
+  end, { buffer = bufnr, desc = "Go to definition via LSP" })
+
   keymap("n", "gr", gtags_reference_picker({ "global", "-rx", "--literal" }, "Gtags References", "ref",
     { "global", "-sx", "--literal" }),
     { buffer = bufnr, desc = "Find references via gtags" })
-  keymap("n", "gR", gtags_reference_picker({
-    { "global", "-x", "--literal" },
-    { "global", "-rx", "--literal" },
-  }, "Gtags Definitions/References", "all"),
-    { buffer = bufnr, desc = "Find definitions and references via gtags" })
+
+  keymap("n", "gR", function()
+    vim.lsp.buf.references()
+  end, { buffer = bufnr, desc = "Find references via LSP" })
 end
 
 return M

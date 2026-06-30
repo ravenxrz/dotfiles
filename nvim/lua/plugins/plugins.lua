@@ -1,18 +1,26 @@
 return {
   {
-    "saecki/crates.nvim",
-    tag = "stable",
-    config = function()
-      require("crates").setup()
+    "iamcco/markdown-preview.nvim",
+    ft = { "markdown" },
+    build = "cd app && npm install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
     end,
-    enabled = false,
   },
-  {
-    "mrcjkb/rustaceanvim",
-    version = "^6", -- Recommended
-    lazy = false,   -- This plugin is already lazy
-    enabled = false,
-  },
+  -- {
+  --   "saecki/crates.nvim",
+  --   tag = "stable",
+  --   config = function()
+  --     require("crates").setup()
+  --   end,
+  --   enabled = false,
+  -- },
+  -- {
+  --   "mrcjkb/rustaceanvim",
+  --   version = "^6", -- Recommended
+  --   lazy = false,   -- This plugin is already lazy
+  --   enabled = false,
+  -- },
   -- {
   --   "nwiizo/cargo.nvim",
   --   build = "cargo build --release",
@@ -105,6 +113,9 @@ return {
   },
   {
     "andymass/vim-matchup",
+    init = function()
+      vim.g.matchup_treesitter_disabled = { "markdown", "markdown_inline" }
+    end,
   },
   {
     "yorickpeterse/nvim-window",
@@ -207,7 +218,7 @@ return {
   },
   {
     "ggandor/leap.nvim",
-    url="https://codeberg.org/andyg/leap.nvim",
+    url = "https://codeberg.org/andyg/leap.nvim",
     config = function()
       -- require('leap').create_default_mappings()
       require("leap").init_highlight(true)
@@ -247,6 +258,7 @@ return {
           group_empty = true,
         },
         filters = {
+          git_ignored = true,
           dotfiles = true,
         },
         on_attach = function(bufnr)
@@ -264,6 +276,10 @@ return {
           vim.keymap.set("n", "L", api.node.open.no_window_picker, opts("Open"))
           vim.keymap.set("n", "H", api.node.navigate.parent_close, opts("Parent Close"))
           vim.keymap.set("n", "i", api.node.show_info_popup, opts("Info"))
+          vim.keymap.set("n", "I", function()
+            api.filter.dotfiles.toggle()
+            api.filter.git.ignored.toggle()
+          end, opts("Toggle Hidden and Git Ignored"))
           vim.keymap.del("n", "<C-e>", { buffer = bufnr })
         end,
       })
@@ -1346,14 +1362,14 @@ return {
       })
     end,
   },
-    -- 完整的Harpoon v2配置（lazy.nvim）
+  -- 完整的Harpoon v2配置（lazy.nvim）
   {
     "ThePrimeagen/harpoon",
-    branch = "harpoon2",             -- 明确指定v2分支
-    lazy = true,                     -- 懒加载，直到被命令或快捷键触发
-    event = "VeryLazy",              -- 也可以用这个触发懒加载，根据习惯选一个
+    branch = "harpoon2",               -- 明确指定v2分支
+    lazy = true,                       -- 懒加载，直到被命令或快捷键触发
+    event = "VeryLazy",                -- 也可以用这个触发懒加载，根据习惯选一个
     dependencies = {
-      "nvim-lua/plenary.nvim",       -- Harpoon的核心依赖，必须安装
+      "nvim-lua/plenary.nvim",         -- Harpoon的核心依赖，必须安装
       "nvim-telescope/telescope.nvim", -- 可选依赖，用于和telescope集成（推荐加）
     },
     config = function()
