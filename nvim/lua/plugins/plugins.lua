@@ -1,10 +1,39 @@
 return {
   {
-    "iamcco/markdown-preview.nvim",
+    "ravenxrz/markdown-preview.nvim",
     ft = { "markdown" },
     build = "cd app && npm install",
     init = function()
       vim.g.mkdp_filetypes = { "markdown" }
+      vim.g.mkdp_auto_start = 1
+      vim.g.mkdp_auto_close = 0
+      vim.g.mkdp_open_to_the_world = 1
+      vim.g.mkdp_open_ip = ""
+      vim.g.mkdp_port = "8088"
+      vim.g.mkdp_echo_preview_url = 1
+      vim.g.mkdp_browserfunc = "OpenMarkdownPreview"
+      vim.g.mkdp_combine_preview = 1
+      vim.g.mkdp_combine_preview_auto_refresh = 1
+      vim.g.mkdp_preview_options = {
+        disable_sync_scroll = 1,
+        toc = {
+          listType = "ul",
+        },
+      }
+
+      vim.cmd([[
+        function! OpenMarkdownPreview(url)
+          call setreg('"', a:url)
+          try
+            call setreg('+', a:url)
+            echom 'Markdown preview URL copied: ' . a:url
+          catch
+            echohl WarningMsg
+            echom 'Markdown preview URL saved to unnamed register, but failed to copy to + clipboard: ' . a:url
+            echohl None
+          endtry
+        endfunction
+      ]])
     end,
   },
   -- {

@@ -163,13 +163,15 @@ vim.api.nvim_create_autocmd("FileType", {
 -- gd/gr 限定
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("cpp_navigation_keymaps", { clear = true }),
-  pattern = { "c", "cpp", "objc", "objcpp", "cuda" },
+  pattern = { "c", "cpp", "objc", "objcpp", "cuda", "pov" },
   callback = function(event)
     require("cpp_navigation").setup_buffer(event.buf)
   end,
 })
 
+
 -- 禁用markdown的treessiter, 老是会报错
+-- 给markdown文件注入toc，可以有导航目录
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "markdown", "markdown.mdx" },
   callback = function(args)
@@ -178,5 +180,31 @@ vim.api.nvim_create_autocmd("FileType", {
 
     -- markdown-preview.nvim 不依赖 Tree-sitter；这里停掉 parser 避免 markdown injections 报错。
     pcall(vim.treesitter.stop, args.buf)
+
+    local function ensure_markdown_preview_toc()
+      local lines = vim.api.nvim_buf_get_lines(args.buf, 0, -1, false)
+      for _, line in ipairs(lines) do
+        if line:match("^%s*%[%[toc%]%]%s*$") or line:match("^%s*%[toc%]%s*$") or line:match("^%s*%$%{toc%}%s*$") or line:match("^%s*%[%[_toc_%]%]%s*$") then
+          return
+        end
+      end
+
+      local insert_at = 0
+      if lines[1] and lines[1]:match("^%-%-%-%s*$") then
+        for i = 2, #lines do
+          if lines[i]:match("^%-%-%-%s*$") or lines[i]:match("^%.%.%.%s*$") then
+            insert_at = i
+            break
+          end
+        end
+      end
+
+      vim.api.nvim_buf_set_lines(args.buf, insert_at, insert_at, false, { "[[toc]]", "" })
+    end
+
+    -- markdown-preview.nvim only renders TOC when the document contains a TOC
+    -- marker. Since preview auto-starts for Markdown files, insert the marker
+    -- automatically so the browser preview always has heading navigation.
+    ensure_markdown_preview_toc()
   end,
 })
