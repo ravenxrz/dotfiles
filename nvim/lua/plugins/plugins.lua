@@ -522,6 +522,11 @@ return {
               ["<C-k>"] = actions.cycle_history_prev,
             },
           },
+          -- NOTE: disable treesitter in preview to avoid markdown crash:
+          -- `attempt to call method 'range' (a nil value)` when selecting entries.
+          preview = {
+            treesitter = false,
+          },
         },
       })
       telescope.load_extension("live_grep_args")
