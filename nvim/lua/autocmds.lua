@@ -1,6 +1,10 @@
 -- 检测 Python 文件的缩进并设置相应缩进
 local function detect_python_indent()
-  for line in io.lines(vim.fn.expand("%")) do
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == "" or vim.bo.buftype ~= "" or vim.fn.filereadable(path) ~= 1 then
+    return
+  end
+  for line in io.lines(path) do
     local spaces = line:match("^(%s*)") -- 匹配每行开头的空格
     if spaces then
       local tabsize = #spaces           -- 计算空格数

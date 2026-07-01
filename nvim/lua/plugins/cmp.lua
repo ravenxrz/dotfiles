@@ -105,16 +105,16 @@ return {
     },
     opts_extend = { "sources.default" },
   },
-  {
-    "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
-    cond = get_os_platform() == "Linux",
-    dependencies = {
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require("marscode").setup({})
-    end,
-  },
+  -- {
+  --   "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
+  --   cond = get_os_platform() == "Linux",
+  --   dependencies = {
+  --     "hrsh7th/nvim-cmp",
+  --   },
+  --   config = function()
+  --     require("marscode").setup({})
+  --   end,
+  -- },
   -- {
   --  "rcarriga/cmp-dap",
   --  event = "InsertEnter",

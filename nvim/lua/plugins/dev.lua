@@ -1,5 +1,24 @@
 return {
   {
+    dir = vim.fn.stdpath("config"),
+    name = "ai-review.nvim",
+    dependencies = {
+      "lewis6991/gitsigns.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+    keys = {
+      { "<leader>ar", function() require("ai_review").toggle() end, desc = "AI Review" },
+    },
+    config = function()
+      require("ai_review").setup({
+        sidebar = {
+          side = "left",
+          width = 50,
+        },
+      })
+    end,
+  },
+  {
     "ravenxrz/bookmarks.nvim",
     config = function()
       local function set_bookmark_highlight()

@@ -33,6 +33,7 @@
     ~/.oh-my-zsh:
     ~/.zshrc:
     ~/.shell_local_before:
+    ~/.gtags.conf:
     ~/.config/helix/config.toml: helix/config.toml
     ~/.config/helix/languages.toml: helix/languages.toml
     # ~/.zfunctions/prompt_spaceship_setup: zsh/prompt/spaceship-prompt/spaceship.zsh
