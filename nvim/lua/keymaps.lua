@@ -66,7 +66,7 @@ keymap("n", "<leader>bd", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>"
 -- keymap("n", "<leader>bd", "<cmd>BufferClose<cr>", opts)
 
 -- Gitsigns
-keymap("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", opts)
+-- <leader>gp is provided by ai-review.nvim lazy spec
 keymap("n", "<leader>gr", "<cmd>Gitsigns reset_hunk<cr>", opts)
 keymap("n", "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>", opts)
 keymap("n", "<leader>gl", "<cmd>Gitsigns blame_line<cr>", opts)

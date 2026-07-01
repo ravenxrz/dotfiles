@@ -50,7 +50,7 @@ local opts = {
   spell = false,                                                                                    -- add spell support
   spelllang = { "en_us" },                                                                          -- support which languages?
   diffopt = "vertical,filler,internal,context:4",                                                   -- vertical diff split view
-  sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions", -- session
+  sessionoptions = "blank,buffers,curdir,folds,help,tabpages,terminal,localoptions", -- session
   showtabline = 0,                                                                                  -- disable status line
   inccommand = "",                                                                                  -- disable replace preview
 }

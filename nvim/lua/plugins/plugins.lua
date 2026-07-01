@@ -905,8 +905,12 @@ return {
         autosave_ignore_filetypes = {                   -- All buffers of these file types will be closed before the session is saved.
           "gitcommit",
           "gitrebase",
+          "NvimTree",
+          "Outline",
+          "neo-tree",
+          "ai-review",
         },
-        autosave_ignore_buftypes = {},    -- All buffers of these bufer types will be closed before the session is saved.
+        autosave_ignore_buftypes = { "nofile" }, -- All buffers of these buffer types will be closed before the session is saved.
         autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
         max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
