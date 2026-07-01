@@ -23,6 +23,7 @@ return {
 
       vim.cmd([[
         function! OpenMarkdownPreview(url)
+          let g:mkdp_last_preview_url = a:url
           call setreg('"', a:url)
           try
             call setreg('+', a:url)
@@ -34,6 +35,77 @@ return {
           endtry
         endfunction
       ]])
+
+      -- Auto echo + copy the preview URL whenever a markdown buffer is opened.
+      -- This does not rely on the preview being already started; it just computes
+      -- the standard mkdp URL (`/page/<bufnr>`) and puts it into registers.
+      local function mkdp_make_url(bufnr)
+        -- Prefer the real URL emitted by markdown-preview.nvim (it may auto-pick a LAN IP
+        -- even if mkdp_open_ip is empty), then just rewrite the /page/<bufnr> part.
+        local last = vim.g.mkdp_last_preview_url
+        if type(last) == "string" then
+          local base = last:match("^(https?://[^/]+)")
+          if base ~= nil then
+            return string.format("%s/page/%d", base, bufnr)
+          end
+        end
+
+        -- Fallback to configured host/port.
+        local port = vim.g.mkdp_port or "8080"
+        local host = vim.g.mkdp_open_ip
+        if host == nil or host == "" then
+          host = "127.0.0.1"
+        end
+        return string.format("http://%s:%s/page/%d", host, port, bufnr)
+      end
+
+      local function mkdp_copy_and_echo(url)
+        vim.fn.setreg('"', url)
+        local ok = pcall(vim.fn.setreg, "+", url)
+        if ok then
+          vim.api.nvim_echo({ { "Markdown preview URL copied: " .. url, "None" } }, false, {})
+        else
+          vim.api.nvim_echo(
+            { { "Markdown preview URL saved to unnamed register (clipboard failed): " .. url, "WarningMsg" } },
+            false,
+            {}
+          )
+        end
+      end
+
+      local function mkdp_try_copy_for_buf(bufnr)
+        if vim.bo[bufnr].filetype ~= "markdown" then
+          return
+        end
+        -- Debounce: avoid double echo/copy caused by multiple events (e.g. FileType + BufEnter).
+        local now_ms = (vim.uv or vim.loop).now()
+        local last_ms = vim.b[bufnr].mkdp_last_copy_ms or 0
+        if (now_ms - last_ms) < 200 then
+          return
+        end
+        vim.b[bufnr].mkdp_last_copy_ms = now_ms
+        mkdp_copy_and_echo(mkdp_make_url(bufnr))
+      end
+
+      -- 1) Initial open / :edit: ensure we copy once when markdown filetype is detected.
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "markdown",
+        callback = function(ev)
+          mkdp_try_copy_for_buf(ev.buf)
+        end,
+      })
+
+      -- 2) Bufferline / normal buffer switching: re-copy whenever we ENTER a markdown buffer.
+      vim.api.nvim_create_autocmd("BufEnter", {
+        callback = function(ev)
+          mkdp_try_copy_for_buf(ev.buf)
+        end,
+      })
+
+      -- Manual helper (in case you want to recopy after changing mkdp_open_ip / mkdp_port).
+      vim.api.nvim_create_user_command("MkdpCopyUrl", function()
+        mkdp_copy_and_echo(mkdp_make_url(vim.api.nvim_get_current_buf()))
+      end, {})
     end,
   },
   -- {
