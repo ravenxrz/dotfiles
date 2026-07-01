@@ -59,7 +59,7 @@ return {
           max_diff_lines = 20000,
         },
         submodules = {
-          enabled = true,
+          enabled = false,
           recursive = true,
           max_depth = nil,
           include_untracked = true,
