@@ -291,6 +291,7 @@ return {
         openc = "o",
         pscrollup = "<C-u>",
         pscrolldown = "<C-d>",
+        fzffilter = "f",
       },
     },
   },
