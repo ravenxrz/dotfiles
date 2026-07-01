@@ -10,6 +10,7 @@ return {
       "AiReviewClose",
       "AiReviewToggle",
       "AiReviewRefresh",
+      "AiReviewToggleSubmodules",
       "AiReviewToggleConflictDiff",
     },
     keys = {
@@ -51,13 +52,14 @@ return {
           prev_hunk = "[g",
           expand_all = "zR",
           collapse_all = "zM",
+          toggle_submodules = "S",
         },
         git = {
           root_cache = true,
           max_diff_lines = 20000,
         },
         submodules = {
-          enabled = false,
+          enabled = true,
           recursive = true,
           max_depth = nil,
           include_untracked = true,
