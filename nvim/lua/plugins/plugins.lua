@@ -9,7 +9,73 @@ return {
       vim.g.mkdp_auto_close = 0
       vim.g.mkdp_open_to_the_world = 1
       vim.g.mkdp_open_ip = ""
-      vim.g.mkdp_port = "8088"
+      local function mkdp_close_handle(handle)
+        if handle ~= nil and not handle:is_closing() then
+          handle:close()
+        end
+      end
+
+      local function mkdp_can_listen(host, port)
+        local uv = vim.uv or vim.loop
+        local handle = uv.new_tcp()
+        if handle == nil then
+          return false
+        end
+
+        local ok_bind, bind_rc = pcall(handle.bind, handle, host, port)
+        if not ok_bind or bind_rc ~= 0 then
+          mkdp_close_handle(handle)
+          return false
+        end
+
+        -- bind() alone can still succeed on an in-use port in some SO_REUSEADDR
+        -- cases. listen() is what markdown-preview's Node server ultimately
+        -- needs, so probe both.
+        local ok_listen, listen_rc = pcall(handle.listen, handle, 1, function() end)
+        mkdp_close_handle(handle)
+        return ok_listen and listen_rc == 0
+      end
+
+      local function mkdp_pick_system_port(host)
+        local uv = vim.uv or vim.loop
+        local handle = uv.new_tcp()
+        if handle == nil then
+          return nil
+        end
+
+        local ok_bind, bind_rc = pcall(handle.bind, handle, host, 0)
+        if not ok_bind or bind_rc ~= 0 then
+          mkdp_close_handle(handle)
+          return nil
+        end
+
+        local ok_listen, listen_rc = pcall(handle.listen, handle, 1, function() end)
+        if not ok_listen or listen_rc ~= 0 then
+          mkdp_close_handle(handle)
+          return nil
+        end
+
+        local sockname = handle:getsockname()
+        mkdp_close_handle(handle)
+        return sockname and sockname.port or nil
+      end
+
+      local function mkdp_pick_port()
+        local host = vim.g.mkdp_open_to_the_world == 1 and "0.0.0.0" or "127.0.0.1"
+        local preferred_port = 8088
+        local scan_count = 128
+
+        for port = preferred_port, preferred_port + scan_count - 1 do
+          if mkdp_can_listen(host, port) then
+            return tostring(port)
+          end
+        end
+
+        local system_port = mkdp_pick_system_port(host)
+        return system_port and tostring(system_port) or ""
+      end
+
+      vim.g.mkdp_port = mkdp_pick_port()
       vim.g.mkdp_echo_preview_url = 1
       vim.g.mkdp_browserfunc = "OpenMarkdownPreview"
       vim.g.mkdp_combine_preview = 1
