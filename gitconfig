@@ -157,3 +157,7 @@
 [protocol]
 	version = 1
 
+[safe]
+	directory = *
+[url "git@code.byted.org:"]
+	insteadOf = https://code.byted.org/

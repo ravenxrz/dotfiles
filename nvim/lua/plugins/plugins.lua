@@ -413,7 +413,7 @@ return {
     end,
   },
   {
-    "nvim-tree/nvim-tree.lua",
+    "ravenxrz/nvim-tree.lua",
     config = function()
       require("nvim-tree").setup({
         sort = {

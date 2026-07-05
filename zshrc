@@ -122,7 +122,7 @@ source ~/.shell/fzf-key-bindings.zsh
 source ~/.shell/bootstrap.sh
 source ~/.shell/aliases.sh
 source ~/.shell/external.sh
-export PATH=$HOME/.local/bin:$PATH
+export PATH=/home/zhangxingrui/Projects/tmp/nvim-linux-x86_64/bin:$HOME/.local/bin:$PATH
 
 if [[ $OSTYPE == 'darwin'* ]]; then
    # 强制当前 shell 会话使用 ARM64 架构
@@ -130,3 +130,11 @@ if [[ $OSTYPE == 'darwin'* ]]; then
       exec arch -arm64 zsh 
   fi
 fi
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="/home/zhangxingrui/.local/bin:$PATH"
+export PATH="$PATH:/home/zhangxingrui/.aiden/global-install/bin"

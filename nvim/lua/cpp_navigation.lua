@@ -1780,19 +1780,19 @@ local function gtags_reference_picker(command_specs, title, source, fallback_spe
   -- 1. ctags -R --languages=C,C++ --exclude=.git --exclude=build --exclude=third_party
   -- 2. rg --files -g '!build/**' -g '!**/build/**' -g '!third_party/**' -g '!**/third_party/**' | gtags -f -
 function M.setup_buffer(bufnr)
-  keymap("n", "gd", function()
+  keymap("n", "gD", function()
     goto_definition(bufnr)
   end, { buffer = bufnr, desc = "Go to definition via treesitter, gtags, and ctags" })
 
-  keymap("n", "gD", function()
+  keymap("n", "gd", function()
     vim.lsp.buf.definition()
   end, { buffer = bufnr, desc = "Go to definition via LSP" })
 
-  keymap("n", "gr", gtags_reference_picker({ "global", "-rx", "--literal" }, "Gtags References", "ref",
+  keymap("n", "gR", gtags_reference_picker({ "global", "-rx", "--literal" }, "Gtags References", "ref",
     { "global", "-sx", "--literal" }),
     { buffer = bufnr, desc = "Find references via gtags" })
 
-  keymap("n", "gR", function()
+  keymap("n", "gr", function()
     vim.lsp.buf.references()
   end, { buffer = bufnr, desc = "Find references via LSP" })
 end

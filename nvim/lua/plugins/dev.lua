@@ -15,7 +15,7 @@ return {
     },
     keys = {
       { "<leader>ar", function() require("ai_review").toggle() end, desc = "AI Review" },
-      { "<leader>gp", function() require("ai_review.diff_view").toggle_current_hunk() end, desc = "AI Review conflict diff" },
+      { "<leader>ao", function() require("ai_review.ui").toggle_focus() end, desc = "AI Review" },
     },
     config = function()
       require("ai_review").setup({
@@ -48,8 +48,8 @@ return {
           filter = "F",
           help = "?",
           close = "q",
-          next_hunk = "]g",
-          prev_hunk = "[g",
+          next_hunk = "J",
+          prev_hunk = "K",
           expand_all = "zR",
           collapse_all = "zM",
           toggle_submodules = "S",
