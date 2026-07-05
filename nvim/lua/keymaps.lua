@@ -293,3 +293,15 @@ keymap("n", "ym", "<cmd>CopyFuncName<cr>", opts)
 
 -- plugin dev
 keymap("n", "<leader>t", "<cmd>PlenaryBustedFile %<cr>", opts)
+
+-- send content to codex CLI in a tmux pane (paste only, no submit)
+local codex_send = require('codex_send')
+keymap('v', '<C-c>', codex_send.send_selection,
+  vim.tbl_extend('force', opts, { desc = 'Send selection text to codex (tmux, no submit)' }))
+keymap('v', '<C-l>', codex_send.send_lines,
+  vim.tbl_extend('force', opts, { desc = 'Send selection line range to codex (tmux, no submit)' }))
+
+-- 运行时切换目标 pane，例如 :CodexPane mysession:0.1
+vim.api.nvim_create_user_command('CodexPane', function(o)
+  codex_send.set_pane(o.args)
+end, { nargs = 1 })

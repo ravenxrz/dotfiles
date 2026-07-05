@@ -439,7 +439,7 @@ return {
           -- custom mappings
           vim.keymap.set("n", "<BS>", api.tree.change_root_to_parent, opts("Up"))
           vim.keymap.set("n", ".", api.tree.change_root_to_node, opts("CD"))
-          vim.keymap.set("n", "w", api.node.open.edit, opts("Open"))
+          vim.keymap.set("n", "p", api.node.open.edit, opts("Open"))
           vim.keymap.set("n", "o", api.node.open.no_window_picker, opts("Open"))
           vim.keymap.set("n", "L", api.node.open.no_window_picker, opts("Open"))
           vim.keymap.set("n", "H", api.node.navigate.parent_close, opts("Parent Close"))
@@ -978,8 +978,8 @@ return {
           "ai-review",
         },
         autosave_ignore_buftypes = { "nofile" }, -- All buffers of these buffer types will be closed before the session is saved.
-        autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-        max_path_length = 80,             -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+        autosave_only_in_session = false,        -- Always autosaves session. If true, only autosaves after a session is active.
+        max_path_length = 80,                    -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
       })
     end,
   },
