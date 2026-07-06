@@ -1,8 +1,31 @@
 local search_root_cache = {}
 local custom_search_root = nil
 
+-- When both a custom search root and an active nvim-tree workspace exist, this
+-- decides which wins. "workspace" | "custom"
+local root_priority = "workspace"
+
 local function normalize_path(path)
-  return vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
+  local normalized = vim.fn.fnamemodify(path, ":p"):gsub("/$", "")
+  return normalized
+end
+
+-- Return the active nvim-tree workspace folders, or nil when not in workspace mode.
+---@return string[]|nil
+local function get_workspace_roots()
+  local ok, ws = pcall(require, "nvim-tree.workspace")
+  if not ok or not ws.is_active() then
+    return nil
+  end
+  local folders = ws.folders()
+  if not folders or #folders == 0 then
+    return nil
+  end
+  local roots = {}
+  for _, folder in ipairs(folders) do
+    table.insert(roots, normalize_path(folder))
+  end
+  return roots
 end
 
 local function is_path_inside(path, root)
@@ -49,8 +72,87 @@ local function get_auto_search_root()
   return root
 end
 
+-- Resolve the set of search roots, honoring root_priority when both a custom
+-- root and an active workspace are present.
+---@return string[] roots always at least one
+local function get_search_roots()
+  local workspace_roots = get_workspace_roots()
+
+  if custom_search_root and workspace_roots then
+    if root_priority == "custom" then
+      return { custom_search_root }
+    else
+      return workspace_roots
+    end
+  end
+
+  if custom_search_root then
+    return { custom_search_root }
+  end
+
+  if workspace_roots then
+    return workspace_roots
+  end
+
+  return { get_auto_search_root() }
+end
+
+-- Single representative root, used for .ripignore location and titles.
 local function get_search_root()
-  return custom_search_root or get_auto_search_root()
+  return get_search_roots()[1]
+end
+
+-- Render a path starting from its project directory, hiding everything above the
+-- project root's parent. e.g. /a/b/pagestore/src/x.cc -> pagestore/src/x.cc
+-- Handles both absolute paths and paths relative to cwd or any search root
+-- (telescope grep passes paths relative to its cwd=root).
+local function display_path(path)
+  if path == nil or path == "" then
+    return path
+  end
+
+  local roots = get_search_roots()
+
+  -- Resolve to an absolute path. If already absolute, use as-is; otherwise try
+  -- cwd and each root as the base and pick the first that lands inside a root.
+  local abs
+  if path:match("^/") then
+    abs = normalize_path(path)
+  else
+    local bases = { vim.fn.getcwd() }
+    for _, r in ipairs(roots) do
+      table.insert(bases, r)
+    end
+    for _, base in ipairs(bases) do
+      local candidate = normalize_path(base .. "/" .. path)
+      for _, root in ipairs(roots) do
+        if is_path_inside(candidate, root) then
+          abs = candidate
+          break
+        end
+      end
+      if abs then break end
+    end
+    abs = abs or normalize_path(vim.fn.getcwd() .. "/" .. path)
+  end
+
+  for _, root in ipairs(roots) do
+    if is_path_inside(abs, root) then
+      local parent = vim.fn.fnamemodify(root, ":h")
+      if parent == "/" then
+        return abs:sub(2) -- strip leading "/"
+      end
+      return abs:sub(#parent + 2) -- strip "parent/" -> keep project dir name
+    end
+  end
+
+  -- Outside every root: show relative to cwd, else the raw path.
+  return vim.fn.fnamemodify(abs, ":.")
+end
+
+-- True when the current search spans more than one root.
+local function is_multi_root()
+  return #get_search_roots() > 1
 end
 
 -- Helper function to create a project-specific .ripignore if it doesn't exist
@@ -80,6 +182,38 @@ local function setup_project_ripignore()
   return ripignore_path, root
 end
 
+-- Ensure a .ripignore exists in every search root, returning the list of
+-- existing .ripignore paths across all roots.
+---@return string[] ignore_files
+---@return string[] roots
+local function setup_project_ripignore_all()
+  local roots = get_search_roots()
+  local ignore_files = {}
+  for _, root in ipairs(roots) do
+    local ripignore_path = root .. '/.ripignore'
+    local file = io.open(ripignore_path, "r")
+    if not file then
+      vim.notify("Creating .ripignore at " .. root, vim.log.levels.INFO, { title = "Telescope" })
+      file = io.open(ripignore_path, "w")
+      if file then
+        file:write("build/\n")
+        file:write("third_party/\n")
+        file:write(".cache/\n")
+        file:write("*.idx/\n")
+        file:write(".calltree*/\n")
+        file:close()
+        table.insert(ignore_files, ripignore_path)
+      else
+        vim.notify("Error: Could not create .ripignore file at " .. ripignore_path, vim.log.levels.ERROR)
+      end
+    else
+      file:close()
+      table.insert(ignore_files, ripignore_path)
+    end
+  end
+  return ignore_files, roots
+end
+
 local function get_visual_selection()
   local _, ls, cs = unpack(vim.fn.getpos("v"))
   local _, le, ce = unpack(vim.fn.getpos("."))
@@ -102,8 +236,16 @@ local function get_project_vimgrep_arguments(ripignore, fixed_strings)
     '--smart-case',
     '--no-ignore',
     '--no-config',
-    string.format('--ignore-file=%s', ripignore),
   }
+
+  -- ripignore may be a single path (string) or a list of paths (multi-root)
+  if type(ripignore) == "table" then
+    for _, path in ipairs(ripignore) do
+      table.insert(args, string.format('--ignore-file=%s', path))
+    end
+  elseif ripignore then
+    table.insert(args, string.format('--ignore-file=%s', ripignore))
+  end
 
   if fixed_strings then
     table.insert(args, '-F')
@@ -206,12 +348,17 @@ local function cpp_function_search_with_hint(opts)
       return nil
     end
 
+    local search_dirs = opts.force_search_dirs
+    if not search_dirs or #search_dirs == 0 then
+      search_dirs = { opts.force_search_root or opts.cwd }
+    end
+
     return vim.tbl_flatten({
       tbl_clone(opts.vimgrep_arguments),
       '--pcre2',
       tbl_clone(cpp_function_globs),
       pattern,
-      opts.force_search_root or opts.cwd,
+      search_dirs,
     })
   end
 
@@ -238,7 +385,15 @@ local function get_title_hint(hint)
 end
 
 local function get_search_title(title, root)
-  return string.format("%s | path=%s", title, vim.fn.fnamemodify(root, ":~"))
+  local roots = get_search_roots()
+  if #roots > 1 then
+    local names = {}
+    for _, r in ipairs(roots) do
+      table.insert(names, vim.fn.fnamemodify(r, ":t"))
+    end
+    return string.format("%s | workspace=[%s]", title, table.concat(names, ", "))
+  end
+  return string.format("%s | path=%s", title, vim.fn.fnamemodify(root or roots[1], ":~"))
 end
 
 local function set_prompt_title(prompt_bufnr, title)
@@ -433,8 +588,12 @@ local function live_grep_args_with_hint(opts)
     local prompt_parts = prompt_parser.parse(prompt, opts.auto_quoting)
     local search_dirs = opts.search_dirs
 
-    if opts.force_search_root and not has_user_search_dir(prompt_parts) then
-      search_dirs = { opts.force_search_root }
+    if not has_user_search_dir(prompt_parts) then
+      if opts.force_search_dirs and #opts.force_search_dirs > 0 then
+        search_dirs = opts.force_search_dirs
+      elseif opts.force_search_root then
+        search_dirs = { opts.force_search_root }
+      end
     end
 
     return vim.tbl_flatten({ args, prompt_parts, search_dirs })
@@ -455,14 +614,19 @@ local M = {}
 
 M.current_search_mode = "Project"
 
+-- Expose the project-relative path renderer for telescope's global path_display.
+M.display_path = display_path
+
 -- Function to set the search mode
 function M.set_search_mode()
-  local modes = { "Default(使用全局+Git的忽略规则)", "Project(项目目录下的ripignore)", "All(不忽略)", "Set Search Root", "Edit .ripignore" }
+  local modes = { "Default(使用全局+Git的忽略规则)", "Project(项目目录下的ripignore)", "All(不忽略)", "Set Search Root", "Root Priority(workspace/custom)", "Edit .ripignore" }
   vim.ui.select(modes, { prompt = "Select search mode:" }, function(choice)
     if not choice then return end
 
     if choice == "Set Search Root" then
       M.set_search_root()
+    elseif choice == "Root Priority(workspace/custom)" then
+      M.set_root_priority()
     elseif choice == "Edit .ripignore" then
       local ripignore_path = setup_project_ripignore()
       if ripignore_path then
@@ -473,6 +637,16 @@ function M.set_search_mode()
       M.current_search_mode = string.match(choice, "^%w+")
       vim.notify("Telescope search mode set to: " .. M.current_search_mode, vim.log.levels.INFO, { title = "Telescope" })
     end
+  end)
+end
+
+-- Choose whether the workspace or the custom search root wins when both exist.
+function M.set_root_priority()
+  local options = { "workspace(优先使用 nvim-tree workspace 目录)", "custom(优先使用手动设置的 search root)" }
+  vim.ui.select(options, { prompt = "Root priority (workspace vs custom):" }, function(choice)
+    if not choice then return end
+    root_priority = string.match(choice, "^%w+")
+    vim.notify("Telescope root priority set to: " .. root_priority, vim.log.levels.INFO, { title = "Telescope" })
   end)
 end
 
@@ -514,34 +688,48 @@ end
 function M.search(search_type)
   local telescope_builtin = require('telescope.builtin')
   local lga_helpers = require('telescope-live-grep-args.helpers')
-  local root = get_search_root()
+  local roots = get_search_roots()
+  local root = roots[1]
+  local multi = #roots > 1
   local search_hint = get_search_hint(root)
   local find_files_hint = get_find_files_hint(root)
+
+  -- For find_files across multiple roots we cannot rely on telescope's single
+  -- `cwd`; pass the roots explicitly to rg and show absolute paths. For a single
+  -- root we keep the original cwd-based behavior (relative paths).
+  -- `base.find_command` may be nil to use telescope's default finder.
+  local function find_files_opts(base)
+    if multi then
+      base.find_command = vim.tbl_flatten({ base.find_command or { 'rg', '--files' }, roots })
+      base.cwd = nil
+      base.path_display = base.path_display or function(_, p) return display_path(p) end
+    else
+      base.cwd = root
+      base.path_display = base.path_display or function(_, p) return display_path(p) end
+    end
+    return base
+  end
 
   local actions_map = {
     find_files = {
       Default = function()
-        telescope_builtin.find_files(add_prompt_hint({ cwd = root }, find_files_hint, get_search_title("Find Files", root)))
+        telescope_builtin.find_files(add_prompt_hint(find_files_opts({}), find_files_hint, get_search_title("Find Files", root)))
       end,
       Project = function()
-        local ripignore, root = setup_project_ripignore()
-        if ripignore then
-          telescope_builtin.find_files(add_prompt_hint({
-            cwd = root,
-            find_command = {
-              'rg',
-              '--files',
-              '--hidden',
-              '--no-ignore',
-              '--no-config',
-              string.format('--ignore-file=%s', ripignore),
-              '--glob=!.git/',
-            },
-          }, get_find_files_hint(root), get_search_title("Find Files", root)))
+        local ignore_files = setup_project_ripignore_all()
+        local cmd = { 'rg', '--files', '--hidden', '--no-ignore', '--no-config' }
+        for _, path in ipairs(ignore_files) do
+          table.insert(cmd, string.format('--ignore-file=%s', path))
         end
+        table.insert(cmd, '--glob=!.git/')
+        telescope_builtin.find_files(add_prompt_hint(find_files_opts({
+          find_command = cmd,
+        }), find_files_hint, get_search_title("Find Files", root)))
       end,
       All = function()
-        telescope_builtin.find_files(add_prompt_hint({ cwd = root, find_command = { 'rg', '--files', '--hidden', '--no-ignore', '--no-config' } }, find_files_hint, get_search_title("Find Files", root)))
+        telescope_builtin.find_files(add_prompt_hint(find_files_opts({
+          find_command = { 'rg', '--files', '--hidden', '--no-ignore', '--no-config' },
+        }), find_files_hint, get_search_title("Find Files", root)))
       end,
     },
     grep_word = {
@@ -549,29 +737,27 @@ function M.search(search_type)
         local text = vim.fn.mode() == 'n' and vim.fn.expand("<cword>") or get_visual_selection()
         live_grep_args_with_hint(add_prompt_hint({
           cwd = root,
-          force_search_root = root,
+          force_search_dirs = roots,
           default_text = lga_helpers.quote(vim.trim(text)),
           vimgrep_arguments = get_default_vimgrep_arguments(true),
         }, search_hint, get_search_title("Grep Word", root)))
       end,
       Project = function()
-        local ripignore, root = setup_project_ripignore()
-        if ripignore then
-          local text = vim.fn.mode() == 'n' and vim.fn.expand("<cword>") or get_visual_selection()
-          local opts = add_prompt_hint({
-            cwd = root,
-            force_search_root = root,
-            default_text = lga_helpers.quote(vim.trim(text)),
-            vimgrep_arguments = get_project_vimgrep_arguments(ripignore, true),
-          }, get_search_hint(root), get_search_title("Grep Word", root))
-          live_grep_args_with_hint(opts)
-        end
+        local ignore_files = setup_project_ripignore_all()
+        local text = vim.fn.mode() == 'n' and vim.fn.expand("<cword>") or get_visual_selection()
+        local opts = add_prompt_hint({
+          cwd = root,
+          force_search_dirs = roots,
+          default_text = lga_helpers.quote(vim.trim(text)),
+          vimgrep_arguments = get_project_vimgrep_arguments(ignore_files, true),
+        }, get_search_hint(root), get_search_title("Grep Word", root))
+        live_grep_args_with_hint(opts)
       end,
       All = function()
         local text = vim.fn.mode() == 'n' and vim.fn.expand("<cword>") or get_visual_selection()
         live_grep_args_with_hint(add_prompt_hint({
           cwd = root,
-          force_search_root = root,
+          force_search_dirs = roots,
           default_text = lga_helpers.quote(vim.trim(text)),
           vimgrep_arguments = get_all_vimgrep_arguments(true),
         }, search_hint, get_search_title("Grep Word", root)))
@@ -581,24 +767,22 @@ function M.search(search_type)
       Default = function()
         live_grep_args_with_hint(add_prompt_hint({
           cwd = root,
-          force_search_root = root,
+          force_search_dirs = roots,
           vimgrep_arguments = get_default_vimgrep_arguments(),
         }, search_hint, get_search_title("Live Grep", root)))
       end,
       Project = function()
-        local ripignore, root = setup_project_ripignore()
-        if ripignore then
-          live_grep_args_with_hint(add_prompt_hint({
-            cwd = root,
-            force_search_root = root,
-            vimgrep_arguments = get_project_vimgrep_arguments(ripignore),
-          }, get_search_hint(root), get_search_title("Live Grep", root)))
-        end
+        local ignore_files = setup_project_ripignore_all()
+        live_grep_args_with_hint(add_prompt_hint({
+          cwd = root,
+          force_search_dirs = roots,
+          vimgrep_arguments = get_project_vimgrep_arguments(ignore_files),
+        }, get_search_hint(root), get_search_title("Live Grep", root)))
       end,
       All = function()
         live_grep_args_with_hint(add_prompt_hint({
           cwd = root,
-          force_search_root = root,
+          force_search_dirs = roots,
           vimgrep_arguments = get_all_vimgrep_arguments(),
         }, search_hint, get_search_title("Live Grep", root)))
       end,
@@ -607,26 +791,24 @@ function M.search(search_type)
       Default = function()
         cpp_function_search_with_hint(add_prompt_hint({
           cwd = root,
-          force_search_root = root,
+          force_search_dirs = roots,
           default_text = vim.fn.expand("<cword>"),
           vimgrep_arguments = get_default_vimgrep_arguments(),
         }, "Hint: 输入函数名，只搜 C/C++ 声明和定义", get_search_title("C++ Functions", root)))
       end,
       Project = function()
-        local ripignore, root = setup_project_ripignore()
-        if ripignore then
-          cpp_function_search_with_hint(add_prompt_hint({
-            cwd = root,
-            force_search_root = root,
-            default_text = vim.fn.expand("<cword>"),
-            vimgrep_arguments = get_project_vimgrep_arguments(ripignore),
-          }, "Hint: 输入函数名，只搜 C/C++ 声明和定义", get_search_title("C++ Functions", root)))
-        end
+        local ignore_files = setup_project_ripignore_all()
+        cpp_function_search_with_hint(add_prompt_hint({
+          cwd = root,
+          force_search_dirs = roots,
+          default_text = vim.fn.expand("<cword>"),
+          vimgrep_arguments = get_project_vimgrep_arguments(ignore_files),
+        }, "Hint: 输入函数名，只搜 C/C++ 声明和定义", get_search_title("C++ Functions", root)))
       end,
       All = function()
         cpp_function_search_with_hint(add_prompt_hint({
           cwd = root,
-          force_search_root = root,
+          force_search_dirs = roots,
           default_text = vim.fn.expand("<cword>"),
           vimgrep_arguments = get_all_vimgrep_arguments(),
         }, "Hint: 输入函数名，只搜 C/C++ 声明和定义", get_search_title("C++ Functions", root)))

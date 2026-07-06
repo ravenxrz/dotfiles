@@ -278,12 +278,12 @@ return {
     },
     enabled = false,
   },
-  {
-    "andymass/vim-matchup",
-    init = function()
-      vim.g.matchup_treesitter_disabled = { "markdown", "markdown_inline" }
-    end,
-  },
+  -- {
+  --   "andymass/vim-matchup",
+  --   init = function()
+  --     vim.g.matchup_treesitter_disabled = { "markdown", "markdown_inline" }
+  --   end,
+  -- },
   {
     "yorickpeterse/nvim-window",
     keys = {
@@ -294,22 +294,22 @@ return {
   {
     "pteroctopus/faster.nvim",
   },
-  {
-    "michaelb/sniprun",
-    branch = "master",
-    build = "sh install.sh",
-    config = function()
-      require("sniprun").setup({
-        -- your options
-        display = { "Classic" },
-        interpreter_options = {
-          Cpp_original = {
-            compiler = "g++ -g --std=c++2a -lpthread",
-          },
-        },
-      })
-    end,
-  },
+  -- {
+  --   "michaelb/sniprun",
+  --   branch = "master",
+  --   build = "sh install.sh",
+  --   config = function()
+  --     require("sniprun").setup({
+  --       -- your options
+  --       display = { "Classic" },
+  --       interpreter_options = {
+  --         Cpp_original = {
+  --           compiler = "g++ -g --std=c++2a -lpthread",
+  --         },
+  --       },
+  --     })
+  --   end,
+  -- },
   {
     "hedyhli/outline.nvim",
     config = function()
@@ -572,6 +572,11 @@ return {
           -- },
 
           path_display = function(_, path)
+            -- 从 workspace project 目录开始显示，隐藏其上层路径。
+            local ok, ts = pcall(require, "telescope_search")
+            if ok and ts.display_path then
+              return ts.display_path(path)
+            end
             local tail = vim.fs.basename(path)
             local parent = vim.fs.dirname(path)
             if parent == "." then

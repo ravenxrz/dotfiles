@@ -95,14 +95,13 @@ keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
 -- telescope
 local ts = require('telescope_search')
 -- Keymap to set the mode
-keymap("n", "<leader>fM", ts.set_search_mode, { desc = "Set Telescope search mode" })
+keymap("n", "<leader>fm", ts.set_search_mode, { desc = "Set Telescope search mode" })
 -- Keymaps for searching, which now use the selected mode
 keymap("n", "<leader>ff", function() ts.search('find_files') end, { desc = "Find files (using current mode)" })
 keymap("n", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep word (using current mode)" })
 keymap("v", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep selected word (using current mode)" })
 keymap("n", "<leader>fg", function() ts.search('live_grep') end, { desc = "Live grep (using current mode)" })
-keymap("n", "<leader>fm", function() ts.search('cpp_functions') end,
-  { desc = "Find C++ function declaration/definition" })
+keymap("n", "<leader>fc", function() ts.search('cpp_functions') end, { desc = "Find C++ function declaration/definition" })
 -- Command to set the mode
 vim.api.nvim_create_user_command('SetTelescopeSearchMode', ts.set_search_mode, {})
 vim.api.nvim_create_user_command('SetTelescopeSearchRoot', ts.set_search_root, {})
