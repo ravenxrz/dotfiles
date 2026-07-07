@@ -4,6 +4,20 @@
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+# Do not inherit a parent/tmux FPATH that already contains oh-my-zsh entries.
+# Keep zsh's system function paths so autoload can still find compinit, colors,
+# add-zsh-hook, and the other standard functions oh-my-zsh uses.
+fpath=(
+  /usr/local/share/zsh/site-functions
+  /usr/share/zsh/site-functions
+  /usr/share/zsh/$ZSH_VERSION/functions
+)
+typeset +x FPATH 2>/dev/null
+
+# Skip oh-my-zsh's compaudit pass on every startup; compinit still uses the
+# cached dump file for completions.
+ZSH_DISABLE_COMPFIX=true
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -76,13 +90,13 @@ plugins=(
   zsh-autosuggestions
   zsh-syntax-highlighting
   vi-mode
-  docker
+  # docker
 )
 
 # plugin settings
 # docker plugin settings
-zstyle ':completion:*:*:docker:*' option-stacking yes
-zstyle ':completion:*:*:docker-*:*' option-stacking yes
+#zstyle ':completion:*:*:docker:*' option-stacking yes
+#zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 
 source $ZSH/oh-my-zsh.sh
@@ -117,6 +131,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 source ~/.shell/functions.sh
+path_remove "$HOME/.pyenv/bin"
 source ~/.shell/fzf-completion.zsh
 source ~/.shell/fzf-key-bindings.zsh
 source ~/.shell/bootstrap.sh
@@ -131,10 +146,6 @@ if [[ $OSTYPE == 'darwin'* ]]; then
   fi
 fi
 export PATH="$HOME/.npm-global/bin:$PATH"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export PATH="/home/zhangxingrui/.local/bin:$PATH"
 export PATH="$PATH:/home/zhangxingrui/.aiden/global-install/bin"
