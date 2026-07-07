@@ -1,0 +1,261 @@
+#!/usr/bin/env bash
+#
+# remote-dev — 基于 Mutagen 的远程开发同步管理器
+#
+# 让你在本地用原生编辑器(Neovim 等)丝滑编辑, 后台增量同步到远端开发机,
+# 远端负责编译/测试。彻底绕开 "SSH 上去开编辑器" 的按键延迟。
+#
+# 工作流模型: 单边 VCS (本地 = master, 远端 = slave)
+#   - .git 只在本地; 所有 git 操作(含 submodule update)只在本地执行
+#   - Mutagen 只同步工作树, 不同步 .git
+#   - 远端不跑 git, 只负责 build/test
+#
+# 每个 workspace 是一个包含 mutagen.yml 的目录。用法见 `remote-dev help`。
+#
+# 依赖: mutagen (brew install mutagen-io/mutagen/mutagen), ssh, bash>=4 或 zsh
+#
+set -euo pipefail
+
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+TEMPLATE_DIR="$SELF_DIR/templates"
+MUTAGEN="$(command -v mutagen 2>/dev/null || echo /usr/local/bin/mutagen)"
+
+# ---- 输出辅助 ----
+c_reset=$'\033[0m'; c_bold=$'\033[1m'; c_grn=$'\033[32m'; c_ylw=$'\033[33m'; c_red=$'\033[31m'; c_cyn=$'\033[36m'
+info()  { echo "${c_cyn}[remote-dev]${c_reset} $*"; }
+ok()    { echo "${c_grn}[remote-dev]${c_reset} $*"; }
+warn()  { echo "${c_ylw}[remote-dev]${c_reset} $*" >&2; }
+err()   { echo "${c_red}[remote-dev]${c_reset} $*" >&2; }
+die()   { err "$*"; exit 1; }
+
+# ---- 前置检查 ----
+need_mutagen() {
+  [ -x "$MUTAGEN" ] || command -v mutagen >/dev/null 2>&1 || die "未找到 mutagen。请先安装: HOMEBREW_NO_REQUIRE_TAP_TRUST=1 brew install mutagen-io/mutagen/mutagen"
+  "$MUTAGEN" daemon start >/dev/null 2>&1 || true
+}
+
+# 定位 workspace 的 mutagen.yml:
+#   1) 显式 -f/--file 参数   2) 环境变量 REMOTE_DEV_WORKSPACE
+#   3) 当前目录向上查找 mutagen.yml
+find_workspace() {
+  local dir="${1:-$PWD}"
+  if [ -n "${REMOTE_DEV_WORKSPACE:-}" ] && [ -f "$REMOTE_DEV_WORKSPACE/mutagen.yml" ]; then
+    echo "$REMOTE_DEV_WORKSPACE"; return 0
+  fi
+  while [ "$dir" != "/" ]; do
+    [ -f "$dir/mutagen.yml" ] && { echo "$dir"; return 0; }
+    dir="$(dirname "$dir")"
+  done
+  return 1
+}
+
+# 在 workspace 目录中执行 mutagen project 命令
+in_ws() {
+  local ws; ws="$(find_workspace)" || die "当前目录及父目录未找到 mutagen.yml。先 cd 到 workspace, 或用 remote-dev init 创建。"
+  ( cd "$ws" && "$@" )
+}
+
+status_line() {
+  if [ "$#" -gt 0 ] && [ -n "${1:-}" ]; then
+    "$MUTAGEN" sync list "$1" 2>/dev/null | grep -iE "^Name|Status|Conflicts|problems" || "$MUTAGEN" sync list "$1"
+  else
+    "$MUTAGEN" sync list 2>/dev/null | grep -iE "^Name|Status|Conflicts|problems" || "$MUTAGEN" sync list
+  fi
+}
+
+# 列出 mutagen.yml 里所有 "project-name<TAB>alpha路径"。
+# 解析 sync: 段下缩进 2 空格的会话 key, 及其 alpha 值。
+list_projects() {
+  local ws; ws="$(find_workspace)" || return 1
+  awk '
+    /^sync:/        { in_sync=1; next }
+    /^[^[:space:]]/ { in_sync=0 }              # 顶格行 = 离开 sync:
+    in_sync && /^  [A-Za-z0-9-]+:[[:space:]]*$/ {
+      name=$1; sub(/:$/,"",name); cur=name; next
+    }
+    in_sync && cur && /^[[:space:]]+alpha:/ {
+      line=$0; sub(/.*alpha:[[:space:]]*"?/,"",line); sub(/"?[[:space:]]*$/,"",line);
+      if (name!="defaults") print cur "\t" line; cur=""
+    }
+  ' "$ws/mutagen.yml"
+}
+
+# ---- 子命令 ----
+
+cmd_init() {
+  # remote-dev init <workspace-dir>
+  local ws="${1:-$PWD}"
+  ws="$(cd "$ws" 2>/dev/null && pwd)" || die "目录不存在: $1"
+  [ -f "$ws/mutagen.yml" ] && die "$ws/mutagen.yml 已存在, 不覆盖。"
+  cp "$TEMPLATE_DIR/mutagen.yml.tpl" "$ws/mutagen.yml"
+  ok "已在 $ws 生成 mutagen.yml 模板。"
+  info "下一步:"
+  echo "  1) 编辑 $ws/mutagen.yml, 填入远端 host 和每个 project 的 alpha/beta 路径"
+  echo "  2) (可选) 本地补全 submodule:  git submodule update --init"
+  echo "  3) 首灌:   remote-dev bootstrap    (one-way-safe, 只推不删, 排查 ignore)"
+  echo "  4) 稳定后: remote-dev start        (two-way-resolved 双向同步)"
+  echo "  详见 $SELF_DIR/README.md"
+}
+
+cmd_start()   { need_mutagen; info "启动同步会话..."; in_ws "$MUTAGEN" project start;      ok "已启动。用 remote-dev status 查看。"; }
+cmd_stop()    { need_mutagen; in_ws "$MUTAGEN" project pause;  ok "已暂停(会话保留, 可 resume)。"; }
+cmd_resume()  { need_mutagen; in_ws "$MUTAGEN" project resume; ok "已恢复。"; }
+cmd_down()    { need_mutagen; in_ws "$MUTAGEN" project terminate; ok "已终止并清理会话。"; }
+cmd_restart() { cmd_down || true; sleep 1; cmd_start; }
+
+cmd_status()  { need_mutagen; status_line "$@"; }
+
+cmd_flush() {
+  need_mutagen
+  info "flush: 强制同步一轮并阻塞到落盘..."
+  in_ws "$MUTAGEN" project flush
+  ok "flush 完成 @ $(date '+%H:%M:%S')"
+}
+
+cmd_sync() { cmd_flush; echo "---"; status_line; }
+
+# 首灌: one-way-safe 只推不删, 用来在不破坏远端的前提下排查 ignore 是否齐全。
+# 需要 mutagen.yml 里 defaults.mode 临时设为 one-way-safe 或 one-way-replica。
+cmd_bootstrap() {
+  need_mutagen
+  warn "bootstrap 假定 mutagen.yml 的 mode 为 one-way-safe/one-way-replica(首灌)。"
+  warn "若仍是 two-way-resolved, 请先改 mode 再跑。"
+  in_ws "$MUTAGEN" project start
+  ok "首灌已启动。用 remote-dev watch 盯扫描进度, remote-dev status 看冲突。"
+}
+
+# 持续监控扫描直到全部进入 Watching
+cmd_watch() {
+  need_mutagen
+  local n=0
+  while [ "$n" -lt 120 ]; do
+    local out; out="$("$MUTAGEN" sync list 2>/dev/null | grep -iE "^Name|Status|Conflicts" | tr '\n' ' ' | sed 's/Name://g')"
+    echo "[$(date '+%H:%M:%S')] $out"
+    echo "$out" | grep -qi "Scanning" || { ok "全部完成扫描。"; break; }
+    n=$((n+1)); sleep 20
+  done
+}
+
+# remote-dev build <project-name> <cmd...>
+# flush 后在远端对应 project 目录执行构建命令
+cmd_build() {
+  need_mutagen
+  local proj="${1:?用法: remote-dev build <project-name> <cmd...>}"; shift
+  local ws; ws="$(find_workspace)" || die "未找到 mutagen.yml"
+  # 从 mutagen.yml 解析该 project 的 beta 端点
+  local beta; beta="$(grep -A3 "^  ${proj}:" "$ws/mutagen.yml" | grep -E "^[[:space:]]*beta:" | head -1 | sed -E 's/.*beta:[[:space:]]*"?([^"]+)"?.*/\1/')"
+  [ -n "$beta" ] || die "在 mutagen.yml 未找到 project '$proj' 的 beta 端点。"
+  local host="${beta%%:*}"; local rpath="${beta#*:}"
+  info "flush 后在 ${host}:${rpath} 执行: $*"
+  ( cd "$ws" && "$MUTAGEN" project flush )
+  ssh "$host" "cd '$rpath' && $*"
+}
+
+# remote-dev checkout <branch>            对 workspace 内所有 project 仓库切同名分支
+# remote-dev checkout <project> <branch>  只切指定 project
+#
+# 流程(做到切分支无感): 先 flush 结算 -> 本地 git checkout + submodule update
+#                       -> 再 flush 把大 diff 推到远端并阻塞到落盘 -> status
+cmd_checkout() {
+  need_mutagen
+  local ws; ws="$(find_workspace)" || die "未找到 mutagen.yml"
+  local only_proj="" branch=""
+  if [ "$#" -eq 2 ]; then only_proj="$1"; branch="$2"
+  elif [ "$#" -eq 1 ]; then branch="$1"
+  else die "用法: remote-dev checkout <branch> | remote-dev checkout <project> <branch>"; fi
+
+  # 1) 先 flush, 把两端 pending 改动结算干净, 避免 checkout 被本地意外改动挡住
+  info "checkout 前 flush, 结算 pending 改动..."
+  ( cd "$ws" && "$MUTAGEN" project flush )
+
+  # 2) 遍历 project, 本地 git checkout + submodule update
+  local did=0
+  while IFS=$'\t' read -r name alpha; do
+    [ -n "$name" ] || continue
+    [ -n "$only_proj" ] && [ "$name" != "$only_proj" ] && continue
+    [ -d "$alpha/.git" ] || [ -f "$alpha/.git" ] || { warn "跳过 $name: $alpha 不是 git 仓库"; continue; }
+    did=1
+    echo
+    info "[$name] $alpha"
+    if ! git -C "$alpha" rev-parse --verify --quiet "$branch" >/dev/null 2>&1 \
+         && ! git -C "$alpha" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+      warn "  分支 '$branch' 在本地和 origin 均不存在, 跳过 $name"
+      continue
+    fi
+    if ! git -C "$alpha" checkout "$branch" 2>&1 | sed 's/^/  /'; then
+      err "  checkout 失败: $name (可能有未提交改动/冲突), 已跳过"
+      continue
+    fi
+    # submodule 也要跟着新分支更新(远端不跑 git, 只能靠本地更新后同步)
+    if [ -f "$alpha/.gitmodules" ]; then
+      info "  更新 submodule..."
+      git -C "$alpha" submodule update --init 2>&1 | sed 's/^/  /' || warn "  部分 submodule 更新失败(可能无权限), 已忽略"
+    fi
+  done < <(list_projects)
+  [ "$did" = 1 ] || die "没有匹配的 project$( [ -n "$only_proj" ] && echo " '$only_proj'" )"
+
+  # 3) 再 flush, 把切分支产生的大 diff 推到远端并阻塞到落盘
+  echo
+  info "checkout 后 flush, 同步到远端并等待落盘..."
+  ( cd "$ws" && "$MUTAGEN" project flush )
+  ok "切分支完成 @ $(date '+%H:%M:%S')"
+  echo "---"
+  status_line
+}
+
+cmd_help() {
+  cat <<EOF
+${c_bold}remote-dev${c_reset} — 基于 Mutagen 的远程开发同步管理器
+
+${c_bold}用法:${c_reset} remote-dev <command> [args]
+
+${c_bold}配置:${c_reset}
+  init [dir]            在 dir(默认当前目录) 生成 mutagen.yml 模板
+  bootstrap            首灌(需 mode=one-way-safe/replica): 只推不删, 排查 ignore
+
+${c_bold}生命周期:${c_reset}
+  start                启动 workspace 所有同步会话
+  stop                 暂停(保留会话)
+  resume               恢复
+  down                 终止并清理
+  restart              down + start (改 ignore/mode 后用)
+
+${c_bold}日常:${c_reset}
+  status [name]        查看状态/冲突/问题
+  flush                强制同步一轮并阻塞到落盘(切分支后用)
+  sync                 flush + status
+  watch                持续监控首次扫描直到完成
+  checkout <branch>            切分支(全部 project): flush→git checkout+submodule→flush→status
+  checkout <proj> <branch>     只切指定 project
+  build <proj> <cmd>   flush 后在远端 <proj> 目录执行 <cmd>
+
+${c_bold}workspace 定位顺序:${c_reset}
+  1) 环境变量 REMOTE_DEV_WORKSPACE
+  2) 当前目录向上查找 mutagen.yml
+
+${c_bold}依赖:${c_reset} mutagen, ssh。详见 $SELF_DIR/README.md
+EOF
+}
+
+# ---- 分发 ----
+main() {
+  local cmd="${1:-help}"; shift || true
+  case "$cmd" in
+    init)      cmd_init "$@" ;;
+    bootstrap) cmd_bootstrap "$@" ;;
+    start)     cmd_start "$@" ;;
+    stop|pause) cmd_stop "$@" ;;
+    resume)    cmd_resume "$@" ;;
+    down|terminate) cmd_down "$@" ;;
+    restart)   cmd_restart "$@" ;;
+    status|st|list) cmd_status "$@" ;;
+    flush)     cmd_flush "$@" ;;
+    sync)      cmd_sync "$@" ;;
+    watch)     cmd_watch "$@" ;;
+    checkout|co) cmd_checkout "$@" ;;
+    build)     cmd_build "$@" ;;
+    help|-h|--help) cmd_help ;;
+    *) err "未知命令: $cmd"; echo; cmd_help; exit 1 ;;
+  esac
+}
+main "$@"
