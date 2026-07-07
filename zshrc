@@ -4,16 +4,6 @@
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Do not inherit a parent/tmux FPATH that already contains oh-my-zsh entries.
-# Keep zsh's system function paths so autoload can still find compinit, colors,
-# add-zsh-hook, and the other standard functions oh-my-zsh uses.
-fpath=(
-  /usr/local/share/zsh/site-functions
-  /usr/share/zsh/site-functions
-  /usr/share/zsh/$ZSH_VERSION/functions
-)
-typeset +x FPATH 2>/dev/null
-
 # Skip oh-my-zsh's compaudit pass on every startup; compinit still uses the
 # cached dump file for completions.
 ZSH_DISABLE_COMPFIX=true
