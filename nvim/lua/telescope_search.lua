@@ -447,7 +447,10 @@ end
 local function add_prompt_hint(opts, hint_text, title)
   opts = opts or {}
   opts.preview = vim.tbl_deep_extend("force", opts.preview or {}, {
-    treesitter = true,
+    -- Keep Telescope preview buffers away from Tree-sitter. Markdown previews
+    -- can trigger `attempt to call method 'range' (a nil value)` before the
+    -- normal Markdown FileType autocmd has a chance to stop Tree-sitter.
+    treesitter = false,
   })
 
   local original_attach_mappings = opts.attach_mappings
