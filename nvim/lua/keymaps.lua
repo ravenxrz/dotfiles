@@ -91,28 +91,29 @@ end, opts)
 keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
-
-
--- telescope
-local ts = require('telescope_search')
--- Keymap to set the mode
-keymap("n", "<leader>fm", ts.set_search_mode, { desc = "Set Telescope search mode" })
--- Keymaps for searching, which now use the selected mode
-keymap("n", "<leader>ff", function() ts.search('find_files') end, { desc = "Find files (using current mode)" })
-keymap("n", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep word (using current mode)" })
-keymap("v", "<leader>fw", function() ts.search('grep_word') end, { desc = "Grep selected word (using current mode)" })
-keymap("n", "<leader>fg", function() ts.search('live_grep') end, { desc = "Live grep (using current mode)" })
-keymap("n", "<leader>fc", function() ts.search('cpp_functions') end, { desc = "Find C++ function declaration/definition" })
--- Command to set the mode
-vim.api.nvim_create_user_command('SetTelescopeSearchMode', ts.set_search_mode, {})
-vim.api.nvim_create_user_command('SetTelescopeSearchRoot', ts.set_search_root, {})
+keymap("n", "<leader>ff", function()
+  require("search_toggle").find_files()
+end, { desc = "Find files" })
+keymap("n", "<leader>fm", ':lua require("search_toggle").open_search_menu()<cmd>', { desc = "Search menu" })
 keymap(
   "n",
   "<leader>s",
-  "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbol_width = 55, fname_width = 25})<cr>",
-  opts
+  function()
+    require("telescope.builtin").lsp_document_symbols({
+      symbol_width = 55,
+      fname_width = 25,
+      sorting_strategy = "ascending",
+    })
+  end,
+  { desc = "Document symbols" }
 )
-keymap("n", "<leader>S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", opts)
+keymap("n", "<leader>S", function()
+  require("telescope.builtin").lsp_dynamic_workspace_symbols({
+    symbol_width = 55,
+    fname_width = 25,
+    sorting_strategy = "ascending",
+  })
+end, { desc = "Workspace symbols" })
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
 keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
@@ -125,15 +126,21 @@ keymap("n", "<leader>lo", "<cmd>Outline<CR>", opts)
 -- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
 -- search & replace config
-keymap("n", "<leader>fr", "<cmd>GrugFar<cr>", opts)
--- keymap("n", "<leader>fg", "<cmd>GrugFar<cr>", opts)
--- keymap("n", "<leader>fw", "<cmd>lua require('grug-far').open({ prefills = { search = vim.fn.expand('<cword>') } })<cr>",
---   opts)
+keymap("n", "<leader>fg", function()
+  require("search_toggle").live_grep()
+end, { desc = "Live grep" })
+keymap("n", "<leader>fw", function()
+  require("search_toggle").grep_current_word()
+end, { desc = "Search current word" })
+keymap("v", "<leader>fw", function()
+  require("search_toggle").grep_visual_selection()
+end, { desc = "Search visual selection" })
+keymap("n", "<leader>fr", function()
+  require("search_toggle").open_grug_far()
+end, { desc = "Search and replace" })
 -- keymap("n", "<leader>fc",
 --   "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%'),  search = vim.fn.expand('<cword>')  } })<cr>",
 --   opts)
--- keymap("v", "<leader>fw",
---   ":<C-u>lua require('grug-far').with_visual_selection({ prefills = { search = vim.fn.expand('<cword>') } })<cr>", opts)
 
 -- session manager
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)

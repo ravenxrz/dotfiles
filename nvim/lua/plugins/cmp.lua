@@ -105,25 +105,4 @@ return {
     },
     opts_extend = { "sources.default" },
   },
-  -- {
-  --   "git@code.byted.org:chenjiaqi.cposture/codeverse.vim.git",
-  --   cond = get_os_platform() == "Linux",
-  --   dependencies = {
-  --     "hrsh7th/nvim-cmp",
-  --   },
-  --   config = function()
-  --     require("marscode").setup({})
-  --   end,
-  -- },
-  -- {
-  --  "rcarriga/cmp-dap",
-  --  event = "InsertEnter",
-  --  config = function()
-  --   require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-  --    sources = {
-  --     { name = "dap" },
-  --    },
-  --   })
-  --  end,
-  -- },
 }

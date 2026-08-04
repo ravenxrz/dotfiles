@@ -1,289 +1,12 @@
 return {
   {
-    "ravenxrz/markdown-preview.nvim",
-    ft = { "markdown" },
-    build = "cd app && npm install",
-    init = function()
-      vim.g.mkdp_filetypes = { "markdown" }
-      vim.g.mkdp_auto_start = 1
-      vim.g.mkdp_auto_close = 0
-      vim.g.mkdp_open_to_the_world = 1
-      vim.g.mkdp_open_ip = ""
-      local function mkdp_close_handle(handle)
-        if handle ~= nil and not handle:is_closing() then
-          handle:close()
-        end
-      end
-
-      local function mkdp_can_listen(host, port)
-        local uv = vim.uv or vim.loop
-        local handle = uv.new_tcp()
-        if handle == nil then
-          return false
-        end
-
-        local ok_bind, bind_rc = pcall(handle.bind, handle, host, port)
-        if not ok_bind or bind_rc ~= 0 then
-          mkdp_close_handle(handle)
-          return false
-        end
-
-        -- bind() alone can still succeed on an in-use port in some SO_REUSEADDR
-        -- cases. listen() is what markdown-preview's Node server ultimately
-        -- needs, so probe both.
-        local ok_listen, listen_rc = pcall(handle.listen, handle, 1, function() end)
-        mkdp_close_handle(handle)
-        return ok_listen and listen_rc == 0
-      end
-
-      local function mkdp_pick_system_port(host)
-        local uv = vim.uv or vim.loop
-        local handle = uv.new_tcp()
-        if handle == nil then
-          return nil
-        end
-
-        local ok_bind, bind_rc = pcall(handle.bind, handle, host, 0)
-        if not ok_bind or bind_rc ~= 0 then
-          mkdp_close_handle(handle)
-          return nil
-        end
-
-        local ok_listen, listen_rc = pcall(handle.listen, handle, 1, function() end)
-        if not ok_listen or listen_rc ~= 0 then
-          mkdp_close_handle(handle)
-          return nil
-        end
-
-        local sockname = handle:getsockname()
-        mkdp_close_handle(handle)
-        return sockname and sockname.port or nil
-      end
-
-      local function mkdp_pick_port()
-        local host = vim.g.mkdp_open_to_the_world == 1 and "0.0.0.0" or "127.0.0.1"
-        local preferred_port = 8088
-        local scan_count = 128
-
-        for port = preferred_port, preferred_port + scan_count - 1 do
-          if mkdp_can_listen(host, port) then
-            return tostring(port)
-          end
-        end
-
-        local system_port = mkdp_pick_system_port(host)
-        return system_port and tostring(system_port) or ""
-      end
-
-      vim.g.mkdp_port = mkdp_pick_port()
-      vim.g.mkdp_echo_preview_url = 1
-      vim.g.mkdp_browserfunc = "OpenMarkdownPreview"
-      vim.g.mkdp_combine_preview = 1
-      vim.g.mkdp_combine_preview_auto_refresh = 1
-      vim.g.mkdp_preview_options = {
-        disable_sync_scroll = 1,
-        toc = {
-          listType = "ul",
-        },
-      }
-
-      vim.cmd([[
-        function! OpenMarkdownPreview(url)
-          let g:mkdp_last_preview_url = a:url
-          call setreg('"', a:url)
-          try
-            call setreg('+', a:url)
-            echom 'Markdown preview URL copied: ' . a:url
-          catch
-            echohl WarningMsg
-            echom 'Markdown preview URL saved to unnamed register, but failed to copy to + clipboard: ' . a:url
-            echohl None
-          endtry
-        endfunction
-      ]])
-
-      -- Auto echo + copy the preview URL whenever a markdown buffer is opened.
-      -- This does not rely on the preview being already started; it just computes
-      -- the standard mkdp URL (`/page/<bufnr>`) and puts it into registers.
-      local function mkdp_make_url(bufnr)
-        -- Prefer the real URL emitted by markdown-preview.nvim (it may auto-pick a LAN IP
-        -- even if mkdp_open_ip is empty), then just rewrite the /page/<bufnr> part.
-        local last = vim.g.mkdp_last_preview_url
-        if type(last) == "string" then
-          local base = last:match("^(https?://[^/]+)")
-          if base ~= nil then
-            return string.format("%s/page/%d", base, bufnr)
-          end
-        end
-
-        -- Fallback to configured host/port.
-        local port = vim.g.mkdp_port or "8080"
-        local host = vim.g.mkdp_open_ip
-        if host == nil or host == "" then
-          host = "127.0.0.1"
-        end
-        return string.format("http://%s:%s/page/%d", host, port, bufnr)
-      end
-
-      local function mkdp_copy_and_echo(url)
-        vim.fn.setreg('"', url)
-        local ok = pcall(vim.fn.setreg, "+", url)
-        if ok then
-          vim.api.nvim_echo({ { "Markdown preview URL copied: " .. url, "None" } }, false, {})
-        else
-          vim.api.nvim_echo(
-            { { "Markdown preview URL saved to unnamed register (clipboard failed): " .. url, "WarningMsg" } },
-            false,
-            {}
-          )
-        end
-      end
-
-      local function mkdp_try_copy_for_buf(bufnr)
-        if vim.bo[bufnr].filetype ~= "markdown" then
-          return
-        end
-        -- Debounce: avoid double echo/copy caused by multiple events (e.g. FileType + BufEnter).
-        local now_ms = (vim.uv or vim.loop).now()
-        local last_ms = vim.b[bufnr].mkdp_last_copy_ms or 0
-        if (now_ms - last_ms) < 200 then
-          return
-        end
-        vim.b[bufnr].mkdp_last_copy_ms = now_ms
-        mkdp_copy_and_echo(mkdp_make_url(bufnr))
-      end
-
-      -- 1) Initial open / :edit: ensure we copy once when markdown filetype is detected.
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "markdown",
-        callback = function(ev)
-          mkdp_try_copy_for_buf(ev.buf)
-        end,
-      })
-
-      -- 2) Bufferline / normal buffer switching: re-copy whenever we ENTER a markdown buffer.
-      vim.api.nvim_create_autocmd("BufEnter", {
-        callback = function(ev)
-          mkdp_try_copy_for_buf(ev.buf)
-        end,
-      })
-
-      -- Manual helper (in case you want to recopy after changing mkdp_open_ip / mkdp_port).
-      vim.api.nvim_create_user_command("MkdpCopyUrl", function()
-        mkdp_copy_and_echo(mkdp_make_url(vim.api.nvim_get_current_buf()))
-      end, {})
-    end,
-  },
-  -- {
-  --   "saecki/crates.nvim",
-  --   tag = "stable",
-  --   config = function()
-  --     require("crates").setup()
-  --   end,
-  --   enabled = false,
-  -- },
-  -- {
-  --   "mrcjkb/rustaceanvim",
-  --   version = "^6", -- Recommended
-  --   lazy = false,   -- This plugin is already lazy
-  --   enabled = false,
-  -- },
-  -- {
-  --   "nwiizo/cargo.nvim",
-  --   build = "cargo build --release",
-  --   config = function()
-  --     require("cargo").setup({
-  --       float_window = true,
-  --       window_width = 0.8,
-  --       window_height = 0.8,
-  --       border = "rounded",
-  --       auto_close = true,
-  --       close_timeout = 5000,
-  --     })
-  --   end,
-  --   ft = { "rust" },
-  --   cmd = {
-  --     "CargoBench",
-  --     "CargoBuild",
-  --     "CargoClean",
-  --     "CargoDoc",
-  --     "CargoNew",
-  --     "CargoRun",
-  --     "CargoRunTerm",
-  --     "CargoTest",
-  --     "CargoUpdate",
-  --     "CargoCheck",
-  --     "CargoClippy",
-  --     "CargoAdd",
-  --     "CargoRemove",
-  --     "CargoFmt",
-  --     "CargoFix"
-  --   }
-  -- },
-  {
-    "andrewferrier/debugprint.nvim",
+    "m4xshen/hardtime.nvim",
+    lazy = false,
+    dependencies = { "MunifTanjim/nui.nvim" },
     opts = {
-      keymaps = {
-        normal = {
-          plain_below = "g?p",
-          plain_above = "g?P",
-          variable_below = "g?v",
-          variable_above = "g?V",
-          variable_below_alwaysprompt = "",
-          variable_above_alwaysprompt = "",
-          surround_plain = "g?sp",
-          surround_variable = "g?sv",
-          surround_variable_alwaysprompt = "",
-          textobj_below = "g?o",
-          textobj_above = "g?O",
-          textobj_surround = "g?so",
-          toggle_comment_debug_prints = "",
-          delete_debug_prints = "",
-        },
-        insert = {
-          plain = "<C-G>p",
-          variable = "<C-G>v",
-        },
-        visual = {
-          variable_below = "g?v",
-          variable_above = "g?V",
-        },
-      },
-    },
-    dependencies = {
-      "echasnovski/mini.nvim",         -- Optional: Needed for line highlighting (full mini.nvim plugin)
-      "nvim-telescope/telescope.nvim", -- Optional: If you want to use the `:Debugprint search` command with telescope.nvim
-    },
-    lazy = false,                      -- Required to make line highlighting work before debugprint is first used
-    version = "*",                     -- Remove if you DON'T want to use the stable version
-  },
-  {
-    "tamton-aquib/keys.nvim",
-    opts = {
-      enable_on_startup = false,
-      win_opts = {
-        width = 25,
-        -- etc
-      },
-      enabled = false,
+      disable_mouse = false,
     },
   },
-  {
-    "amitds1997/remote-nvim.nvim",
-    version = "*",                     -- Pin to GitHub releases
-    dependencies = {
-      "nvim-lua/plenary.nvim",         -- For standard functions
-      "MunifTanjim/nui.nvim",          -- To build the plugin UI
-      "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
-    },
-    enabled = false,
-  },
-  -- {
-  --   "andymass/vim-matchup",
-  --   init = function()
-  --     vim.g.matchup_treesitter_disabled = { "markdown", "markdown_inline" }
-  --   end,
-  -- },
   {
     "yorickpeterse/nvim-window",
     keys = {
@@ -291,25 +14,6 @@ return {
     },
     config = true,
   },
-  {
-    "pteroctopus/faster.nvim",
-  },
-  -- {
-  --   "michaelb/sniprun",
-  --   branch = "master",
-  --   build = "sh install.sh",
-  --   config = function()
-  --     require("sniprun").setup({
-  --       -- your options
-  --       display = { "Classic" },
-  --       interpreter_options = {
-  --         Cpp_original = {
-  --           compiler = "g++ -g --std=c++2a -lpthread",
-  --         },
-  --       },
-  --     })
-  --   end,
-  -- },
   {
     "hedyhli/outline.nvim",
     config = function()
@@ -413,7 +117,7 @@ return {
     end,
   },
   {
-    "ravenxrz/nvim-tree.lua",
+    "nvim-tree/nvim-tree.lua",
     config = function()
       require("nvim-tree").setup({
         sort = {
@@ -502,9 +206,6 @@ return {
     "sindrets/diffview.nvim",
   },
   {
-    "rickhowe/diffchar.vim",
-  },
-  {
     "numToStr/Comment.nvim",
     event = { "BufReadPost" },
     opts = {
@@ -567,16 +268,16 @@ return {
       telescope.setup({
         defaults = {
           -- sorting_strategy = "ascending", -- display results top->bottom
-          -- layout_config = {
-          --   prompt_position = "top",
-          -- },
+          layout_config = {
+            horizontal = {
+              prompt_position = "top",
+            },
+            vertical = {
+              prompt_position = "top",
+            },
+          },
 
           path_display = function(_, path)
-            -- 从 workspace project 目录开始显示，隐藏其上层路径。
-            local ok, ts = pcall(require, "telescope_search")
-            if ok and ts.display_path then
-              return ts.display_path(path)
-            end
             local tail = vim.fs.basename(path)
             local parent = vim.fs.dirname(path)
             if parent == "." then
@@ -594,25 +295,11 @@ return {
               ["<C-k>"] = actions.cycle_history_prev,
             },
           },
-          -- NOTE: disable treesitter in preview to avoid markdown crash:
-          -- `attempt to call method 'range' (a nil value)` when selecting entries.
-          preview = {
-            treesitter = false,
-          },
         },
       })
       telescope.load_extension("live_grep_args")
     end,
   },
-  -- {
-  -- 	"stevearc/aerial.nvim",
-  -- 	event = "LspAttach",
-  -- 	opts = {},
-  -- 	dependencies = {
-  -- 		-- "nvim-treesitter/nvim-treesitter",
-  -- 		"nvim-tree/nvim-web-devicons",
-  -- 	},
-  -- },
   {
     "akinsho/toggleterm.nvim",
     keys = {
@@ -624,7 +311,6 @@ return {
     version = "*",
     config = function()
       require("toggleterm").setup({
-        size = 30,
         open_mapping = [[<c-\>]],
         hide_numbers = false,
         shade_filetypes = {},
@@ -633,14 +319,20 @@ return {
         start_in_insert = true,
         insert_mappings = true,
         persist_size = true,
-        direction = "horizontal",
+        direction = "float",
         close_on_exit = true,
         shell = vim.o.shell,
         float_opts = {
           winblend = 0,
-          border = "single",
-          width = 300,
-          height = 100,
+          border = "none",
+          width = function()
+            return vim.o.columns
+          end,
+          height = function()
+            return vim.o.lines - vim.o.cmdheight
+          end,
+          row = 0,
+          col = 0,
           highlights = {
             border = "Normal",
             background = "Normal",
@@ -734,27 +426,6 @@ return {
     end,
   },
   {
-    "romgrk/barbar.nvim",
-    dependencies = {
-      "lewis6991/gitsigns.nvim",     -- OPTIONAL: for git status
-      "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
-    },
-    init = function()
-      vim.g.barbar_auto_setup = false
-    end,
-    opts = {
-      icons = {
-        pinned = { button = "", filename = true },
-      },
-      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
-      -- animation = true,
-      -- insert_at_start = true,
-      -- …etc.
-    },
-    version = "^1.0.0", -- optional: only update when a new 1.x version is released
-    enabled = false,
-  },
-  {
     "nvim-lualine/lualine.nvim",
     enabled = true,
     dependencies = {
@@ -814,11 +485,6 @@ return {
             "lsp_progress",
           },
           lualine_x = {
-            {
-              function()
-                return "TS:" .. require("telescope_search").current_search_mode
-              end,
-            },
             --[[ 'diff', ]]
             "diagnostics",
             "filetype",
@@ -1078,36 +744,26 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     version = "*",
-    -- commit = "1b050206e490a4146cdf25c7b38969c1711b5620",
     build = ":TSUpdate",
-    config = function()
-      local configs = require("nvim-treesitter.configs")
-      configs.setup({
-        ensure_installed = {
-          "cpp",
-          "json",
-          "yaml",
-          "python",
-          "lua",
-        },
-        sync_install = false,
-        highlight = {
-          enable = false,
-          use_languagetree = false,
-          disable = function(_, bufnr)
-            local buf_name = vim.api.nvim_buf_get_name(bufnr)
-            local file_size = vim.api.nvim_call_function("getfsize", { buf_name })
-            return file_size > 30 * 1024
-          end,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = {
-          enable = false,
-          -- disable = {
-          --   "python"
-          -- }
-        },
-      })
+    opts = {
+      ensure_installed = {
+        "c",
+        "cpp",
+        "json",
+        "yaml",
+        "python",
+        "lua",
+      },
+      sync_install = false,
+      highlight = {
+        enable = false,
+      },
+      indent = {
+        enable = false,
+      },
+    },
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
     end,
   },
   {
@@ -1171,52 +827,52 @@ return {
       end)
 
       -- for move
+      local function safe_ts_move(method, query, query_group)
+        return function()
+          local ok_move, move = pcall(require, "nvim-treesitter-textobjects.move")
+          if not ok_move then
+            vim.notify("nvim-treesitter-textobjects.move is not available", vim.log.levels.WARN)
+            return
+          end
+          local fn = move[method]
+          if type(fn) ~= "function" then
+            vim.notify("Unknown Tree-sitter move method: " .. tostring(method), vim.log.levels.WARN)
+            return
+          end
+          local ok, err = pcall(fn, query, query_group)
+          if not ok then
+            vim.notify(
+              string.format("Tree-sitter move failed for %s in %s: %s", vim.inspect(query), tostring(query_group), err),
+              vim.log.levels.WARN
+            )
+          end
+        end
+      end
+
       vim.keymap.set({ "n", "x", "o" }, "]f", function()
-        require("nvim-treesitter-textobjects.move").goto_next_start("@custom.function.declare", "textobjects")
+        require("treesitter_function_move").goto_next()
       end)
       vim.keymap.set({ "n", "x", "o" }, "[f", function()
-        require("nvim-treesitter-textobjects.move").goto_previous_start("@custom.function.declare", "textobjects")
+        require("treesitter_function_move").goto_previous()
       end)
 
-      --
-      vim.keymap.set({ "n", "x", "o" }, "]m", function()
-        require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects")
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "]]", function()
-        require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects")
-      end)
+      vim.keymap.set({ "n", "x", "o" }, "]m", safe_ts_move("goto_next_start", "@function.outer", "textobjects"))
+      vim.keymap.set({ "n", "x", "o" }, "]]", safe_ts_move("goto_next_start", "@class.outer", "textobjects"))
       -- You can also pass a list to group multiple queries.
-      vim.keymap.set({ "n", "x", "o" }, "]o", function()
-        move.goto_next_start({ "@loop.inner", "@loop.outer" }, "textobjects")
-      end)
+      vim.keymap.set({ "n", "x", "o" }, "]o",
+        safe_ts_move("goto_next_start", { "@loop.inner", "@loop.outer" }, "textobjects"))
       -- You can also use captures from other query groups like `locals.scm` or `folds.scm`
-      vim.keymap.set({ "n", "x", "o" }, "]s", function()
-        require("nvim-treesitter-textobjects.move").goto_next_start("@local.scope", "locals")
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "]z", function()
-        require("nvim-treesitter-textobjects.move").goto_next_start("@fold", "folds")
-      end)
+      vim.keymap.set({ "n", "x", "o" }, "]s", safe_ts_move("goto_next_start", "@local.scope", "locals"))
+      vim.keymap.set({ "n", "x", "o" }, "]z", safe_ts_move("goto_next_start", "@fold", "folds"))
 
-      vim.keymap.set({ "n", "x", "o" }, "]M", function()
-        require("nvim-treesitter-textobjects.move").goto_next_end("@function.outer", "textobjects")
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "][", function()
-        require("nvim-treesitter-textobjects.move").goto_next_end("@class.outer", "textobjects")
-      end)
+      vim.keymap.set({ "n", "x", "o" }, "]M", safe_ts_move("goto_next_end", "@function.outer", "textobjects"))
+      vim.keymap.set({ "n", "x", "o" }, "][", safe_ts_move("goto_next_end", "@class.outer", "textobjects"))
 
-      vim.keymap.set({ "n", "x", "o" }, "[m", function()
-        require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects")
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "[[", function()
-        require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer", "textobjects")
-      end)
+      vim.keymap.set({ "n", "x", "o" }, "[m", safe_ts_move("goto_previous_start", "@function.outer", "textobjects"))
+      vim.keymap.set({ "n", "x", "o" }, "[[", safe_ts_move("goto_previous_start", "@class.outer", "textobjects"))
 
-      vim.keymap.set({ "n", "x", "o" }, "[M", function()
-        require("nvim-treesitter-textobjects.move").goto_previous_end("@function.outer", "textobjects")
-      end)
-      vim.keymap.set({ "n", "x", "o" }, "[]", function()
-        require("nvim-treesitter-textobjects.move").goto_previous_end("@class.outer", "textobjects")
-      end)
+      vim.keymap.set({ "n", "x", "o" }, "[M", safe_ts_move("goto_previous_end", "@function.outer", "textobjects"))
+      vim.keymap.set({ "n", "x", "o" }, "[]", safe_ts_move("goto_previous_end", "@class.outer", "textobjects"))
 
       --   require("nvim-treesitter.configs").setup({
       --     textobjects = {
@@ -1358,51 +1014,15 @@ return {
       local ufo = require("ufo")
       ufo.setup({
         fold_virt_text_handler = handler,
+        provider_selector = function()
+          return { "treesitter", "indent" }
+        end,
       })
       vim.api.nvim_set_hl(0, "UfoFoldedBg", { bg = nil, fg = nil })
       vim.api.nvim_set_hl(0, "UfoFoldedFg", { link = "Comment" })
       vim.keymap.set("n", "zR", ufo.openAllFolds)
       vim.keymap.set("n", "zM", ufo.closeAllFolds)
     end,
-  },
-  {
-    "dgagn/diagflow.nvim",
-    cond = false,
-    event = "LspAttach",
-    opts = {
-      enable = true,
-      max_width = 60,     -- The maximum width of the diagnostic messages
-      max_height = 10,    -- the maximum height per diagnostics
-      severity_colors = { -- The highlight groups to use for each diagnostic severity level
-        error = "DiagnosticFloatingError",
-        warning = "DiagnosticFloatingWarn",
-        info = "DiagnosticFloatingInfo",
-        hint = "DiagnosticFloatingHint",
-      },
-      format = function(diagnostic)
-        return diagnostic.message
-      end,
-      gap_size = 1,
-      scope = "line", -- 'cursor', 'line' this changes the scope, so instead of showing errors under the cursor, it shows errors on the entire line.
-      padding_top = 0,
-      padding_right = 0,
-      text_align = "right",                                  -- 'left', 'right'
-      placement = "top",                                     -- 'top', 'inline'
-      inline_padding_left = 0,                               -- the padding left when the placement is inline
-      update_event = { "DiagnosticChanged", "BufReadPost" }, -- the event that updates the diagnostics cache
-      toggle_event = {},                                     -- if InsertEnter, can toggle the diagnostics on inserts
-      show_sign = true,                                      -- set to true if you want to render the diagnostic sign before the diagnostic message
-      render_event = { "DiagnosticChanged", "CursorMoved" },
-      border_chars = {
-        top_left = "┌",
-        top_right = "┐",
-        bottom_left = "└",
-        bottom_right = "┘",
-        horizontal = "─",
-        vertical = "│",
-      },
-      show_borders = true,
-    },
   },
   {
     "tpope/vim-dadbod",
@@ -1422,48 +1042,6 @@ return {
     init = function()
       -- Your DBUI configuration
       vim.g.db_ui_use_nerd_fonts = 1
-    end,
-  },
-  {
-    "echasnovski/mini.animate",
-    -- cond = get_os_platform() == "MacOS",
-    cond = false,
-    opts = function(_, opts)
-      -- don't use animate when scrolling with the mouse
-      local mouse_scrolled = false
-      for _, scroll in ipairs({ "Up", "Down" }) do
-        local key = "<ScrollWheel" .. scroll .. ">"
-        vim.keymap.set({ "", "i" }, key, function()
-          mouse_scrolled = true
-          return key
-        end, { expr = true })
-      end
-
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "grug-far",
-        callback = function()
-          vim.b.minianimate_disable = true
-        end,
-      })
-
-      local animate = require("mini.animate")
-      return vim.tbl_deep_extend("force", opts, {
-        resize = {
-          timing = animate.gen_timing.linear({ duration = 50, unit = "total" }),
-        },
-        scroll = {
-          timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
-          subscroll = animate.gen_subscroll.equal({
-            predicate = function(total_scroll)
-              if mouse_scrolled then
-                mouse_scrolled = false
-                return false
-              end
-              return total_scroll > 1
-            end,
-          }),
-        },
-      })
     end,
   },
   -- Lua

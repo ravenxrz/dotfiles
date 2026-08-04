@@ -173,42 +173,48 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-
--- 禁用markdown的treessiter, 老是会报错
--- 给markdown文件注入toc，可以有导航目录
 vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("telescope_disable_folds", { clear = true }),
+  pattern = { "TelescopePrompt", "TelescopeResults" },
+  callback = function(args)
+    for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+      vim.api.nvim_set_option_value("foldenable", false, { win = win })
+      vim.api.nvim_set_option_value("foldmethod", "manual", { win = win })
+      vim.api.nvim_set_option_value("foldexpr", "0", { win = win })
+    end
+  end,
+})
+
+
+-- Browser Markdown preview used to inject [[toc]] automatically here.
+-- Keep TraeCLI/AI generated plan files unmodified for in-buffer review with
+-- render-markdown.nvim; add a TOC marker manually only when browser preview
+-- specifically needs one.
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("markdown_review_view", { clear = true }),
   pattern = { "markdown", "markdown.mdx" },
   callback = function(args)
+    local bo = vim.bo[args.buf]
+    if bo.buftype ~= "" or vim.api.nvim_buf_get_name(args.buf) == "" then
+      return
+    end
+
+    -- Review-oriented defaults: keep Markdown readable inside Neovim without
+    -- forcing a browser preview or mutating generated plan files.
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.breakindent = true
+    vim.opt_local.breakindentopt = "shift:2,min:20"
+    vim.opt_local.showbreak = "  "
+    vim.opt_local.conceallevel = 2
     vim.opt_local.foldmethod = "manual"
     vim.opt_local.foldexpr = "0"
 
-    -- markdown-preview.nvim 不依赖 Tree-sitter；这里停掉 parser 避免 markdown injections 报错。
     pcall(vim.treesitter.stop, args.buf)
 
-    local function ensure_markdown_preview_toc()
-      local lines = vim.api.nvim_buf_get_lines(args.buf, 0, -1, false)
-      for _, line in ipairs(lines) do
-        if line:match("^%s*%[%[toc%]%]%s*$") or line:match("^%s*%[toc%]%s*$") or line:match("^%s*%$%{toc%}%s*$") or line:match("^%s*%[%[_toc_%]%]%s*$") then
-          return
-        end
-      end
-
-      local insert_at = 0
-      if lines[1] and lines[1]:match("^%-%-%-%s*$") then
-        for i = 2, #lines do
-          if lines[i]:match("^%-%-%-%s*$") or lines[i]:match("^%.%.%.%s*$") then
-            insert_at = i
-            break
-          end
-        end
-      end
-
-      vim.api.nvim_buf_set_lines(args.buf, insert_at, insert_at, false, { "[[toc]]", "" })
-    end
-
-    -- markdown-preview.nvim only renders TOC when the document contains a TOC
-    -- marker. Since preview auto-starts for Markdown files, insert the marker
-    -- automatically so the browser preview always has heading navigation.
-    ensure_markdown_preview_toc()
+    -- Keep Markdown readable, but do not force Zen Mode automatically.
+    -- Use <leader>zz when a centered Zen view is wanted.
   end,
 })
+

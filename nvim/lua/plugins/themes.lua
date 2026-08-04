@@ -1,24 +1,7 @@
 return {
   {
-    "EdenEast/nightfox.nvim",
-    lazy = false,
-    priority = 1000,
-  },
-  {
-    "yorickpeterse/nvim-grey"
-  },
-  -- {
-  --   "sainnhe/sonokai",
-  --   priority = 999,
-  -- },
-  -- {
-  --   "eldritch-theme/eldritch.nvim",
-  --   lazy = false,
-  --   priority = 999,
-  --   opts = {},
-  -- },
-  {
     "miikanissi/modus-themes.nvim",
+    lazy = false,
     priority = 1000,
     config = function()
       require("modus-themes").setup({
@@ -39,52 +22,55 @@ return {
       })
     end,
   },
+
+  -- Catppuccin (soothing pastel; `catppuccin-latte` is the light variant)
+  -- Activate light with: `:colorscheme catppuccin-latte`
   {
-    "loctvl842/monokai-pro.nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
     priority = 1000,
-    opts = {
-      transparent_background = false,
-      terminal_colors = true,
-      devicons = true, -- highlight the icons of `nvim-web-devicons`
-      styles = {
-        comment = { italic = true },
-        keyword = { italic = true },       -- any other keyword
-        type = { italic = true },          -- (preferred) int, long, char, etc
-        storageclass = { italic = true },  -- static, register, volatile, etc
-        structure = { italic = true },     -- struct, union, enum, etc
-        parameter = { italic = true },     -- parameter pass in function
-        annotation = { italic = true },
-        tag_attribute = { italic = true }, -- attribute of tag in reactjs
-      },
-      filter = "pro",                      -- classic | octagon | pro | machine | ristretto | spectrum
-      -- Enable this will disable filter option
-      day_night = {
-        enable = false,            -- turn off by default
-        day_filter = "pro",        -- classic | octagon | pro | machine | ristretto | spectrum
-        night_filter = "spectrum", -- classic | octagon | pro | machine | ristretto | spectrum
-      },
-      inc_search = "background",   -- underline | background
-      background_clear = {
-        -- "float_win",
-        "toggleterm",
-        "telescope",
-        -- "which-key",
-        "renamer",
-        "notify",
-        -- "nvim-tree",
-        -- "neo-tree",
-        -- "bufferline", -- better used if background of `neo-tree` or `nvim-tree` is cleared
-      }, -- "float_win", "toggleterm", "telescope", "which-key", "renamer", "neo-tree", "nvim-tree", "bufferline"
-      plugins = {
-        bufferline = {
-          underline_selected = false,
-          underline_visible = false,
+    config = function()
+      require("catppuccin").setup({
+        flavour = "auto",         -- auto: latte on light bg, mocha on dark bg
+        background = {
+          light = "latte",
+          dark = "mocha",
         },
-        indent_blankline = {
-          context_highlight = "default", -- default | pro
-          context_start_underline = false,
+        transparent_background = false,
+        styles = {
+          comments = { "italic" },
+          keywords = { "italic" },
+          functions = {},
+          variables = {},
         },
-      },
-    }
-  }
+        integrations = {
+          treesitter = true,
+          native_lsp = { enabled = true },
+          telescope = { enabled = true },
+          nvimtree = true,
+          gitsigns = true,
+        },
+      })
+    end,
+  },
+
+  -- Rose Pine (elegant, muted; `rose-pine-dawn` is the light variant)
+  -- Activate light with: `:colorscheme rose-pine-dawn`
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("rose-pine").setup({
+        variant = "auto",       -- auto picks dawn/main by vim.o.background
+        dark_variant = "main",
+        styles = {
+          italic = true,
+          transparency = false,
+        },
+      })
+    end,
+  },
 }
