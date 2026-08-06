@@ -267,7 +267,7 @@ return {
       local telescope = require("telescope")
       telescope.setup({
         defaults = {
-          -- sorting_strategy = "ascending", -- display results top->bottom
+          sorting_strategy = "ascending", -- display results top->bottom
           layout_config = {
             horizontal = {
               prompt_position = "top",

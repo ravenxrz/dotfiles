@@ -94,15 +94,14 @@ keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
 keymap("n", "<leader>ff", function()
   require("search_toggle").find_files()
 end, { desc = "Find files" })
-keymap("n", "<leader>fm", ':lua require("search_toggle").open_search_menu()<cmd>', { desc = "Search menu" })
+keymap("n", "<leader>fm", ':lua require("search_toggle").open_search_menu()<cr>', { desc = "Search menu" })
 keymap(
   "n",
   "<leader>s",
   function()
     require("telescope.builtin").lsp_document_symbols({
       symbol_width = 55,
-      fname_width = 25,
-      sorting_strategy = "ascending",
+      fname_width = 25
     })
   end,
   { desc = "Document symbols" }
@@ -110,8 +109,7 @@ keymap(
 keymap("n", "<leader>S", function()
   require("telescope.builtin").lsp_dynamic_workspace_symbols({
     symbol_width = 55,
-    fname_width = 25,
-    sorting_strategy = "ascending",
+    fname_width = 25
   })
 end, { desc = "Workspace symbols" })
 keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", opts)
