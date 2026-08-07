@@ -135,7 +135,7 @@ remote-dev status
 ```
 若看到某 project 有 `Conflicts` 或 `Transition problems`，多半是**远端有、本地没有的产物/依赖**（远端是编译过的重环境）。查看详情：
 ```bash
-mutagen sync list --long <project-name> | grep -A20 Conflicts
+remote-dev status <project-name> detail
 ```
 把这些 "本地无、远端产物" 的路径加进 `mutagen.yml` 的 `ignore.paths`（模板底部有示例和规则说明），然后：
 ```bash
@@ -213,6 +213,7 @@ Mutagen 默认基于文件监听自动同步，但切分支瞬间大量文件变
 | `remote-dev down` | 终止并清理 |
 | `remote-dev restart` | down + start（改 ignore/mode 后用） |
 | `remote-dev status [name]` | 查看状态/冲突/问题 |
+| `remote-dev status [name] detail` | 查看明细，含具体冲突/问题路径 |
 | `remote-dev flush` | 强制同步一轮并阻塞到落盘(切分支后用) |
 | `remote-dev sync` | flush + status |
 | `remote-dev watch` | 持续监控首次扫描直到完成 |
@@ -239,7 +240,7 @@ Mutagen 默认基于文件监听自动同步，但切分支瞬间大量文件变
 
 **查看某会话详情**：
 ```bash
-mutagen sync list --long <project-name>
+remote-dev status <project-name> detail
 ```
 **查看 daemon**：
 ```bash

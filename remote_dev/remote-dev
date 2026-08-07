@@ -63,6 +63,14 @@ status_line() {
   fi
 }
 
+status_detail() {
+  if [ "$#" -gt 0 ] && [ -n "${1:-}" ]; then
+    "$MUTAGEN" sync list --long "$1"
+  else
+    "$MUTAGEN" sync list --long
+  fi
+}
+
 # 列出 mutagen.yml 里所有 "project-name<TAB>alpha路径"。
 # 解析 sync: 段下缩进 2 空格的会话 key, 及其 alpha 值。
 list_projects() {
@@ -103,7 +111,28 @@ cmd_resume()  { need_mutagen; in_ws "$MUTAGEN" project resume; ok "已恢复。"
 cmd_down()    { need_mutagen; in_ws "$MUTAGEN" project terminate; ok "已终止并清理会话。"; }
 cmd_restart() { cmd_down || true; sleep 1; cmd_start; }
 
-cmd_status()  { need_mutagen; status_line "$@"; }
+cmd_status() {
+  need_mutagen
+  local detail=0 name=""
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      detail|--detail|-d)
+        detail=1
+        ;;
+      *)
+        [ -z "$name" ] || die "用法: remote-dev status [name] [detail]"
+        name="$1"
+        ;;
+    esac
+    shift
+  done
+
+  if [ "$detail" = 1 ]; then
+    status_detail "$name"
+  else
+    status_line "$name"
+  fi
+}
 
 cmd_flush() {
   need_mutagen
@@ -222,6 +251,7 @@ ${c_bold}生命周期:${c_reset}
 
 ${c_bold}日常:${c_reset}
   status [name]        查看状态/冲突/问题
+  status [name] detail 查看状态明细(含具体冲突/问题路径)
   flush                强制同步一轮并阻塞到落盘(切分支后用)
   sync                 flush + status
   watch                持续监控首次扫描直到完成
