@@ -1,13 +1,5 @@
 return {
   {
-    "m4xshen/hardtime.nvim",
-    lazy = false,
-    dependencies = { "MunifTanjim/nui.nvim" },
-    opts = {
-      disable_mouse = false,
-    },
-  },
-  {
     "yorickpeterse/nvim-window",
     keys = {
       { "<C-s>", "<cmd>lua require('nvim-window').pick()<cr>", desc = "nvim-window: Jump to window" },

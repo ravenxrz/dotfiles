@@ -1780,21 +1780,36 @@ local function gtags_reference_picker(command_specs, title, source, fallback_spe
   -- 1. ctags -R --languages=C,C++ --exclude=.git --exclude=build --exclude=third_party
   -- 2. rg --files -g '!build/**' -g '!**/build/**' -g '!third_party/**' -g '!**/third_party/**' | gtags -f -
 function M.setup_buffer(bufnr)
-  keymap("n", "gD", function()
+  local uname = vim.uv and vim.uv.os_uname() or vim.loop.os_uname()
+  local is_macos = uname.sysname == "Darwin"
+
+  local tags_definition = function()
     goto_definition(bufnr)
-  end, { buffer = bufnr, desc = "Go to definition via treesitter, gtags, and ctags" })
+  end
 
-  keymap("n", "gd", function()
+  local lsp_definition = function()
     vim.lsp.buf.definition()
-  end, { buffer = bufnr, desc = "Go to definition via LSP" })
+  end
 
-  keymap("n", "gR", gtags_reference_picker({ "global", "-rx", "--literal" }, "Gtags References", "ref",
-    { "global", "-sx", "--literal" }),
-    { buffer = bufnr, desc = "Find references via gtags" })
+  local tags_references = gtags_reference_picker({ "global", "-rx", "--literal" }, "Gtags References", "ref",
+    { "global", "-sx", "--literal" })
 
-  keymap("n", "gr", function()
+  local lsp_references = function()
     vim.lsp.buf.references()
-  end, { buffer = bufnr, desc = "Find references via LSP" })
+  end
+
+  if is_macos then
+    keymap("n", "gd", tags_definition, { buffer = bufnr, desc = "Go to definition via treesitter, gtags, and ctags" })
+    keymap("n", "gD", lsp_definition, { buffer = bufnr, desc = "Go to definition via LSP" })
+    keymap("n", "gr", tags_references, { buffer = bufnr, desc = "Find references via gtags" })
+    keymap("n", "gR", lsp_references, { buffer = bufnr, desc = "Find references via LSP" })
+    return
+  end
+
+  keymap("n", "gD", tags_definition, { buffer = bufnr, desc = "Go to definition via treesitter, gtags, and ctags" })
+  keymap("n", "gd", lsp_definition, { buffer = bufnr, desc = "Go to definition via LSP" })
+  keymap("n", "gR", tags_references, { buffer = bufnr, desc = "Find references via gtags" })
+  keymap("n", "gr", lsp_references, { buffer = bufnr, desc = "Find references via LSP" })
 end
 
 return M
