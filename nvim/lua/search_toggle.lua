@@ -280,12 +280,36 @@ function M.set_search_mode(mode)
   vim.notify("Telescope search mode set to: " .. mode, vim.log.levels.INFO, { title = "Telescope" })
 end
 
+-- grug-far 持久实例：整个 nvim session 复用同一个命名 buffer，退出面板时用
+-- hide（关窗但不删 buffer）而不是 close，这样 search/replacement/Files Filter/
+-- flags/paths 等所有输入在下次打开时原样保留，不用重填。
+local GRUG_FAR_INSTANCE = "persistent"
+
+-- 打开（或聚焦）持久 grug-far 实例。
+-- prefills 只在首次创建实例时用于铺底（比如默认 Files Filter）；实例已存在时
+-- 直接聚焦，保留里面的全部输入。update 用于把指定字段覆盖进已存在的实例
+-- （clearOld=false，未给的字段保持不变）。
 function M.open_grug_far(opts)
   opts = opts or {}
-  opts.prefills = opts.prefills or {}
-  opts.prefills.filesFilter = M.get_files_filter(opts.prefills.filesFilter)
+  local prefills = opts.prefills or {}
+  local update = opts.update
+
   local grug = require("grug-far")
-  return grug.open(opts)
+
+  if grug.has_instance(GRUG_FAR_INSTANCE) then
+    local inst = grug.get_instance(GRUG_FAR_INSTANCE)
+    inst:open()
+    if update and next(update) ~= nil then
+      inst:update_input_values(update, false)
+    end
+    return inst
+  end
+
+  prefills.filesFilter = M.get_files_filter(prefills.filesFilter)
+  return grug.open({
+    instanceName = GRUG_FAR_INSTANCE,
+    prefills = prefills,
+  })
 end
 
 function M.open_grug_far_with_cword()
@@ -293,13 +317,21 @@ function M.open_grug_far_with_cword()
     prefills = {
       search = vim.fn.expand("<cword>"),
     },
+    update = {
+      search = vim.fn.expand("<cword>"),
+    },
   })
 end
 
 function M.open_grug_far_with_visual_selection()
-  return require("grug-far").with_visual_selection({
+  local lines = require("grug-far").get_current_visual_selection_lines(true) or {}
+  local text = table.concat(lines, "\n")
+  return M.open_grug_far({
     prefills = {
-      filesFilter = M.get_files_filter(nil),
+      search = text,
+    },
+    update = {
+      search = text,
     },
   })
 end

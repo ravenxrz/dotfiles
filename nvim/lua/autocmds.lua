@@ -186,6 +186,15 @@ vim.api.nvim_create_autocmd("FileType", {
       -- map both x (visual) and v (visual+select) to reliably override the global "_dP
       vim.keymap.set("x", "p", visual_paste(false), o)
       vim.keymap.set("x", "P", visual_paste(true), o)
+
+      -- <localleader>q "puts away" the panel by hiding the window instead of the
+      -- built-in close action, which nvim_buf_delete's the buffer and drops every
+      -- input. Hiding keeps the persistent instance valid so search/replacement/
+      -- Files Filter/flags/paths are all preserved for the rest of the session.
+      -- (A real destroy/reset is remapped to <localleader>Q in plugins.lua.)
+      vim.keymap.set("n", "<localleader>q", function()
+        require("grug-far").hide_instance(buf)
+      end, o)
     end)
   end,
 })

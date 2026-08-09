@@ -405,9 +405,12 @@ return {
         -- 不读取全局 ~/.ripgreprc（其中用 glob 排除了 third_party 等目录，
         -- 会导致 grug-far 永远搜不到这些内容）。要过滤的目录改为在
         -- search_toggle.lua 的默认 Files Filter 里显式声明，方便按需删改。
+        -- --no-ignore-vcs：不尊重 .gitignore/.git/info/exclude，这样能搜到被 git
+        -- 忽略的文件（比如构建生成的头文件 src/pagestore/api/psterr.h 里的枚举
+        -- 定义）；third_party/build/.tmp 等仍由默认 Files Filter 排除。
         engines = {
           ripgrep = {
-            extraArgs = "--no-config",
+            extraArgs = "--no-config --no-ignore-vcs",
           },
         },
         keymaps = {
@@ -415,7 +418,9 @@ return {
           qflist = { n = "<C-q>" },
           syncLocations = { n = "<localleader>s" },
           syncLine = { n = "<localleader>l" },
-          close = { n = "<localleader>q" },
+          -- <localleader>q 被 autocmds.lua 重绑为 hide（关窗保留输入），
+          -- 这里把会销毁 buffer/丢失输入的内置 close 动作挪到 <localleader>Q。
+          close = { n = "<localleader>Q" },
           historyOpen = { n = "<localleader>t" },
           historyAdd = { n = "<localleader>a" },
           refresh = { n = "<localleader>f" },
@@ -434,6 +439,7 @@ return {
         -- ... options, see Configuration section below ...
         -- ... there are no required options atm...
       })
+
       -- 每次搜索完成自动写 history，并把 history 限制在 max_items 条
       require("grug_far_history").setup({ max_items = 30 })
     end,
