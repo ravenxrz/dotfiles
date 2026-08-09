@@ -9,12 +9,6 @@ vim.g.maplocalleader = " "
 
 keymap("i", "jk", "<Esc>", opts)
 
--- Better window navigation
--- keymap("n", "<C-h>", "<C-w>h", opts)
--- keymap("n", "<C-j>", "<C-w>j", opts)
--- keymap("n", "<C-k>", "<C-w>k", opts)
--- keymap("n", "<C-l>", "<C-w>l", opts)
-
 keymap("n", "j", "gj", opts)
 keymap("n", "k", "gk", opts)
 
@@ -47,10 +41,6 @@ keymap("n", "<C-q>", "<cmd>wqa!<cr>", opts)
 -- p does not replace reigster
 keymap("v", "p", '"_dP', opts)
 
--- Neo tree
--- keymap("n", "<leader>e", "<cmd>Neotree toggle<cr>", opts)
--- keymap("n", "<leader>fo", "<cmd>Neotree reveal<cr>", opts)
-
 -- Nvim tree
 keymap("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", opts)
 keymap("n", "<leader>o", "<cmd>NvimTreeFindFile!<cr>", opts)
@@ -63,7 +53,6 @@ keymap("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", opts)
 keymap("n", "<leader>bb", "<cmd>BufferLinePick<cr>", opts)
 -- buffer delete
 keymap("n", "<leader>bd", "<cmd>lua require('bufdelete').bufdelete(0, true)<cr>", opts)
--- keymap("n", "<leader>bd", "<cmd>BufferClose<cr>", opts)
 
 -- Gitsigns
 keymap("n", "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", opts)
@@ -87,7 +76,6 @@ keymap("n", "<leader>r", function()
     require("telescope").extensions.frecency.frecency()
   end)
 end, opts)
--- keymap("n", "<leader>r", "<cmd>Telescope oldfiles<cr>", opts)
 keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
@@ -117,28 +105,21 @@ keymap("n", "gd", "<cmd>Telescope lsp_definitions<cr>", opts)
 
 
 -- outline
--- keymap("n", "<leader>lo", "<cmd>AerialToggle!<cr>", opts)
 keymap("n", "<leader>lo", "<cmd>Outline<CR>", opts)
-
--- lazygit
--- keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 
 -- search & replace config
 keymap("n", "<leader>fg", function()
-  require("search_toggle").live_grep()
-end, { desc = "Live grep" })
+  require("search_toggle").open_grug_far()
+end, { desc = "Grug-far: open search" })
 keymap("n", "<leader>fw", function()
-  require("search_toggle").grep_current_word()
-end, { desc = "Search current word" })
+  require("search_toggle").open_grug_far_with_cword()
+end, { desc = "Grug-far: search current word" })
 keymap("v", "<leader>fw", function()
-  require("search_toggle").grep_visual_selection()
-end, { desc = "Search visual selection" })
+  require("search_toggle").open_grug_far_with_visual_selection()
+end, { desc = "Grug-far: search visual selection" })
 keymap("n", "<leader>fr", function()
   require("search_toggle").open_grug_far()
 end, { desc = "Search and replace" })
--- keymap("n", "<leader>fc",
---   "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%'),  search = vim.fn.expand('<cword>')  } })<cr>",
---   opts)
 
 -- session manager
 keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
@@ -146,19 +127,6 @@ keymap("n", "<leader>P", "<cmd>SessionManager! load_session<cr>", opts)
 -- lsp
 keymap("n", "<leader>li", "<cmd>LspInfo<cr>", opts)
 
--- dap
--- keymap("n", "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", opts)
--- keymap("n", "<leader>dT", "<cmd>lua require('dapui').float_element('stacks', {})<cr>", opts)
--- keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)
--- keymap("n", "<leader>dB", "<cmd>lua require'dap'.toggle_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>", opts)
--- keymap("n", "<leader>dc", "<cmd>DapContinue<cr>", opts)
--- keymap("n", "<leader>dn", "<cmd>lua require'dap'.step_over()<cr>", opts)
--- keymap("n", "<leader>ds", "<cmd>lua require'dap'.step_into()<cr>", opts)
--- keymap("n", "<leader>df", "<cmd>lua require'dap'.step_out()<cr>", opts)
--- keymap("n", "<leader>dk", "<cmd>lua require'dap'.terminate()<cr>", opts)
--- keymap("n", "<leader>de", "<cmd>lua require('dapui').eval()<cr>", opts)
--- keymap("n", "<leader>d<cr>", "<cmd>lua require'dap'.run_last()<cr>", opts)
---
 -- DB
 keymap("n", "<leader>dB", "<cmd>DBUIToggle<cr>", opts)
 
@@ -203,18 +171,6 @@ keymap("n", "[c", goto_prev_qf_or_diff, opts)
 
 -- zenmode
 keymap("n", "<leader>zz", "<cmd>ZenMode<cr>", opts)
--- foucs
-keymap("n", "<leader>zf", "<cmd>FocusToggle<cr>", opts)
-
--- neogen
--- keymap("n", "<leader>c", "<cmd>Neogen<cr>", opts)
-
--- trouble
--- keymap("n", "<leader>d", "<cmd>Trouble diagnostics toggle filter.buf=0 win.position=bottom<cr>", opts)
--- keymap("n", "<leader>D", "<cmd>Trouble diagnostics toggle win.position=bottom<cr>", opts)
--- keymap("n", "<leader>lo", "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", opts)
--- keymap("n", "gr", "<cmd>Trouble lsp_references focus=true win.position=bottom<cr>", opts)
--- keymap("n", "<leader>in", "<cmd>Trouble lsp_incoming_calls focus=true win.position=right<cr>", opts)
 
 -- call_graph.nvim plugin
 keymap("n", "<leader>ci", "<cmd>CallGraphI<cr>", opts)
@@ -231,25 +187,10 @@ keymap("n", "<leader>mm", "<cmd>Make<cr> ", opts)
 keymap("n", "<leader>mr", "<cmd>MakeRun<cr>", opts)
 keymap("n", "<leader>ms", "<cmd>MakeSelect<cr>", opts)
 keymap("n", "<leader>mk", "<cmd>KillMake<cr>", opts)
--- keymap("n", "<leader>ih", "<cmd>CallGraphToggleAutoHighlight<cr>", opts)
--- keymap("n", "<leader>tq", "<cmd>Trouble qflist toggle<cr>", opts)
-
--- liteecall
--- keymap("n", "<leader>in", "<cmd>lua vim.lsp.buf.incoming_calls()<cr>", opts)
--- keymap("n", "<leader>on", "<cmd>lua vim.lsp.buf.outgoing_calls()<cr>", opts)
 
 -- change macro keyshort for not interrupting cmp plugin
 keymap("n", "Q", "q", opts)
 keymap("n", "q", "<Nop>", opts)
-
--- sniprun
-keymap(
-  "n",
-  "<leader><enter>",
-  ":let b:caret=winsaveview() <CR> | :%SnipRun <CR>| :call winrestview(b:caret) <CR>",
-  opts
-)
-keymap("v", "<leader><enter>", "<Plug>SnipRun", opts)
 
 -- highlight current line
 keymap("n", "<leader>bm", function()
@@ -267,10 +208,6 @@ end, opts)
 keymap("n", "<leader>bS", function()
   require("bookmarks").list_all_buffer_bookmarks()
 end, opts)
--- keymap("n", "]m", "<Nop>", opts)
--- keymap("n", "[m", "<Nop>", opts)
-keymap("n", "]b", "<Nop>", opts)
-keymap("n", "[b", "<Nop>", opts)
 keymap("n", "]b", function()
   require("bookmarks").goto_next_bookmark()
 end, opts)
@@ -280,14 +217,6 @@ end, opts)
 
 -- cppp header/source switch
 keymap("n", "<leader>j", "<cmd>LspClangdSwitchSourceHeader<cr>", opts)
-
--- codeverse
-vim.cmd([[
-let g:codeverse_disable_bindings = v:true
-inoremap <script><silent><nowait><expr> <C-b> marscode#Accept()
-]])
--- keymap("i", "<C-[", "<Plug>(codeverse-previous)", opts)
--- keymap("i", "<C-]", "<Plug>(codeverse-next-or-complete)", opts)
 
 keymap("n", "yb", "<cmd>CopyBreakPoint<cr>", opts)
 keymap("n", "yf", "<cmd>CopyFileName<cr>", opts)

@@ -36,7 +36,6 @@ require("parser")
 require("options")
 require("commands")
 require("keymaps")
-require("utils")
 require("autocmds")
 require("lazy").setup("plugins", {
   performance = {
