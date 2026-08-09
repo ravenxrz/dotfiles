@@ -434,6 +434,8 @@ return {
         -- ... options, see Configuration section below ...
         -- ... there are no required options atm...
       })
+      -- 每次搜索完成自动写 history，并把 history 限制在 max_items 条
+      require("grug_far_history").setup({ max_items = 30 })
     end,
   },
   {
