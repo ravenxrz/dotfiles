@@ -69,28 +69,124 @@ vim.api.nvim_create_autocmd("BufRead", {
   end,
 })
 
-local win_focus_ignore_filetypes = { "neo-tree" }
-vim.api.nvim_create_autocmd("FileType", {
-  group = augroup,
-  callback = function(_)
-    if vim.tbl_contains(win_focus_ignore_filetypes, vim.bo.filetype) then
-      vim.b.focus_disable = true
-    else
-      vim.b.focus_disable = false
-    end
-  end,
-  desc = "Disable focus autoresize for FileType",
-})
-
 -- grug-far set fixed-string shortcut
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("my-grug-far-custom-keybinds", { clear = true }),
   pattern = { "grug-far" },
-  callback = function()
+  callback = function(args)
+    local buf = args.buf
+
     vim.keymap.set("n", "<localleader>w", function()
       local state = unpack(require("grug-far").toggle_flags({ "--fixed-strings" }))
       vim.notify("grug-far: toggled --fixed-strings " .. (state and "ON" or "OFF"))
     end, { buffer = true })
+
+    -- grug-far inputs (Search/Replace/Filter/...) are single-line regions delimited by
+    -- extmarks. Pasting a linewise / multi-line register there spills across physical
+    -- lines and overflows into the next input (e.g. Files Filter). Two culprits:
+    --   1. grug-far's own paste handler mishandles linewise registers.
+    --   2. our global `keymap("v","p",'"_dP')` (keymaps.lua) hijacks visual paste: `"_d`
+    --      deletes the selection, then `P` pastes the linewise register as new lines.
+    -- Observed: normal `p` is fine, only visual (select-then-paste) breaks.
+    -- Fix:
+    --   * normal p/P  -> flatten the register to a single charwise line, then paste.
+    --   * visual p/P  -> deterministic buffer edit (replace the selection with the
+    --     flattened text via nvim_buf_set_text), bypassing native paste / "_dP /
+    --     grug-far's fallback entirely so nothing can turn it into multiple lines.
+    -- Maps are set in vim.schedule so they are registered after grug-far binds its own
+    -- keymaps and therefore win.
+    local function in_input_region()
+      local ok, inst = pcall(function()
+        return require("grug-far.instances").get_instance(0)
+      end)
+      if not ok or not inst then
+        -- default to treating it as an input so we still fix the reported case
+        return true
+      end
+      local ok_row, header = pcall(function()
+        return require("grug-far.inputs").getHeaderRow(inst._context, inst._buf)
+      end)
+      if not ok_row or not header then
+        return true
+      end
+      return (vim.fn.line(".") - 1) < header
+    end
+
+    -- normal-mode paste: flatten a linewise / multi-line register to one charwise line.
+    local function normal_paste(key)
+      return function()
+        local reg = vim.v.register
+        local content = vim.fn.getreg(reg)
+        local regtype = vim.fn.getregtype(reg)
+        local flattened = false
+        if in_input_region() and (regtype:sub(1, 1) == "V" or content:find("[\r\n]")) then
+          -- drop trailing newline(s) outright; turn interior newlines into spaces
+          vim.fn.setreg(reg, (content:gsub("[\r\n]+$", ""):gsub("[\r\n]+", " ")), "c")
+          flattened = true
+        end
+        pcall(vim.cmd, "normal! \"" .. reg .. key)
+        if flattened then
+          vim.schedule(function()
+            vim.fn.setreg(reg, content, regtype)
+          end)
+        end
+      end
+    end
+
+    -- visual-mode paste: replace the selection with flattened text via a direct buffer
+    -- edit. This never routes through native paste, so the linewise register and the
+    -- global "_dP map cannot spill it onto extra lines.
+    local function visual_paste(before)
+      return function()
+        local reg = vim.v.register
+        local content = vim.fn.getreg(reg)
+        local mode = vim.fn.mode()
+        local vpos = vim.fn.getpos("v")
+        local cpos = vim.fn.getpos(".")
+        local srow, scol = vpos[2], vpos[3]
+        local erow, ecol = cpos[2], cpos[3]
+        if srow > erow or (srow == erow and scol > ecol) then
+          srow, scol, erow, ecol = erow, ecol, srow, scol
+        end
+        -- leave visual mode before editing
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
+
+        if not in_input_region() then
+          -- results region: keep native visual paste behaviour
+          vim.cmd("normal! gv\"" .. reg .. (before and "P" or "p"))
+          return
+        end
+
+        local flat = content:gsub("[\r\n]+$", ""):gsub("[\r\n]+", " ")
+        if mode == "V" or srow ~= erow then
+          -- whole-line (or multi-line) selection inside a single-line input: replace the
+          -- start line's text entirely.
+          local line = vim.api.nvim_buf_get_lines(0, srow - 1, srow, false)[1] or ""
+          vim.api.nvim_buf_set_text(0, srow - 1, 0, srow - 1, #line, { flat })
+          vim.api.nvim_win_set_cursor(0, { srow, #flat })
+        else
+          -- charwise selection within one line: replace [scol, ecol] inclusive.
+          local line = vim.api.nvim_buf_get_lines(0, srow - 1, srow, false)[1] or ""
+          local a = math.min(scol - 1, #line)
+          local b = math.min(ecol, #line)
+          if b < a then b = a end
+          vim.api.nvim_buf_set_text(0, srow - 1, a, srow - 1, b, { flat })
+          vim.api.nvim_win_set_cursor(0, { srow, a + #flat })
+        end
+      end
+    end
+
+    vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(buf) then
+        return
+      end
+      local o = { buffer = buf, nowait = true, silent = true }
+      vim.keymap.set("n", "p", normal_paste("p"), o)
+      vim.keymap.set("n", "P", normal_paste("P"), o)
+      -- map both x (visual) and v (visual+select) to reliably override the global "_dP
+      vim.keymap.set("x", "p", visual_paste(false), o)
+      vim.keymap.set("x", "P", visual_paste(true), o)
+    end)
   end,
 })
 
@@ -120,16 +216,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-
--- 为nvimgdb文件类型创建自动命令组
-local group = vim.api.nvim_create_augroup("NVIMGDBConfig", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "nvimgdb",
-  group = group,
-  callback = function()
-    vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { buffer = true, desc = "GDB → Code" })
-  end,
-})
 
 -- format for rust
 vim.api.nvim_create_autocmd("FileType", {
