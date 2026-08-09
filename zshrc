@@ -7,6 +7,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # Skip oh-my-zsh's compaudit pass on every startup; compinit still uses the
 # cached dump file for completions.
 ZSH_DISABLE_COMPFIX=true
+DISABLE_UNTRACKED_FILES_DIRTY=true
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -88,6 +89,12 @@ plugins=(
 #zstyle ':completion:*:*:docker:*' option-stacking yes
 #zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
+# Do not inherit duplicated oh-my-zsh completion paths from parent zsh/tmux
+# environments. A polluted FPATH makes compinit slow and invalidates zcompdump.
+typeset +x FPATH 2>/dev/null
+fpath=("${(@)fpath:#$HOME/.oh-my-zsh(|/*)}")
+fpath=("${(@)fpath:#$HOME/.config/dotfiles/oh-my-zsh(|/*)}")
+fpath=("${(@u)fpath}")
 
 source $ZSH/oh-my-zsh.sh
 

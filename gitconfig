@@ -159,5 +159,7 @@
 
 [safe]
 	directory = *
+[oh-my-zsh]
+	hide-dirty = 1
 [url "git@code.byted.org:"]
 	insteadOf = https://code.byted.org/
