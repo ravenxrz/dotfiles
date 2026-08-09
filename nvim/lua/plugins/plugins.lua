@@ -353,7 +353,7 @@ return {
       vim.api.nvim_set_keymap(
         "n",
         "<leader>gb",
-        "<cmd>TermExec cmd='tig blame %' go_back=1 direction=float<CR>",
+        "<cmd>Gitsigns blame<CR>",
         { noremap = true, silent = true }
       )
       vim.api.nvim_set_keymap("t", "<c-q>", "<cmd>bd!<cr>", { noremap = true, silent = true })
