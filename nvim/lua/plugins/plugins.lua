@@ -260,6 +260,17 @@ return {
       telescope.setup({
         defaults = {
           sorting_strategy = "ascending", -- display results top->bottom
+          -- nvim-treesitter (master branch) ships markdown injection queries that assume
+          -- the old single-node match format; on Neovim 0.11 match captures are node
+          -- lists, so its `set-lang-from-info-string!` directive throws
+          -- "attempt to call method 'range' (a nil value)" the first time the preview
+          -- parses a markdown file. Disable treesitter highlighting for markdown in the
+          -- previewer (falls back to regex/syntax highlight, which is fine for a preview).
+          preview = {
+            treesitter = {
+              disable = { "markdown", "markdown.mdx" },
+            },
+          },
           layout_config = {
             horizontal = {
               prompt_position = "top",
