@@ -402,6 +402,14 @@ return {
     config = function()
       require("grug-far").setup({
         -- windowCreationCommand = 'topleft split',
+        -- 不读取全局 ~/.ripgreprc（其中用 glob 排除了 third_party 等目录，
+        -- 会导致 grug-far 永远搜不到这些内容）。要过滤的目录改为在
+        -- search_toggle.lua 的默认 Files Filter 里显式声明，方便按需删改。
+        engines = {
+          ripgrep = {
+            extraArgs = "--no-config",
+          },
+        },
         keymaps = {
           replace = { n = "<localleader>r" },
           qflist = { n = "<C-q>" },

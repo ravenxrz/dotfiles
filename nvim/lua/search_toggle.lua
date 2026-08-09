@@ -9,12 +9,27 @@ local always_exclude_globs = {
   "!**/.git/**",
 }
 
+-- grug-far 默认在 Files Filter 里排除的目录/文件（每行一个 glob）。
+-- 因为 grug-far 用了 --no-config 不再读 ~/.ripgreprc，这里用来补回常见的
+-- 忽略项；需要搜某个目录时，直接在 grug-far 面板的 Files Filter 删掉对应行即可。
+local default_grug_far_files_filter = {
+  "!**/.git/**",
+  "!**/third_party/**",
+  "!**/third/**",
+  "!**/build/**",
+  "!**/.cache/**",
+  "!**/.tmp/**",
+}
+
 local function get_exclude_globs()
   return always_exclude_globs
 end
 
 function M.get_files_filter(existing)
-  return existing or ""
+  if existing and existing ~= "" then
+    return existing
+  end
+  return table.concat(default_grug_far_files_filter, "\n")
 end
 
 local function normalize_path(path)
@@ -282,7 +297,11 @@ function M.open_grug_far_with_cword()
 end
 
 function M.open_grug_far_with_visual_selection()
-  return require("grug-far").with_visual_selection()
+  return require("grug-far").with_visual_selection({
+    prefills = {
+      filesFilter = M.get_files_filter(nil),
+    },
+  })
 end
 
 function M.open_search_menu()
