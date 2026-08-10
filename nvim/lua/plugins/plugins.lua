@@ -505,6 +505,17 @@ return {
           },
           lualine_x = {
             --[[ 'diff', ]]
+            {
+              function()
+                return require("remote_dev_sync").component()
+              end,
+              cond = function()
+                return require("remote_dev_sync").has_session()
+              end,
+              color = function()
+                return require("remote_dev_sync").highlight()
+              end,
+            },
             "diagnostics",
             "filetype",
             "encoding",

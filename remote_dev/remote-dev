@@ -71,6 +71,26 @@ status_detail() {
   fi
 }
 
+# 机器可读输出(供编辑器/状态栏集成, 如 Neovim lualine)。
+# 每个会话一行, TAB 分隔 8 个字段:
+#   name  alpha_path  beta_host  status  conflicts  cycles  paused  beta_connected
+# 说明:
+#   - 源头是本地 mutagen daemon, 它同时掌握 alpha(本地) 与 beta(远端) 两端状态,
+#     所以纯本地读取即可判断远端是否已同步。
+#   - status 为 "Watching for changes" 时表示空闲(已同步), 其余(Scanning/Reconciling/
+#     Staging...)表示同步中。
+#   - cycles = 成功同步周期计数, 单调递增; 保存文件后等它增长即证明这一轮已落盘。
+#   - 刻意不调用 need_mutagen: 避免编辑器高频轮询反复拉起 daemon。daemon 不在时
+#     输出为空且退出码 0, 调用方按 "无会话" 处理即可。
+status_porcelain() {
+  local tpl='{{range .}}{{.Name}}{{"\t"}}{{.Alpha.Path}}{{"\t"}}{{.Beta.Host}}{{"\t"}}{{.Status}}{{"\t"}}{{len .Conflicts}}{{"\t"}}{{.SuccessfulCycles}}{{"\t"}}{{.Paused}}{{"\t"}}{{.Beta.Connected}}{{"\n"}}{{end}}'
+  if [ "$#" -gt 0 ] && [ -n "${1:-}" ]; then
+    "$MUTAGEN" sync list --template "$tpl" "$1" 2>/dev/null || true
+  else
+    "$MUTAGEN" sync list --template "$tpl" 2>/dev/null || true
+  fi
+}
+
 # 列出 mutagen.yml 里所有 "project-name<TAB>alpha路径"。
 # 解析 sync: 段下缩进 2 空格的会话 key, 及其 alpha 值。
 list_projects() {
@@ -132,6 +152,12 @@ cmd_status() {
   else
     status_line "$name"
   fi
+}
+
+# remote-dev porcelain [name]
+# 机器可读状态(见 status_porcelain 注释)。供编辑器/状态栏集成调用。
+cmd_porcelain() {
+  status_porcelain "${1:-}"
 }
 
 cmd_flush() {
@@ -252,6 +278,7 @@ ${c_bold}生命周期:${c_reset}
 ${c_bold}日常:${c_reset}
   status [name]        查看状态/冲突/问题
   status [name] detail 查看状态明细(含具体冲突/问题路径)
+  porcelain [name]     机器可读状态(TAB 分隔, 供编辑器/状态栏集成, 如 nvim)
   flush                强制同步一轮并阻塞到落盘(切分支后用)
   sync                 flush + status
   watch                持续监控首次扫描直到完成
@@ -279,6 +306,7 @@ main() {
     down|terminate) cmd_down "$@" ;;
     restart)   cmd_restart "$@" ;;
     status|st|list) cmd_status "$@" ;;
+    porcelain) cmd_porcelain "$@" ;;
     flush)     cmd_flush "$@" ;;
     sync)      cmd_sync "$@" ;;
     watch)     cmd_watch "$@" ;;

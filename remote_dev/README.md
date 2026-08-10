@@ -214,6 +214,7 @@ Mutagen 默认基于文件监听自动同步，但切分支瞬间大量文件变
 | `remote-dev restart` | down + start（改 ignore/mode 后用） |
 | `remote-dev status [name]` | 查看状态/冲突/问题 |
 | `remote-dev status [name] detail` | 查看明细，含具体冲突/问题路径 |
+| `remote-dev porcelain [name]` | 机器可读状态(每会话一行，TAB 分隔 8 字段)，供编辑器/状态栏集成，如 nvim lualine |
 | `remote-dev flush` | 强制同步一轮并阻塞到落盘(切分支后用) |
 | `remote-dev sync` | flush + status |
 | `remote-dev watch` | 持续监控首次扫描直到完成 |

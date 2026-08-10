@@ -37,6 +37,7 @@ require("options")
 require("commands")
 require("keymaps")
 require("autocmds")
+require("remote_dev_sync").setup({})
 require("lazy").setup("plugins", {
   performance = {
     rtp = {
