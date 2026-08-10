@@ -175,54 +175,61 @@ remote-dev status                   # 查看状态/冲突
 # 用本地 Neovim/VSCode 直接编辑, 改动自动同步到远端
 
 # --- 切分支 (关键: 让远端拿到完整最新代码) ---
-remote-dev checkout <branch>        # 一键: flush→git checkout+submodule→flush→status
-                                    # (对 workspace 内所有 project 仓库切同名分支)
-remote-dev checkout <proj> <branch> # 只切指定 project
+remote-dev checkout <proj> <branch> # 一键切指定 project: flush→git checkout+submodule→flush→status
 
 # --- 远端构建 ---
 remote-dev build svc-a ./build.sh   # 自动 flush 后在远端 svc-a 目录执行
 
 remote-dev stop                     # 暂时不用(保留会话)
 remote-dev down                     # 彻底关闭清理
+
+# --- 单会话操作 (只动一个 project, 其余大树会话不受影响、不重扫) ---
+remote-dev restart pagestore        # 只重建 pagestore(改了它的 ignore/mode 后)
+remote-dev flush dotfiles           # 只 flush dotfiles
+remote-dev stop logstore            # 只暂停 logstore
+remote-dev status pagestore detail  # 只看 pagestore 的冲突明细
 ```
 
 ### 为什么切分支要 `flush`
 
 Mutagen 默认基于文件监听自动同步，但切分支瞬间大量文件变化，`flush` 会**强制同步一轮并阻塞到落盘**，保证远端构建时代码是完整、最新的，不会编译到 "新旧混合" 的中间态。这是做到 "无感" 的关键一步。
 
-`remote-dev checkout <branch>` 把这套动作封装成一条命令，内部依次执行：
-1. **前置 flush** — 结算两端 pending 改动，避免 checkout 被本地意外改动挡住
-2. **本地 `git checkout` + `git submodule update`** — 对 workspace 内每个 project 仓库执行（分支不存在的自动跳过；submodule 无权限的忽略）
-3. **后置 flush** — 把切分支的大 diff 推到远端并阻塞到落盘
-4. **status** — 确认全部 Watching
+`remote-dev checkout <proj> <branch>` 把这套动作封装成一条命令，内部依次执行：
+1. **前置 flush**（只 flush 该 project 的会话）— 结算两端 pending 改动，避免 checkout 被本地意外改动挡住
+2. **本地 `git checkout` + `git submodule update`** — 对该 project 仓库执行（submodule 无权限的自动忽略）
+3. **后置 flush**（只 flush 该会话）— 把切分支的大 diff 推到远端并阻塞到落盘
+4. **status** — 确认该会话 Watching
 
-> 单独 project 分支不同时用 `remote-dev checkout <proj> <branch>`。
+> **必须带 project name**：本 workspace 内各 project 是互不相关的独立仓库（不同 remote、无共享分支约定），不存在"一条命令切齐所有仓"的场景，故 `checkout` 只支持单 project。
 > **不要**用 `stop`/`down` 再切分支——`resume`/`restart` 会触发全量重扫（大仓库很慢）。让同步保持运行，靠增量 + flush 即可。
 
 ---
 
 ## 五、命令参考
 
+> **Session 级操作**：下表标注 `[name]` 的命令都可选带一个 session 名（`mutagen.yml` 里的 project key，如 `pagestore`、`dotfiles`）。带 name 时只作用于该会话，走 `mutagen sync <verb> <name>`，**其余会话保持运行、不触发重扫**；不带 name 则作用于 workspace 全部会话，走 `mutagen project <verb>`。传入未定义的 session 名会报错并列出可选值。
+
 | 命令 | 说明 |
 |------|------|
 | `remote-dev init [dir]` | 在 dir(默认当前目录)生成 mutagen.yml 模板 |
-| `remote-dev bootstrap` | 首灌(需 mode=one-way-safe/replica)：只推不删 |
-| `remote-dev start` | 启动 workspace 所有同步会话 |
-| `remote-dev stop` | 暂停(保留会话，可 resume) |
-| `remote-dev resume` | 恢复 |
-| `remote-dev down` | 终止并清理 |
-| `remote-dev restart` | down + start（改 ignore/mode 后用） |
+| `remote-dev bootstrap [name]` | 首灌(需 mode=one-way-safe/replica)：只推不删 |
+| `remote-dev start [name]` | 启动同步会话(带 name 只启动/恢复该会话) |
+| `remote-dev stop [name]` | 暂停(保留会话，可 resume) |
+| `remote-dev resume [name]` | 恢复 |
+| `remote-dev down [name]` | 终止并清理 |
+| `remote-dev restart [name]` | 重建会话使配置生效；无参重建全部(会重扫大树)，带 name 只重建该会话 |
 | `remote-dev status [name]` | 查看状态/冲突/问题 |
 | `remote-dev status [name] detail` | 查看明细，含具体冲突/问题路径 |
 | `remote-dev porcelain [name]` | 机器可读状态(每会话一行，TAB 分隔 8 字段)，供编辑器/状态栏集成，如 nvim lualine |
-| `remote-dev flush` | 强制同步一轮并阻塞到落盘(切分支后用) |
-| `remote-dev sync` | flush + status |
-| `remote-dev watch` | 持续监控首次扫描直到完成 |
-| `remote-dev checkout <branch>` | 切分支(全部 project)：flush→checkout+submodule→flush→status |
-| `remote-dev checkout <proj> <branch>` | 只切指定 project |
+| `remote-dev flush [name]` | 强制同步一轮并阻塞到落盘(切分支后用) |
+| `remote-dev sync [name]` | flush + status |
+| `remote-dev watch [name]` | 持续监控首次扫描直到完成 |
+| `remote-dev checkout <proj> <branch>` | 切指定 project 到某分支：flush→checkout+submodule→flush→status(必须带 proj) |
 | `remote-dev build <proj> <cmd>` | flush 后在远端 `<proj>` 目录执行 `<cmd>` |
 
 **workspace 定位顺序**：① 环境变量 `REMOTE_DEV_WORKSPACE` ② 当前目录向上查找 `mutagen.yml`。
+
+> **为什么单会话操作不重扫其他会话**：`mutagen project <verb>` 是 workspace 级的，会作用于 `mutagen.yml` 里全部 project；带 name 时改用 `mutagen sync <verb> <name>` 只动一个会话。`restart <name>` 还会自动复用 `sync.defaults` 的全部 ignore/symlink/permissions 并带回原 project label(保持归属)，所以改了单个 project 的 ignore/symlink/mode 时，用 `restart <name>` 即可让配置生效，而不必让 pagestore/logstore 这种几十万文件的大树跟着冷扫描。
 
 ---
 
@@ -235,7 +242,7 @@ Mutagen 默认基于文件监听自动同步，但切分支瞬间大量文件变
 | `Transition problems: permission denied` | one-way-replica 想删远端 root 拥有的文件 | 改用 `one-way-safe`(不删)，或把该路径 ignore |
 | `Conflicts` 全是 "本地无、远端 Untracked" | 远端有编译产物/依赖，本地没有 | 把这些路径加进 `ignore.paths`，`remote-dev restart` |
 | submodule 的 `.git` 反复冲突 | `vcs:true` 只忽略 `.git` 目录，submodule 的 `.git` 是文件 | 模板已含显式 `- ".git"`，确保没删掉它 |
-| 改了 ignore 但没生效 | Mutagen 会话创建时锁定 ignore | 必须 `remote-dev restart` 重建会话 |
+| 改了 ignore 但没生效 | Mutagen 会话创建时锁定 ignore | 必须重建会话。只改了单个 project 的规则时用 `remote-dev restart <name>`，避免 pagestore/logstore 等大树跟着全量重扫 |
 | 双向模式下本地冒出预期外文件 | 远端产生的新产物未被 ignore 回灌了 | 加 ignore + restart |
 | 远端 host 连不上 | ssh 别名/跳板问题 | 先 `ssh <host> 'echo ok'` 单独验证 |
 

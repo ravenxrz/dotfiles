@@ -108,6 +108,56 @@ list_projects() {
   ' "$ws/mutagen.yml"
 }
 
+# 校验 name 是 mutagen.yml 里定义的 session, 否则报错并列出可选值。
+require_session_defined() {
+  local name="$1"
+  list_projects | cut -f1 | grep -qx "$name" || \
+    die "mutagen.yml 未定义 session '$name'。可选: $(list_projects | cut -f1 | tr '\n' ' ')"
+}
+
+# 只创建单个会话: 复用 mutagen.yml 的 alpha/beta 端点 + sync.defaults(全部 ignore/symlink/
+# permissions) + 原 project label(保持归属, 否则会脱离 `mutagen project` 管理)。
+# 这样单会话操作不经过 workspace 级的 `mutagen project`, 其余大树会话零重扫。
+create_single_session() {
+  local name="$1"
+  local ws; ws="$(find_workspace)" || die "未找到 mutagen.yml"
+
+  local alpha beta
+  alpha="$(grep -A3 "^  ${name}:" "$ws/mutagen.yml" | grep -E "^[[:space:]]*alpha:" | head -1 | sed -E 's/.*alpha:[[:space:]]*"?([^"]+)"?.*/\1/')"
+  beta="$(grep -A3 "^  ${name}:" "$ws/mutagen.yml" | grep -E "^[[:space:]]*beta:" | head -1 | sed -E 's/.*beta:[[:space:]]*"?([^"]+)"?.*/\1/')"
+  [ -n "$alpha" ] && [ -n "$beta" ] || die "在 mutagen.yml 未找到 session '$name' 的 alpha/beta 端点。"
+
+  # project label: 优先读 mutagen.yml.lock, 兜底查运行中的会话
+  local proj_id=""
+  [ -f "$ws/mutagen.yml.lock" ] && proj_id="$(tr -d '\0' < "$ws/mutagen.yml.lock")"
+  [ -n "$proj_id" ] || proj_id="$("$MUTAGEN" sync list --template '{{range .}}{{index .Labels "io.mutagen.project"}}{{end}}' "$name" 2>/dev/null || true)"
+
+  # 抽取 sync.defaults 段作为 -c 配置文件, 复用大盘的 ignore/symlink/permissions
+  local cfg; cfg="$(mktemp)"; trap 'rm -f "${cfg:-}"' RETURN
+  awk '
+    /^sync:[[:space:]]*$/ { print; in_sync=1; next }
+    /^[^[:space:]]/       { in_sync=0; keep=0 }
+    in_sync && /^  [A-Za-z0-9_-]+:/ { keep = ($0 ~ /^  defaults:/) ? 1 : 0 }
+    in_sync && keep       { print }
+  ' "$ws/mutagen.yml" > "$cfg"
+  [ -s "$cfg" ] || die "从 mutagen.yml 抽取 sync.defaults 失败。"
+
+  local create_args=( --name="$name" -c "$cfg" )
+  [ -n "$proj_id" ] && create_args+=( --label="io.mutagen.project=$proj_id" )
+  "$MUTAGEN" sync create "${create_args[@]}" "$alpha" "$beta"
+}
+
+# 启动单个会话: 已存在(含 paused/disconnected)则 resume, 不存在则按 mutagen.yml 创建。
+start_single_session() {
+  local name="$1"
+  require_session_defined "$name"
+  if "$MUTAGEN" sync list "$name" >/dev/null 2>&1; then
+    info "恢复会话 '$name'..."; "$MUTAGEN" sync resume "$name"
+  else
+    info "创建会话 '$name'..."; create_single_session "$name"
+  fi
+}
+
 # ---- 子命令 ----
 
 cmd_init() {
@@ -125,11 +175,63 @@ cmd_init() {
   echo "  详见 $SELF_DIR/README.md"
 }
 
-cmd_start()   { need_mutagen; info "启动同步会话..."; in_ws "$MUTAGEN" project start;      ok "已启动。用 remote-dev status 查看。"; }
-cmd_stop()    { need_mutagen; in_ws "$MUTAGEN" project pause;  ok "已暂停(会话保留, 可 resume)。"; }
-cmd_resume()  { need_mutagen; in_ws "$MUTAGEN" project resume; ok "已恢复。"; }
-cmd_down()    { need_mutagen; in_ws "$MUTAGEN" project terminate; ok "已终止并清理会话。"; }
-cmd_restart() { cmd_down || true; sleep 1; cmd_start; }
+# 生命周期命令: 无参作用于 workspace 全部会话(走 `mutagen project`), 带 name 只作用于
+# 该单个会话(走 `mutagen sync <verb> <name>`), 其余会话不受影响、不触发重扫。
+cmd_start() {
+  need_mutagen
+  if [ -n "${1:-}" ]; then
+    start_single_session "$1"; ok "会话 '$1' 已启动。用 remote-dev status $1 查看。"
+  else
+    info "启动同步会话..."; in_ws "$MUTAGEN" project start; ok "已启动。用 remote-dev status 查看。"
+  fi
+}
+cmd_stop() {
+  need_mutagen
+  if [ -n "${1:-}" ]; then
+    require_session_defined "$1"; "$MUTAGEN" sync pause "$1"; ok "会话 '$1' 已暂停(可 resume)。"
+  else
+    in_ws "$MUTAGEN" project pause; ok "已暂停(会话保留, 可 resume)。"
+  fi
+}
+cmd_resume() {
+  need_mutagen
+  if [ -n "${1:-}" ]; then
+    require_session_defined "$1"; "$MUTAGEN" sync resume "$1"; ok "会话 '$1' 已恢复。"
+  else
+    in_ws "$MUTAGEN" project resume; ok "已恢复。"
+  fi
+}
+cmd_down() {
+  need_mutagen
+  if [ -n "${1:-}" ]; then
+    require_session_defined "$1"; "$MUTAGEN" sync terminate "$1"; ok "会话 '$1' 已终止并清理。"
+  else
+    in_ws "$MUTAGEN" project terminate; ok "已终止并清理会话。"
+  fi
+}
+
+# remote-dev restart [name]
+#   无参:   down + start, 重建 workspace 全部会话(改 defaults 影响多个 project 时用)。
+#   带 name: 只 terminate+create 指定会话, 其余会话完全不动、零重扫。
+#
+# 为什么要单会话重建:
+#   mutagen.yml 的 ignore/symlink/mode 在会话创建时就固化进会话了, flush/resume 不会重读,
+#   所以改了配置必须重建会话才能生效。但 `mutagen project` 是 workspace 级的, 一 restart
+#   就把 pagestore/logstore 这种几十万文件的大树也一起冷扫描, 很慢。若你只改了某一个
+#   project 的规则, 用 `restart <name>` 只重建它, 大树会话保持运行、不触发重扫。
+cmd_restart() {
+  local name="${1:-}"
+  if [ -z "$name" ]; then
+    cmd_down || true; sleep 1; cmd_start
+    return
+  fi
+  need_mutagen
+  require_session_defined "$name"
+  info "只重建会话 '$name'(其余会话不受影响、不重扫)..."
+  "$MUTAGEN" sync terminate "$name" 2>/dev/null || true
+  create_single_session "$name"
+  ok "会话 '$name' 已重建。用 remote-dev status $name 看扫描进度, remote-dev watch 盯全局。"
+}
 
 cmd_status() {
   need_mutagen
@@ -162,29 +264,42 @@ cmd_porcelain() {
 
 cmd_flush() {
   need_mutagen
-  info "flush: 强制同步一轮并阻塞到落盘..."
-  in_ws "$MUTAGEN" project flush
+  if [ -n "${1:-}" ]; then
+    require_session_defined "$1"
+    info "flush: 强制同步会话 '$1' 一轮并阻塞到落盘..."
+    "$MUTAGEN" sync flush "$1"
+  else
+    info "flush: 强制同步一轮并阻塞到落盘..."
+    in_ws "$MUTAGEN" project flush
+  fi
   ok "flush 完成 @ $(date '+%H:%M:%S')"
 }
 
-cmd_sync() { cmd_flush; echo "---"; status_line; }
+cmd_sync() { cmd_flush "${1:-}"; echo "---"; status_line "${1:-}"; }
 
 # 首灌: one-way-safe 只推不删, 用来在不破坏远端的前提下排查 ignore 是否齐全。
 # 需要 mutagen.yml 里 defaults.mode 临时设为 one-way-safe 或 one-way-replica。
+# 带 name 时只首灌指定会话。
 cmd_bootstrap() {
   need_mutagen
   warn "bootstrap 假定 mutagen.yml 的 mode 为 one-way-safe/one-way-replica(首灌)。"
   warn "若仍是 two-way-resolved, 请先改 mode 再跑。"
-  in_ws "$MUTAGEN" project start
+  if [ -n "${1:-}" ]; then
+    start_single_session "$1"
+  else
+    in_ws "$MUTAGEN" project start
+  fi
   ok "首灌已启动。用 remote-dev watch 盯扫描进度, remote-dev status 看冲突。"
 }
 
-# 持续监控扫描直到全部进入 Watching
+# 持续监控扫描直到全部进入 Watching。带 name 时只盯该会话。
 cmd_watch() {
   need_mutagen
+  local name="${1:-}"
+  [ -n "$name" ] && require_session_defined "$name"
   local n=0
   while [ "$n" -lt 120 ]; do
-    local out; out="$("$MUTAGEN" sync list 2>/dev/null | grep -iE "^Name|Status|Conflicts" | tr '\n' ' ' | sed 's/Name://g')"
+    local out; out="$("$MUTAGEN" sync list $name 2>/dev/null | grep -iE "^Name|Status|Conflicts" | tr '\n' ' ' | sed 's/Name://g')"
     echo "[$(date '+%H:%M:%S')] $out"
     echo "$out" | grep -qi "Scanning" || { ok "全部完成扫描。"; break; }
     n=$((n+1)); sleep 20
@@ -206,56 +321,52 @@ cmd_build() {
   ssh "$host" "cd '$rpath' && $*"
 }
 
-# remote-dev checkout <branch>            对 workspace 内所有 project 仓库切同名分支
-# remote-dev checkout <project> <branch>  只切指定 project
+# remote-dev checkout <project> <branch>  切指定 project 到某分支
+#
+# 强制带 project name: 本 workspace 内各 project 是互不相关的独立仓库(不同 remote、
+# 无共享分支约定), 不存在"一条命令切齐所有仓"的场景; 全项目切同名分支只会大量 skip,
+# 还可能误动无关仓。故只支持单 project。
 #
 # 流程(做到切分支无感): 先 flush 结算 -> 本地 git checkout + submodule update
 #                       -> 再 flush 把大 diff 推到远端并阻塞到落盘 -> status
+# flush 均只作用于该会话, 不阻塞/触发其余大树会话。
 cmd_checkout() {
   need_mutagen
   local ws; ws="$(find_workspace)" || die "未找到 mutagen.yml"
-  local only_proj="" branch=""
-  if [ "$#" -eq 2 ]; then only_proj="$1"; branch="$2"
-  elif [ "$#" -eq 1 ]; then branch="$1"
-  else die "用法: remote-dev checkout <branch> | remote-dev checkout <project> <branch>"; fi
+  [ "$#" -eq 2 ] || die "用法: remote-dev checkout <project> <branch>"
+  local proj="$1" branch="$2"
+  require_session_defined "$proj"
 
-  # 1) 先 flush, 把两端 pending 改动结算干净, 避免 checkout 被本地意外改动挡住
-  info "checkout 前 flush, 结算 pending 改动..."
-  ( cd "$ws" && "$MUTAGEN" project flush )
+  # 解析该 project 的本地(alpha)路径
+  local alpha; alpha="$(list_projects | awk -F'\t' -v p="$proj" '$1==p{print $2; exit}')"
+  [ -n "$alpha" ] || die "在 mutagen.yml 未找到 project '$proj' 的 alpha 路径。"
+  { [ -d "$alpha/.git" ] || [ -f "$alpha/.git" ]; } || die "$alpha 不是 git 仓库, 无法 checkout。"
 
-  # 2) 遍历 project, 本地 git checkout + submodule update
-  local did=0
-  while IFS=$'\t' read -r name alpha; do
-    [ -n "$name" ] || continue
-    [ -n "$only_proj" ] && [ "$name" != "$only_proj" ] && continue
-    [ -d "$alpha/.git" ] || [ -f "$alpha/.git" ] || { warn "跳过 $name: $alpha 不是 git 仓库"; continue; }
-    did=1
-    echo
-    info "[$name] $alpha"
-    if ! git -C "$alpha" rev-parse --verify --quiet "$branch" >/dev/null 2>&1 \
-         && ! git -C "$alpha" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
-      warn "  分支 '$branch' 在本地和 origin 均不存在, 跳过 $name"
-      continue
-    fi
-    if ! git -C "$alpha" checkout "$branch" 2>&1 | sed 's/^/  /'; then
-      err "  checkout 失败: $name (可能有未提交改动/冲突), 已跳过"
-      continue
-    fi
-    # submodule 也要跟着新分支更新(远端不跑 git, 只能靠本地更新后同步)
-    if [ -f "$alpha/.gitmodules" ]; then
-      info "  更新 submodule..."
-      git -C "$alpha" submodule update --init 2>&1 | sed 's/^/  /' || warn "  部分 submodule 更新失败(可能无权限), 已忽略"
-    fi
-  done < <(list_projects)
-  [ "$did" = 1 ] || die "没有匹配的 project$( [ -n "$only_proj" ] && echo " '$only_proj'" )"
+  # 1) 先 flush 该会话, 结算 pending 改动, 避免 checkout 被本地意外改动挡住
+  info "[$proj] checkout 前 flush, 结算 pending 改动..."
+  "$MUTAGEN" sync flush "$proj"
 
-  # 3) 再 flush, 把切分支产生的大 diff 推到远端并阻塞到落盘
+  # 2) 本地 git checkout + submodule update
   echo
-  info "checkout 后 flush, 同步到远端并等待落盘..."
-  ( cd "$ws" && "$MUTAGEN" project flush )
-  ok "切分支完成 @ $(date '+%H:%M:%S')"
+  info "[$proj] $alpha"
+  if ! git -C "$alpha" rev-parse --verify --quiet "$branch" >/dev/null 2>&1 \
+       && ! git -C "$alpha" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+    die "分支 '$branch' 在本地和 origin 均不存在。"
+  fi
+  git -C "$alpha" checkout "$branch" 2>&1 | sed 's/^/  /' || die "checkout 失败(可能有未提交改动/冲突)。"
+  # submodule 也要跟着新分支更新(远端不跑 git, 只能靠本地更新后同步)
+  if [ -f "$alpha/.gitmodules" ]; then
+    info "  更新 submodule..."
+    git -C "$alpha" submodule update --init 2>&1 | sed 's/^/  /' || warn "  部分 submodule 更新失败(可能无权限), 已忽略"
+  fi
+
+  # 3) 再 flush 该会话, 把切分支产生的大 diff 推到远端并阻塞到落盘
+  echo
+  info "[$proj] checkout 后 flush, 同步到远端并等待落盘..."
+  "$MUTAGEN" sync flush "$proj"
+  ok "[$proj] 切分支完成 @ $(date '+%H:%M:%S')"
   echo "---"
-  status_line
+  status_line "$proj"
 }
 
 cmd_help() {
@@ -264,26 +375,29 @@ ${c_bold}remote-dev${c_reset} — 基于 Mutagen 的远程开发同步管理器
 
 ${c_bold}用法:${c_reset} remote-dev <command> [args]
 
+${c_bold}Session 级操作:${c_reset} 下面标注 [name] 的命令都可选带一个 session 名(mutagen.yml 里的
+  project key), 只作用于该会话, 其余会话不受影响、不触发重扫; 不带则作用于 workspace 全部会话。
+
 ${c_bold}配置:${c_reset}
-  init [dir]            在 dir(默认当前目录) 生成 mutagen.yml 模板
-  bootstrap            首灌(需 mode=one-way-safe/replica): 只推不删, 排查 ignore
+  init [dir]           在 dir(默认当前目录) 生成 mutagen.yml 模板
+  bootstrap [name]     首灌(需 mode=one-way-safe/replica): 只推不删, 排查 ignore
 
 ${c_bold}生命周期:${c_reset}
-  start                启动 workspace 所有同步会话
-  stop                 暂停(保留会话)
-  resume               恢复
-  down                 终止并清理
-  restart              down + start (改 ignore/mode 后用)
+  start [name]         启动同步会话(带 name 只启动/恢复该会话)
+  stop [name]          暂停(保留会话)
+  resume [name]        恢复
+  down [name]          终止并清理
+  restart [name]       重建会话使配置生效; 无参重建全部(会重扫大树),
+                       带 name 只重建该会话(改单个 project 的 ignore/symlink/mode 时用)
 
 ${c_bold}日常:${c_reset}
   status [name]        查看状态/冲突/问题
   status [name] detail 查看状态明细(含具体冲突/问题路径)
   porcelain [name]     机器可读状态(TAB 分隔, 供编辑器/状态栏集成, 如 nvim)
-  flush                强制同步一轮并阻塞到落盘(切分支后用)
-  sync                 flush + status
-  watch                持续监控首次扫描直到完成
-  checkout <branch>            切分支(全部 project): flush→git checkout+submodule→flush→status
-  checkout <proj> <branch>     只切指定 project
+  flush [name]         强制同步一轮并阻塞到落盘(切分支后用)
+  sync [name]          flush + status
+  watch [name]         持续监控首次扫描直到完成
+  checkout <proj> <branch>     切指定 project 到某分支(flush→checkout+submodule→flush→status)
   build <proj> <cmd>   flush 后在远端 <proj> 目录执行 <cmd>
 
 ${c_bold}workspace 定位顺序:${c_reset}
