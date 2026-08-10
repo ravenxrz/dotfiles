@@ -3,28 +3,49 @@
 # makes this the right place to build $PATH.
 #
 # fish_add_path prepends (default) and de-duplicates, so re-sourcing is safe.
+# It is only available in newer fish releases; keep a small fallback for older
+# host installs such as fish 3.0.x.
+function __dotfiles_fish_add_path --description 'fish_add_path fallback for old fish'
+    if type -q fish_add_path
+        fish_add_path $argv
+        return
+    end
+
+    set -l __new_paths
+    for __path in $argv
+        if test -d "$__path"; and not contains -- "$__path" $__new_paths; and not contains -- "$__path" $fish_user_paths
+            set __new_paths $__new_paths "$__path"
+        end
+    end
+
+    if test (count $__new_paths) -gt 0
+        set -gx fish_user_paths $__new_paths $fish_user_paths
+    end
+end
 
 # Homebrew (arm64) first, so brew-installed tools win over system ones.
 if test -x /opt/homebrew/bin/brew
-    fish_add_path /opt/homebrew/bin /opt/homebrew/sbin
+    __dotfiles_fish_add_path /opt/homebrew/bin /opt/homebrew/sbin
 end
 
 # dotfiles bin dirs (bootstrap.sh)
-fish_add_path "$HOME/.dotfiles/bin/common"
+__dotfiles_fish_add_path "$HOME/.dotfiles/bin/common"
 if test (uname) = Darwin
-    fish_add_path "$HOME/.dotfiles/bin/macos"
+    __dotfiles_fish_add_path "$HOME/.dotfiles/bin/macos"
 else
-    fish_add_path "$HOME/.dotfiles/bin/linux"
-    fish_add_path "$HOME/.dotfiles/bin/linux/bin"
+    __dotfiles_fish_add_path "$HOME/.dotfiles/bin/linux"
+    __dotfiles_fish_add_path "$HOME/.dotfiles/bin/linux/bin"
 end
 
-fish_add_path "$HOME/.dotfiles/remote_dev"
-fish_add_path "$HOME/.dotfiles/dockerfile"
+__dotfiles_fish_add_path "$HOME/.dotfiles/remote_dev"
+__dotfiles_fish_add_path "$HOME/.dotfiles/dockerfile"
 
 # User-local tool dirs (zshrc tail)
-fish_add_path "$HOME/.local/bin"
-fish_add_path "$HOME/.npm-global/bin"
-fish_add_path "$HOME/.cargo/bin"
+__dotfiles_fish_add_path "$HOME/.local/bin"
+__dotfiles_fish_add_path "$HOME/.npm-global/bin"
+__dotfiles_fish_add_path "$HOME/.cargo/bin"
+
+functions -e __dotfiles_fish_add_path
 
 # set term color (bootstrap.sh)
 set -gx TERM xterm-256color

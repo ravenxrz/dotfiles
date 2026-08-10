@@ -13,7 +13,14 @@ if status is-interactive
 
     # fzf key bindings: Ctrl-T (files), Ctrl-R (history), Alt-C (cd).
     # fish integration ships with the fzf brew formula.
-    for __fzf_dir in (brew --prefix fzf 2>/dev/null)/shell /usr/local/opt/fzf/shell /opt/homebrew/opt/fzf/shell
+    set -l __fzf_dirs /usr/local/opt/fzf/shell /opt/homebrew/opt/fzf/shell
+    if type -q brew
+        set -l __fzf_brew_prefix (brew --prefix fzf 2>/dev/null)
+        if test -n "$__fzf_brew_prefix"
+            set __fzf_dirs "$__fzf_brew_prefix/shell" $__fzf_dirs
+        end
+    end
+    for __fzf_dir in $__fzf_dirs
         if test -f "$__fzf_dir/key-bindings.fish"
             source "$__fzf_dir/key-bindings.fish"
             fzf_key_bindings
@@ -21,11 +28,21 @@ if status is-interactive
         end
     end
     set -e __fzf_dir
+    set -e __fzf_dirs
+    set -e __fzf_brew_prefix
 
     # zoxide: `z`/`zi` smart directory jumping (replaces the zsh z plugin).
     # History was imported from ~/.z via `zoxide import --from=z ~/.z`.
     if type -q zoxide
-        zoxide init fish | source
+        # zoxide 0.10 emits fish syntax that requires newer fish features:
+        #   - &> redirection
+        #   - per-command environment assignment (`VAR=value command`)
+        # Keep the generated integration working on older host fish installs
+        # such as fish 3.0.x by rewriting only those compatibility points.
+        zoxide init fish \
+            | string replace -a '&>/dev/null' '>/dev/null 2>&1' \
+            | string replace -a '__zoxide_loop=1 __zoxide_cd_internal $argv' 'begin; set -lx __zoxide_loop 1; __zoxide_cd_internal $argv; end' \
+            | source
     end
 
     # ---- aliases (mirror of shell/aliases.sh) ----
