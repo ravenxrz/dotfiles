@@ -52,3 +52,9 @@
     git cleanall -f
     shell/plugins/
     zsh/plugins/
+  # install CLI tools our shells depend on (zoxide, ...); idempotent
+  -
+    command: shell/install-tools.sh
+    description: Install shell CLI tools (zoxide)
+    stdout: true
+    stderr: true
