@@ -984,6 +984,37 @@ return {
     opts = {
       disable_when_zoomed = true, -- defaults to false
     },
+    config = function(_, opts)
+      local nav = require("nvim-tmux-navigation")
+      nav.setup(opts)
+
+      -- Prevent wrap-around: when the current tmux pane is already at the
+      -- edge in the requested direction, stay put instead of jumping to the
+      -- opposite side. tmux's `select-pane -L/-D/-U/-R` wraps by default, and
+      -- the plugin calls it directly (bypassing our tmux.conf keybindings), so
+      -- the no-wrap guard has to be applied here too.
+      local tmux_util = require("nvim-tmux-navigation.tmux_util")
+      local edge_flag = {
+        h = "pane_at_left",
+        j = "pane_at_bottom",
+        k = "pane_at_top",
+        l = "pane_at_right",
+      }
+      local orig_change_pane = tmux_util.tmux_change_pane
+      function tmux_util.tmux_change_pane(direction)
+        local flag = edge_flag[direction]
+        if flag then
+          local socket = vim.fn.split(vim.env.TMUX, ",")[1]
+          local at_edge = vim.fn.system(
+            "tmux -S " .. socket .. " display-message -p '#{" .. flag .. "}'"
+          )
+          if vim.trim(at_edge) == "1" then
+            return -- already at the tmux edge; do not wrap
+          end
+        end
+        orig_change_pane(direction)
+      end
+    end,
   },
   {
     "folke/lazydev.nvim",
