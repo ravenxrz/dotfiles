@@ -26,6 +26,38 @@ local copy_cur_file_path_wo_ext = function()
   send2clipboard(filepath_wo_ext)
   print("copy file path wo ext:" .. filepath_wo_ext)
 end
+local get_root_dir = function()
+  local file_path = vim.fn.expand("%:p")
+  local start_dir = file_path ~= "" and vim.fn.fnamemodify(file_path, ":p:h") or vim.fn.getcwd()
+  -- 优先用 git 判定 root（能正确处理 worktree/submodule 等 .git 是文件的情况）
+  local toplevel = vim.fn.systemlist({
+    "git", "-C", start_dir, "rev-parse", "--show-toplevel",
+  })[1]
+  if vim.v.shell_error == 0 and toplevel and toplevel ~= "" then
+    return toplevel
+  end
+  -- 回退：向上查找 .git 标记
+  local git_marker = vim.fs.find(".git", {
+    path = start_dir,
+    upward = true,
+    limit = 1,
+  })[1]
+  if git_marker then
+    return vim.fs.dirname(git_marker)
+  end
+  return vim.fn.getcwd()
+end
+local copy_cur_relative_file_path = function()
+  local file_path = vim.fn.expand("%:p")
+  local root = get_root_dir()
+  local relative_path = vim.fn.fnamemodify(file_path, ":.")
+  -- fnamemodify(":.") is relative to cwd; make it relative to the detected root
+  if file_path:sub(1, #root) == root then
+    relative_path = file_path:sub(#root + 2)
+  end
+  send2clipboard(relative_path)
+  print("copy relative file path:" .. relative_path)
+end
 local copy_cur_breakpoint = function()
   local file_name = vim.fn.expand("%:t")
   -- get current line number
@@ -114,6 +146,7 @@ vim.api.nvim_create_user_command("CopyFileName", copy_cur_filename, {})
 vim.api.nvim_create_user_command("CopyFileNameWoExt", copy_cur_filename_wo_ext, {})
 vim.api.nvim_create_user_command("CopyFilePath", copy_cur_file_path, {})
 vim.api.nvim_create_user_command("CopyFilePathWoExt", copy_cur_file_path_wo_ext, {})
+vim.api.nvim_create_user_command("CopyRelativeFilePath", copy_cur_relative_file_path, {})
 vim.api.nvim_create_user_command("CopyBreakPoint", copy_cur_breakpoint, {})
 vim.api.nvim_create_user_command("CopyFuncName", copy_cursor_func_name, {})
 
