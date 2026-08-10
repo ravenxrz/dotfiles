@@ -1,0 +1,3 @@
+# This file contains fish universal variable definitions.
+# VERSION: 3.0
+SETUVAR fish_user_paths:/Users/leo/\x2ecargo/bin\x1e/Users/leo/\x2enpm\x2dglobal/bin\x1e/Users/leo/\x2elocal/bin\x1e/Users/leo/\x2edotfiles/dockerfile\x1e/Users/leo/\x2edotfiles/remote_dev\x1e/Users/leo/\x2edotfiles/bin/macos\x1e/Users/leo/\x2edotfiles/bin/common\x1e/opt/homebrew/bin\x1e/opt/homebrew/sbin

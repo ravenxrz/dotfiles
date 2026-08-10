@@ -26,7 +26,8 @@
     ~/.vimrc: vim/vimrc
     ~/.config/lvim: lvim
     ~/.config/zellij: zellij
-    ~/.config/alacritty: alacritty 
+    ~/.config/alacritty: alacritty
+    ~/.config/fish: fish
     ~/.vimrc_local:
     ~/.ideavimrc:
     ~/.vsvimrc: vscode/vsvimrc
