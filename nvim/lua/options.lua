@@ -8,6 +8,91 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 -- nvim tree requirements end
 
+-- Use OSC52 as the explicit clipboard provider for remote terminal sessions.
+-- This lets yanks in server-side Neovim update the local terminal clipboard
+-- when the terminal supports OSC52 (for example Ghostty, iTerm2, WezTerm, tmux).
+--
+-- The correct provider depends on whether we are inside tmux:
+--
+--   * Direct to iTerm2/Ghostty (no tmux): iTerm2 only acts on a BEL-terminated
+--     (\007) OSC 52 sequence.  Neovim's built-in provider emits an ST-terminated
+--     (ESC \) form, which iTerm2 ignores -- this is why a bare
+--     `ssh -> nvim -> yank` never reached the macOS clipboard.  So we emit BEL
+--     via nvim_ui_send.  Ghostty accepts either form and keeps working.
+--   * Inside tmux: use a tmux-specific provider that wraps the OSC 52 in tmux's
+--     DCS passthrough envelope (ESC P tmux ; ... ESC \, with inner ESCs doubled).
+--     This makes tmux forward the sequence verbatim to the outer terminal,
+--     bypassing tmux's native set-clipboard forwarding -- which is unreliable
+--     here because this host's terminfo has no `Ms` clipboard capability.
+--     Requires `set -g allow-passthrough on` in tmux.conf.
+if vim.env.SSH_TTY then
+  vim.opt.clipboard:append("unnamedplus")
+
+  local function paste()
+    return { vim.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+  end
+
+  -- Build a BEL-terminated OSC 52 payload for the given register.
+  local function osc52_seq(reg, lines)
+    local sel = reg == "+" and "c" or "p"
+    local data = vim.base64.encode(table.concat(lines, "\n"))
+    return string.format("\027]52;%s;%s\007", sel, data)
+  end
+
+  -- Send raw bytes through the TUI output path (falls back to stderr channel).
+  local function tty_send(sequence)
+    local ok = pcall(vim.api.nvim_ui_send, sequence)
+    if not ok then
+      pcall(vim.api.nvim_chan_send, 2, sequence)
+    end
+  end
+
+  if vim.env.TMUX then
+    -- tmux-specific provider: wrap in DCS passthrough so tmux forwards it
+    -- verbatim to the outer terminal (iTerm2), which then reads the BEL-
+    -- terminated OSC 52.
+    local function tmux_copy(reg)
+      return function(lines)
+        local inner = osc52_seq(reg, lines)
+        -- Double every ESC inside the payload, then wrap: ESC P tmux ; ... ESC \
+        local wrapped = "\027Ptmux;" .. inner:gsub("\027", "\027\027") .. "\027\\"
+        tty_send(wrapped)
+      end
+    end
+
+    vim.g.clipboard = {
+      name = "OSC 52 (tmux passthrough)",
+      copy = {
+        ["+"] = tmux_copy("+"),
+        ["*"] = tmux_copy("*"),
+      },
+      paste = {
+        ["+"] = paste,
+        ["*"] = paste,
+      },
+    }
+  else
+    -- No tmux (direct iTerm2/Ghostty): emit a BEL-terminated OSC 52 sequence.
+    local function osc52_copy(reg)
+      return function(lines)
+        tty_send(osc52_seq(reg, lines))
+      end
+    end
+
+    vim.g.clipboard = {
+      name = "OSC 52 (BEL)",
+      copy = {
+        ["+"] = osc52_copy("+"),
+        ["*"] = osc52_copy("*"),
+      },
+      paste = {
+        ["+"] = paste,
+        ["*"] = paste,
+      },
+    }
+  end
+end
+
 local opts = {
   -- eadirection = 'ver',                                                                             -- keep other window to a fixed size when vsplit (keep grug-far plugin to a fixed size)
   backup = false,                                                                                   -- creates a backup file
