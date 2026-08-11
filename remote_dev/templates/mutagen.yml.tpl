@@ -58,6 +58,9 @@ sync:
         - "CMakeFiles/"
         - "CMakeCache.txt"
 
+        # ---- fish 配置不忽略
+        - "!conf.d/"
+
         # ---- 代码索引 / tags (本地和远端各自生成, 不该同步) ----
         - "GPATH"
         - "GRTAGS"

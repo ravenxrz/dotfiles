@@ -77,7 +77,7 @@ if status is-interactive
     alias lazygit='lazygit -ucd ~/.config/lazygit/'
     alias rgn='rg --no-ignore --no-config'
     alias cpptree='cpptree.pl'
-    alias nv='/Users/leo/.local/share/bob/v0.12.3/nvim-macos-arm64/bin/nvim'
+    alias nv='nvim'
 
     # switch architecture (fish counterparts of armzsh/x86zsh)
     alias armfish='arch -arm64 fish'
