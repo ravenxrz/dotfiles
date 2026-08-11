@@ -10,8 +10,8 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
         set user_seg (set_color cyan)$USER(set_color normal)
     end
 
-    # home-abbreviated cwd, matching zsh's %~
-    set -l cwd (string replace -- $HOME '~' $PWD)
+    # absolute cwd (no home abbreviation)
+    set -l cwd $PWD
 
     # git branch only — no dirty check, to match `oh-my-zsh.hide-dirty = 1`
     # and keep the prompt fast in large repos.
