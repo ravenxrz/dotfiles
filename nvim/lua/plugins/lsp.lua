@@ -174,6 +174,16 @@ return {
             },
           },
         },
+        rust_analyzer = {
+          filetypes = { "rust" },
+          root_markers = { "Cargo.toml", "rust-project.json", ".git" },
+          settings = {
+            ["rust-analyzer"] = {
+              cargo = { allFeatures = true },
+              checkOnSave = true,
+            },
+          },
+        },
         yamlls = {
           on_attach = function(client, bufnr)
             client.server_capabilities.documentFormattingProvider = true
@@ -191,9 +201,7 @@ return {
         },
       }
 
-      local skipped = {
-        rust_analyzer = true, -- rustacean.nvim 会自己处理
-      }
+      local skipped = {}
 
       for _, server_name in ipairs(mason_lspconfig.get_installed_servers()) do
         if not skipped[server_name] then
