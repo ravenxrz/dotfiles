@@ -307,7 +307,9 @@ return {
     "akinsho/toggleterm.nvim",
     keys = {
       "<C-\\>",
+      "<C-t>",
       "<leader>gg",
+      "<leader>cc",
       "<leader>gt",
       "<leader>gb",
     },
@@ -325,9 +327,16 @@ return {
         direction = "float",
         close_on_exit = true,
         shell = vim.o.shell,
+        winbar = {
+          enabled = true,
+          name_formatter = function(term)
+            return string.format("%d:%s", term.id, term:_display_name())
+          end,
+        },
         float_opts = {
           winblend = 0,
-          border = "none",
+          border = "curved",
+          title_pos = "center",
           width = function()
             return vim.o.columns
           end,
@@ -348,12 +357,22 @@ return {
       local lazygit = Terminal:new({
         cmd = "lazygit",
         direction = "float",
+        display_name = "lazygit",
+      })
+      local traex = Terminal:new({
+        cmd = "traex",
+        direction = "float",
+        display_name = "traex",
       })
       function _lazygit_toggle()
         lazygit:toggle()
       end
+      function _traex_toggle()
+        traex:toggle()
+      end
 
       vim.api.nvim_set_keymap("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("n", "<leader>cc", "<cmd>lua _traex_toggle()<CR>", { noremap = true, silent = true })
       -- vim.api.nvim_set_keymap(
       --   "n",
       --   "<leader>gt",
@@ -368,6 +387,9 @@ return {
         { noremap = true, silent = true }
       )
       vim.api.nvim_set_keymap("t", "<c-q>", "<cmd>bd!<cr>", { noremap = true, silent = true })
+      -- select/switch among open terminals
+      vim.api.nvim_set_keymap("n", "<C-t>", "<cmd>TermSelect<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("t", "<C-t>", "<cmd>TermSelect<CR>", { noremap = true, silent = true })
     end,
   },
   {
@@ -1150,107 +1172,6 @@ return {
     version = "*",
     config = function()
       require("telescope").load_extension "frecency"
-    end,
-  },
-  {
-    "ravenxrz/transfer.nvim",
-    lazy = false,
-    event = "BufWritePost",
-    cmd = { "TransferInit", "DiffRemote", "TransferUpload", "TransferDownload", "TransferDirDiff", "TransferRepeat" },
-    config = function()
-      require("transfer").setup({})
-      local group = vim.api.nvim_create_augroup('autosave', {})
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'AutoSaveWritePost',
-        group = group,
-        callback = function(opts)
-          if opts.data.saved_buffer == nil then
-            return
-          end
-          local file_path = vim.api.nvim_buf_get_name(opts.data.saved_buffer)
-          if file_path == "" then
-            return
-          end
-          local deployment_file = vim.fn.expand(vim.fn.getcwd() .. "/.nvim/deployment.lua")
-          if vim.fn.filereadable(deployment_file) == 0 then
-            return
-          end
-          local success, err = pcall(vim.cmd, string.format("TransferUpload %s", vim.fn.fnameescape(file_path)))
-          if not success then
-            print(string.format("[Transfer] 上传失败：%s", err))
-          end
-        end,
-      })
-    end,
-  },
-  -- 完整的Harpoon v2配置（lazy.nvim）
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",               -- 明确指定v2分支
-    lazy = true,                       -- 懒加载，直到被命令或快捷键触发
-    event = "VeryLazy",                -- 也可以用这个触发懒加载，根据习惯选一个
-    dependencies = {
-      "nvim-lua/plenary.nvim",         -- Harpoon的核心依赖，必须安装
-      "nvim-telescope/telescope.nvim", -- 可选依赖，用于和telescope集成（推荐加）
-    },
-    config = function()
-      -- 导入harpoon核心模块
-      local harpoon = require("harpoon")
-
-      -- Harpoon v2的核心配置
-      harpoon:setup({
-        settings = {
-          -- 切换标记时自动保存标记列表到文件
-          save_on_toggle = true,
-          -- 标记列表变化时自动保存
-          save_on_change = true,
-          -- 启动时自动加载之前保存的标记列表
-          sync_on_ui_close = true,
-          -- 标记的文件路径显示为相对路径（也可以设为"absolute"绝对路径）
-          relative_paths = true,
-          -- 省略当前目录的路径前缀（配合relative_paths使用更清爽）
-          ui_nav_wrap = true,
-        },
-        -- UI界面配置（可选，自定义外观）
-        ui = {
-          -- 窗口宽度
-          width = 60,
-          -- 窗口高度
-          height = 10,
-          -- 边框样式（可选：single/double/rounded/solid/shadow）
-          border = "rounded",
-          -- 标记列表的高亮组（可自定义颜色）
-          prompt_title = "Harpoon",
-        },
-      })
-
-      -- 配置快捷键（核心操作，可根据自己的习惯修改）
-      local keymap = vim.keymap.set
-      local opts = { noremap = true, silent = true, desc = "Harpoon: " }
-
-      -- 1. 核心操作：添加当前文件到Harpoon列表
-      keymap("n", "<leader>ha", function() harpoon:list():add() end,
-        vim.tbl_extend("force", opts, { desc = "Add current file" }))
-
-      -- 2. 打开Harpoon的快速菜单（可视化选择标记文件）
-      keymap("n", "<leader>hf", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end,
-        vim.tbl_extend("force", opts, { desc = "Toggle menu" }))
-
-      -- 3. 快速切换到第1-4个标记的文件（高频使用，可扩展到更多）
-      keymap("n", "<leader>h1", function() harpoon:list():select(1) end,
-        vim.tbl_extend("force", opts, { desc = "Select file 1" }))
-      keymap("n", "<leader>h2", function() harpoon:list():select(2) end,
-        vim.tbl_extend("force", opts, { desc = "Select file 2" }))
-      keymap("n", "<leader>h3", function() harpoon:list():select(3) end,
-        vim.tbl_extend("force", opts, { desc = "Select file 3" }))
-      keymap("n", "<leader>h4", function() harpoon:list():select(4) end,
-        vim.tbl_extend("force", opts, { desc = "Select file 4" }))
-
-      -- 4. 扩展功能：切换到上一个/下一个标记的文件（循环切换）
-      keymap("n", "<leader>hj", function() harpoon:list():prev() end,
-        vim.tbl_extend("force", opts, { desc = "Previous file" }))
-      keymap("n", "<leader>hk", function() harpoon:list():next() end,
-        vim.tbl_extend("force", opts, { desc = "Next file" }))
     end,
   }
 }
