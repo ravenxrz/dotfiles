@@ -435,6 +435,9 @@ return {
             extraArgs = "--no-config --no-ignore-vcs",
           },
         },
+        openTargetWindow = {
+          preferredLocation = "below",
+        },
         keymaps = {
           replace = { n = "<localleader>r" },
           qflist = { n = "<C-q>" },

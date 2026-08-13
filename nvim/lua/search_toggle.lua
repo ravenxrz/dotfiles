@@ -284,6 +284,12 @@ end
 -- hide（关窗但不删 buffer）而不是 close，这样 search/replacement/Files Filter/
 -- flags/paths 等所有输入在下次打开时原样保留，不用重填。
 local GRUG_FAR_INSTANCE = "persistent"
+local GRUG_FAR_WINDOW_COMMAND = "topleft split"
+
+local function resize_grug_far_window()
+  local height = math.max(1, math.floor(vim.o.lines * 2 / 3))
+  vim.api.nvim_win_set_height(0, height)
+end
 
 -- 打开（或聚焦）持久 grug-far 实例。
 -- prefills 只在首次创建实例时用于铺底（比如默认 Files Filter）；实例已存在时
@@ -299,6 +305,7 @@ function M.open_grug_far(opts)
   if grug.has_instance(GRUG_FAR_INSTANCE) then
     local inst = grug.get_instance(GRUG_FAR_INSTANCE)
     inst:open()
+    resize_grug_far_window()
     if update and next(update) ~= nil then
       inst:update_input_values(update, false)
     end
@@ -306,10 +313,13 @@ function M.open_grug_far(opts)
   end
 
   prefills.filesFilter = M.get_files_filter(prefills.filesFilter)
-  return grug.open({
+  local inst = grug.open({
     instanceName = GRUG_FAR_INSTANCE,
+    windowCreationCommand = GRUG_FAR_WINDOW_COMMAND,
     prefills = prefills,
   })
+  resize_grug_far_window()
+  return inst
 end
 
 function M.open_grug_far_with_cword()

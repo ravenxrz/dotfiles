@@ -187,6 +187,26 @@ vim.api.nvim_create_autocmd("FileType", {
       vim.keymap.set("x", "p", visual_paste(false), o)
       vim.keymap.set("x", "P", visual_paste(true), o)
 
+      vim.keymap.set("n", "<enter>", function()
+        local inst = require("grug-far").get_instance(buf)
+        if vim.v.count > 0 then
+          inst:goto_match(vim.v.count)
+        end
+        inst:open_location()
+      end, o)
+
+      vim.keymap.set("n", "<localleader>o", function()
+        local inst = require("grug-far").get_instance(buf)
+        local grug_win = vim.api.nvim_get_current_win()
+        if vim.v.count > 0 then
+          inst:goto_match(vim.v.count)
+        end
+        inst:goto_location()
+        if vim.api.nvim_get_current_win() ~= grug_win then
+          inst:hide()
+        end
+      end, o)
+
       -- <localleader>q "puts away" the panel by hiding the window instead of the
       -- built-in close action, which nvim_buf_delete's the buffer and drops every
       -- input. Hiding keeps the persistent instance valid so search/replacement/
