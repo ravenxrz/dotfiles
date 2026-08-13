@@ -98,7 +98,7 @@ list_projects() {
   awk '
     /^sync:/        { in_sync=1; next }
     /^[^[:space:]]/ { in_sync=0 }              # 顶格行 = 离开 sync:
-    in_sync && /^  [A-Za-z0-9-]+:[[:space:]]*$/ {
+    in_sync && /^  [A-Za-z0-9_-]+:[[:space:]]*$/ {
       name=$1; sub(/:$/,"",name); cur=name; next
     }
     in_sync && cur && /^[[:space:]]+alpha:/ {
