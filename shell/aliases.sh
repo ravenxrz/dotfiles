@@ -1,8 +1,8 @@
 # Use colors in coreutils utilities output
-if ls --help 2>&1 | grep -q -- --color; then
-  alias ls='ls --color=auto -F'
-else
+if [[ "$OSTYPE" == darwin* ]]; then
   alias ls='ls -FG'
+else
+  alias ls='ls --color=auto -F'
 fi
 alias grep='grep --color'
 
@@ -250,4 +250,4 @@ zkinit() {
 # alias img="Honeyview.exe"
 # alias typora="Typora.exe"
 
-alias nv="/data04/zhangxingrui/Projects/tmp/nvim-linux-x86_64/bin/nvim"
+alias nv="nvim"
