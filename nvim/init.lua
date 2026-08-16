@@ -38,6 +38,7 @@ require("commands")
 require("config.keymaps")
 require("config.autocmds")
 require("features.remote_dev_sync").setup({})
+require("features.codecompanion_status").setup({})
 require("lazy").setup("plugins", {
   performance = {
     rtp = {

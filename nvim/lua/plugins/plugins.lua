@@ -533,6 +533,17 @@ return {
                 return require("features.remote_dev_sync").highlight()
               end,
             },
+            {
+              function()
+                return require("features.codecompanion_status").component()
+              end,
+              cond = function()
+                return require("features.codecompanion_status").active()
+              end,
+              color = function()
+                return require("features.codecompanion_status").highlight()
+              end,
+            },
             "diagnostics",
             "filetype",
             "encoding",
