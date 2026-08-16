@@ -32,12 +32,12 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("utils")
-require("parser")
-require("options")
+require("config.parser")
+require("config.options")
 require("commands")
-require("keymaps")
-require("autocmds")
-require("remote_dev_sync").setup({})
+require("config.keymaps")
+require("config.autocmds")
+require("features.remote_dev_sync").setup({})
 require("lazy").setup("plugins", {
   performance = {
     rtp = {

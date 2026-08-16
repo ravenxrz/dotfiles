@@ -19,8 +19,8 @@
 --     直到观察到 cycles 超过 baseline 且会话回到 Watching/0 冲突, 才转"已同步"。
 --     这样能覆盖"刚存盘但还没传过去"的窗口, 而不是一看到空闲就误报已同步。
 --
--- 用法: 在 init.lua 里 require("remote_dev_sync").setup({})
---       在 lualine 组件里调用 require("remote_dev_sync").component()/highlight()/has_session()
+-- 用法: 在 init.lua 里 require("features.remote_dev_sync").setup({})
+--       在 lualine 组件里调用 require("features.remote_dev_sync").component()/highlight()/has_session()
 
 local M = {}
 

@@ -285,14 +285,14 @@ vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("cpp_navigation_keymaps", { clear = true }),
   pattern = { "c", "cpp", "objc", "objcpp", "cuda", "pov" },
   callback = function(event)
-    require("cpp_navigation").setup_buffer(event.buf)
+    require("features.cpp.navigation").setup_buffer(event.buf)
 
     -- Keep ctags/gtags indexes fresh incrementally on save.
     vim.api.nvim_create_autocmd("BufWritePost", {
       group = cpp_tags_save_group,
       buffer = event.buf,
       callback = function(args)
-        require("cpp_tags").on_save(args.buf)
+        require("features.cpp.tags").on_save(args.buf)
       end,
     })
   end,
@@ -301,7 +301,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Manual full rebuild of both indexes (purges stale ctags entries that
 -- incremental updates cannot remove).
 vim.api.nvim_create_user_command("CppTagsRebuild", function()
-  require("cpp_tags").rebuild_all()
+  require("features.cpp.tags").rebuild_all()
 end, { desc = "Rebuild ctags + gtags indexes for the current C/C++ project" })
 
 vim.api.nvim_create_autocmd("FileType", {

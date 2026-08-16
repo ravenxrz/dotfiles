@@ -71,7 +71,7 @@ keymap("n", "<leader>go", "<cmd>DiffviewClose<cr>", opts)
 
 -- Telescope
 keymap("n", "<leader>r", function()
-  require("telescope_prompt_guard").guard_initial_a()
+  require("features.search.telescope_prompt_guard").guard_initial_a()
   vim.schedule(function()
     require("telescope").extensions.frecency.frecency()
   end)
@@ -80,9 +80,9 @@ keymap("n", "<leader>D", "<cmd>Telescope diagnostics<cr>", opts)
 keymap("n", "<leader>f<cr>", "<cmd>Telescope resume<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", opts)
 keymap("n", "<leader>ff", function()
-  require("search_toggle").find_files()
+  require("features.search.toggle").find_files()
 end, { desc = "Find files" })
-keymap("n", "<leader>fm", ':lua require("search_toggle").open_search_menu()<cr>', { desc = "Search menu" })
+keymap("n", "<leader>fm", ':lua require("features.search.toggle").open_search_menu()<cr>', { desc = "Search menu" })
 keymap(
   "n",
   "<leader>s",
@@ -109,16 +109,16 @@ keymap("n", "<leader>lo", "<cmd>Outline<CR>", opts)
 
 -- search & replace config
 keymap("n", "<leader>fg", function()
-  require("search_toggle").open_grug_far()
+  require("features.search.toggle").open_grug_far()
 end, { desc = "Grug-far: open search" })
 keymap("n", "<leader>fw", function()
-  require("search_toggle").open_grug_far_with_cword()
+  require("features.search.toggle").open_grug_far_with_cword()
 end, { desc = "Grug-far: search current word" })
 keymap("v", "<leader>fw", function()
-  require("search_toggle").open_grug_far_with_visual_selection()
+  require("features.search.toggle").open_grug_far_with_visual_selection()
 end, { desc = "Grug-far: search visual selection" })
 keymap("n", "<leader>fr", function()
-  require("search_toggle").open_grug_far()
+  require("features.search.toggle").open_grug_far()
 end, { desc = "Search and replace" })
 
 -- session manager
@@ -229,7 +229,7 @@ keymap("n", "ym", "<cmd>CopyFuncName<cr>", opts)
 keymap("n", "<leader>t", "<cmd>PlenaryBustedFile %<cr>", opts)
 
 -- send content to codex CLI in a tmux pane (paste only, no submit)
-local codex_send = require('codex_send')
+local codex_send = require("features.codex_send")
 keymap('v', '<C-c>', codex_send.send_selection,
   vim.tbl_extend('force', opts, { desc = 'Send selection text to codex (tmux, no submit)' }))
 keymap('v', '<C-l>', codex_send.send_lines,

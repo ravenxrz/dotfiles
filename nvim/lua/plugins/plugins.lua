@@ -466,7 +466,7 @@ return {
       })
 
       -- 每次搜索完成自动写 history，并把 history 限制在 max_items 条
-      require("grug_far_history").setup({ max_items = 30 })
+      require("features.search.grug_far_history").setup({ max_items = 30 })
     end,
   },
   {
@@ -532,13 +532,13 @@ return {
             --[[ 'diff', ]]
             {
               function()
-                return require("remote_dev_sync").component()
+                return require("features.remote_dev_sync").component()
               end,
               cond = function()
-                return require("remote_dev_sync").has_session()
+                return require("features.remote_dev_sync").has_session()
               end,
               color = function()
-                return require("remote_dev_sync").highlight()
+                return require("features.remote_dev_sync").highlight()
               end,
             },
             "diagnostics",
@@ -905,10 +905,10 @@ return {
       end
 
       vim.keymap.set({ "n", "x", "o" }, "]f", function()
-        require("treesitter_function_move").goto_next()
+        require("features.treesitter_function_move").goto_next()
       end)
       vim.keymap.set({ "n", "x", "o" }, "[f", function()
-        require("treesitter_function_move").goto_previous()
+        require("features.treesitter_function_move").goto_previous()
       end)
 
       vim.keymap.set({ "n", "x", "o" }, "]m", safe_ts_move("goto_next_start", "@function.outer", "textobjects"))
