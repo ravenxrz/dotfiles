@@ -260,17 +260,6 @@ return {
       telescope.setup({
         defaults = {
           sorting_strategy = "ascending", -- display results top->bottom
-          -- nvim-treesitter (master branch) ships markdown injection queries that assume
-          -- the old single-node match format; on Neovim 0.11 match captures are node
-          -- lists, so its `set-lang-from-info-string!` directive throws
-          -- "attempt to call method 'range' (a nil value)" the first time the preview
-          -- parses a markdown file. Disable treesitter highlighting for markdown in the
-          -- previewer (falls back to regex/syntax highlight, which is fine for a preview).
-          preview = {
-            treesitter = {
-              disable = { "markdown", "markdown.mdx" },
-            },
-          },
           layout_config = {
             horizontal = {
               prompt_position = "top",
@@ -819,6 +808,31 @@ return {
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+
+      -- nvim-treesitter (master branch) registers `set-lang-from-info-string!`
+      -- assuming `match[capture_id]` is a single TSNode. On Neovim 0.12 a match
+      -- capture is a list of nodes, so `get_node_text` calls `node:range()` on a
+      -- table and throws "attempt to call method 'range' (a nil value)". This
+      -- fires whenever a markdown ```lang fence is parsed (render-markdown in the
+      -- Avante sidebar, telescope preview, etc.). Re-register the directive with
+      -- force so it tolerates both the single-node and node-list forms.
+      local ts_query = require("vim.treesitter.query")
+      local non_filetype_aliases = {
+        ex = "elixir",
+        pl = "perl",
+        sh = "bash",
+        uxn = "uxntal",
+        ts = "typescript",
+      }
+      ts_query.add_directive("set-lang-from-info-string!", function(match, _, bufnr, pred, metadata)
+        local node = match[pred[2]]
+        -- Neovim 0.12 hands us a list of nodes; older versions a single node.
+        if type(node) == "table" and node[1] ~= nil then node = node[#node] end
+        if not node then return end
+        local alias = vim.treesitter.get_node_text(node, bufnr):lower()
+        local resolved = vim.filetype.match({ filename = "a." .. alias })
+        metadata["injection.language"] = resolved or non_filetype_aliases[alias] or alias
+      end, { force = true, all = false })
     end,
   },
   {
