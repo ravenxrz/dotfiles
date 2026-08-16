@@ -1,4 +1,6 @@
 return {
+  -- ai_review.nvim is no longer used; disabled so avante owns <leader>ar/<leader>ao.
+  --[[
   {
     "ravenxrz/ai_review.nvim",
     dependencies = {
@@ -75,6 +77,7 @@ return {
       })
     end,
   },
+  ]]
   {
     "ravenxrz/bookmarks.nvim",
     config = function()
