@@ -18,3 +18,7 @@ vim/.netrwhist
 bin/linux/bsadmin
 .calltree*
 .cpptree*
+fish/fish_variables
+
+# Kerberos keytabs / other credentials — never commit
+*.keytab

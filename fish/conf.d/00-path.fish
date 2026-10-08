@@ -45,6 +45,26 @@ __dotfiles_fish_add_path "$HOME/.local/bin"
 __dotfiles_fish_add_path "$HOME/.npm-global/bin"
 __dotfiles_fish_add_path "$HOME/.cargo/bin"
 
+# Prefer distro-managed binaries (for example NodeSource Node.js) over
+# manually installed binaries in /usr/local/bin, while preserving user-local
+# tool directories ahead of both.
+set -l __reordered_path
+for __path_entry in $PATH
+    if test "$__path_entry" = /usr/bin
+        continue
+    end
+    if test "$__path_entry" = /usr/local/bin
+        set __reordered_path $__reordered_path /usr/bin
+    end
+    set __reordered_path $__reordered_path $__path_entry
+end
+if not contains -- /usr/bin $__reordered_path
+    set __reordered_path $__reordered_path /usr/bin
+end
+set -gx PATH $__reordered_path
+set -e __reordered_path
+set -e __path_entry
+
 functions -e __dotfiles_fish_add_path
 
 # set term color (bootstrap.sh)
