@@ -1,0 +1,6 @@
+{
+  "name": "herdr-traex",
+  "version": "0.1.1",
+  "description": "Report TraeX lifecycle state to Herdr.",
+  "hooks": "./hooks/hooks.json"
+}

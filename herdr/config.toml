@@ -1,0 +1,45 @@
+onboarding = false
+
+[keys]
+# Keep the same prefix as tmux.
+prefix = "ctrl+a"
+help = "prefix+?"
+detach = "prefix+d"
+reload_config = ["prefix+r", "prefix+ctrl+r"]
+
+# tmux windows map to Herdr tabs.
+new_tab = "prefix+c"
+previous_tab = ["prefix+p", "ctrl+shift+left", "ctrl+shift+up"]
+next_tab = ["prefix+n", "ctrl+shift+right", "ctrl+shift+down"]
+switch_tab = "prefix+1..9"
+
+# Pane operations.
+rename_pane = "prefix+/"
+copy_mode = ["prefix+m", "prefix+["]
+clear_pane = "prefix+ctrl+k"
+focus_pane_left = "ctrl+h"
+focus_pane_down = "ctrl+j"
+focus_pane_up = "ctrl+k"
+focus_pane_right = "ctrl+l"
+last_pane = ["prefix+.", "prefix+ctrl+\\"]
+split_vertical = "prefix+|"
+split_horizontal = "prefix+minus"
+close_pane = "prefix+shift+x"
+
+# Free the tmux-style Shift+H/J/K/L and Shift+X bindings from Herdr's
+# default swap-pane/close-tab actions.
+swap_pane_left = ""
+swap_pane_down = ""
+swap_pane_up = ""
+swap_pane_right = ""
+close_tab = ""
+resize_mode = ""
+
+resize_pane_left = "prefix+shift+h"
+resize_pane_down = "prefix+shift+j"
+resize_pane_up = "prefix+shift+k"
+resize_pane_right = "prefix+shift+l"
+
+[theme]
+name = "one-light"
+auto_switch = false
