@@ -2,12 +2,21 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
     # Capture exit status of the last command before anything clobbers it.
     set -l last_status $status
 
+    # One Light palette. Use explicit true-color values instead of ANSI color
+    # names so the prompt stays readable on a light terminal background.
+    set -l prompt_blue 305fbd
+    set -l prompt_cyan 08799e
+    set -l prompt_green 3a7638
+    set -l prompt_yellow 8a6100
+    set -l prompt_magenta 962694
+    set -l prompt_red c4313d
+
     # user segment: highlight root like ys does, otherwise cyan.
     set -l user_seg
     if test (id -u) -eq 0
-        set user_seg (set_color -b yellow black)$USER(set_color normal)
+        set user_seg (set_color -b $prompt_yellow white)$USER(set_color normal)
     else
-        set user_seg (set_color cyan)$USER(set_color normal)
+        set user_seg (set_color $prompt_cyan)$USER(set_color normal)
     end
 
     # Absolute cwd (no home abbreviation). Fish 3.0.x falls back to a bare `>`
@@ -41,8 +50,8 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
     set -l git_plain
     set -l branch (command git symbolic-ref --short HEAD 2>/dev/null; or command git rev-parse --short HEAD 2>/dev/null)
     if test -n "$branch"
-        set git_seg ' '(set_color normal)'on'(set_color blue)' git:'(set_color cyan)$branch(set_color normal)
-        set git_seg_unpadded (set_color normal)'on'(set_color blue)' git:'(set_color cyan)$branch(set_color normal)
+        set git_seg ' '(set_color normal)'on'(set_color $prompt_blue)' git:'(set_color $prompt_cyan)$branch(set_color normal)
+        set git_seg_unpadded (set_color normal)'on'(set_color $prompt_blue)' git:'(set_color $prompt_cyan)$branch(set_color normal)
         set git_plain " on git:$branch"
     end
 
@@ -50,7 +59,7 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
     set -l exit_seg
     set -l exit_plain
     if test $last_status -ne 0
-        set exit_seg ' C:'(set_color red)$last_status(set_color normal)
+        set exit_seg ' C:'(set_color $prompt_red)$last_status(set_color normal)
         set exit_plain " C:$last_status"
     end
 
@@ -66,14 +75,14 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
 
     if test (string length -- $full_line_plain) -le $physical_limit
         echo -n -s \
-            (set_color -o blue) '#' (set_color normal) ' ' \
+            (set_color -o $prompt_blue) '#' (set_color normal) ' ' \
             $user_seg ' ' \
             (set_color normal) '@ ' \
-            (set_color green) $prompt_host ' ' \
+            (set_color $prompt_green) $prompt_host ' ' \
             (set_color normal) 'in ' \
-            (set_color -o yellow) $cwd (set_color normal) \
+            (set_color -o $prompt_yellow) $cwd (set_color normal) \
             $git_seg \
-            ' ' (set_color magenta) $os_name (set_color normal) \
+            ' ' (set_color $prompt_magenta) $os_name (set_color normal) \
             ' [' $now ']' \
             $exit_seg
     else
@@ -83,12 +92,12 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
         end
 
         echo -n -s \
-            (set_color -o blue) '#' (set_color normal) ' ' \
+            (set_color -o $prompt_blue) '#' (set_color normal) ' ' \
             $user_seg ' ' \
             (set_color normal) '@ ' \
-            (set_color green) $prompt_host ' ' \
+            (set_color $prompt_green) $prompt_host ' ' \
             (set_color normal) 'in ' \
-            (set_color -o yellow) (string sub -s 1 -l $first_chunk_width -- $cwd) (set_color normal)
+            (set_color -o $prompt_yellow) (string sub -s 1 -l $first_chunk_width -- $cwd) (set_color normal)
 
         set -l last_path_line_len $first_chunk_width
         set -l cwd_len (string length -- $cwd)
@@ -96,7 +105,7 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
         while test $cwd_offset -le $cwd_len
             echo ''
             set -l path_chunk (string sub -s $cwd_offset -l $physical_limit -- $cwd)
-            echo -n -s (set_color -o yellow) $path_chunk (set_color normal)
+            echo -n -s (set_color -o $prompt_yellow) $path_chunk (set_color normal)
             set last_path_line_len (string length -- $path_chunk)
             set cwd_offset (math "$cwd_offset + $physical_limit")
         end
@@ -105,7 +114,7 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
         if test (math "$last_path_line_len + $suffix_len") -le $physical_limit
             echo -n -s \
                 $git_seg \
-                ' ' (set_color magenta) $os_name (set_color normal) \
+                ' ' (set_color $prompt_magenta) $os_name (set_color normal) \
                 ' [' $now ']' \
                 $exit_seg
         else
@@ -114,12 +123,12 @@ function fish_prompt --description 'ys-like prompt, ported from the oh-my-zsh ys
                 echo -n -s $git_seg_unpadded ' '
             end
             echo -n -s \
-                (set_color magenta) $os_name (set_color normal) \
+                (set_color $prompt_magenta) $os_name (set_color normal) \
                 ' [' $now ']' \
                 $exit_seg
         end
     end
 
     echo ''
-    echo -n -s (set_color -o red) '$ ' (set_color normal)
+    echo -n -s (set_color -o $prompt_red) '$ ' (set_color normal)
 end
