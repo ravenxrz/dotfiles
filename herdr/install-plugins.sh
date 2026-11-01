@@ -83,6 +83,72 @@ install_plugin() {
     fi
 }
 
+python_version_supported() {
+    local python_bin="$1"
+    "${python_bin}" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 9) else 1)' \
+        >/dev/null 2>&1
+}
+
+find_python_39() {
+    local candidate resolved
+    for candidate in \
+        "${OPENSPEC_PYTHON:-}" \
+        python3 python3.13 python3.12 python3.11 python3.10 python3.9 \
+        "${HOME}"/.pyenv/versions/*/bin/python3; do
+        [ -n "${candidate}" ] || continue
+
+        if [[ "${candidate}" == */* ]]; then
+            [ -x "${candidate}" ] || continue
+            resolved="${candidate}"
+        else
+            resolved="$(command -v "${candidate}" 2>/dev/null)" || continue
+        fi
+
+        if python_version_supported "${resolved}"; then
+            "${resolved}" -c 'import sys; print(sys.executable)'
+            return
+        fi
+    done
+    return 1
+}
+
+configure_openspec_plugin() {
+    local python_bin plugin_root launcher
+
+    if ! python_bin="$(find_python_39)"; then
+        echo "!! herdr-openspec requires Python 3.9 or newer." >&2
+        echo "!! Install a supported Python or set OPENSPEC_PYTHON=/absolute/path/to/python." >&2
+        return 1
+    fi
+
+    plugin_root="$(
+        herdr plugin list --plugin openspec --json |
+            "${python_bin}" -c 'import json, sys; print(json.load(sys.stdin)["result"]["plugins"][0]["plugin_root"])'
+    )"
+    launcher="${plugin_root}/bin/ospec"
+
+    if [ ! -f "${launcher}" ]; then
+        echo "!! herdr-openspec launcher not found: ${launcher}" >&2
+        return 1
+    fi
+
+    # The upstream launcher uses `#!/usr/bin/env python3`. Herdr may run with a
+    # smaller service PATH than the interactive shell, so pin the interpreter
+    # selected above. Reapply this after every managed plugin refresh.
+    OPENSPEC_LAUNCHER="${launcher}" OPENSPEC_PYTHON="${python_bin}" \
+        "${python_bin}" -c '
+import os
+from pathlib import Path
+
+path = Path(os.environ["OPENSPEC_LAUNCHER"])
+lines = path.read_text().splitlines(keepends=True)
+lines[0] = "#!" + os.environ["OPENSPEC_PYTHON"] + "\n"
+path.write_text("".join(lines))
+'
+    chmod +x "${launcher}"
+    echo "==> Configured herdr-openspec with ${python_bin}"
+}
+
 if ! command -v herdr >/dev/null 2>&1; then
     install_herdr
 fi
@@ -100,6 +166,9 @@ fi
 install_plugin "persiyanov/herdr-reviewr" "persiyanov.reviewr"
 install_plugin "paulbkim-dev/vim-herdr-navigation" "vim-herdr-navigation"
 install_plugin "kryptamine/herdr-auto-title" "herdr.auto-title" "${GOPROXY:-direct}"
+install_plugin "FlorisKr/herdr-openspec" "openspec"
+
+configure_openspec_plugin
 
 herdr config check
 

@@ -81,6 +81,8 @@ name = "one-light"
 auto_switch = false
 
 [ui]
+sidebar_width = 34
+sidebar_max_width = 36
 status_indicators = "symbols"
 prompt_new_tab_name = false
 agent_panel_sort = "spaces"
@@ -124,3 +126,19 @@ key = "prefix+v"
 type = "plugin_action"
 command = "persiyanov.reviewr.toggle"
 description = "toggle reviewr"
+
+# OpenSpec browser. prefix+t is already used for rename_tab, so use prefix+o.
+[[keys.command]]
+key = "prefix+o"
+type = "plugin_action"
+command = "openspec-browse"
+description = "browse OpenSpec changes"
+
+# OpenSpec project and locally edited change reported by ospec sync.
+[ui.sidebar.spaces]
+rows = [
+  ["state_icon", "workspace"],
+  ["branch", "git_status"],
+  [{ token = "$openspec", fg = "#89b4fa" }],
+  [{ token = "$openspec_change", dim = true }],
+]
