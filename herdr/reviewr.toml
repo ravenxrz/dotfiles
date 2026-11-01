@@ -1,3 +1,7 @@
 theme = "one-light"
 auto_open = false
 toggle_placement = "overlay"
+
+[keybindings]
+expand = ["o"]
+open-pr = ["O"]
