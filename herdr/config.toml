@@ -57,6 +57,25 @@ navigate_pane_down = ""
 navigate_pane_up = ""
 navigate_pane_right = ""
 
+[[keys.command]]
+key = "prefix+{"
+type = "shell"
+command = "~/.config/dotfiles/herdr/rotate-pane.sh counterclockwise"
+description = "rotate pane counter-clockwise"
+
+[[keys.command]]
+key = "prefix+}"
+type = "shell"
+command = "~/.config/dotfiles/herdr/rotate-pane.sh clockwise"
+description = "rotate pane clockwise"
+
+[ui.toast]
+delivery = "herdr"
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "top-right"
+
 [theme]
 name = "one-light"
 auto_switch = false
@@ -75,9 +94,6 @@ rows = [
 
 [ui.sound]
 enabled = false
-
-[ui.toast]
-delivery = "herdr"
 
 [[keys.command]]
 key = "ctrl+h"
