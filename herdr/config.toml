@@ -7,8 +7,14 @@ help = "prefix+?"
 detach = "prefix+d"
 reload_config = ["prefix+r", "prefix+ctrl+r"]
 
+# Navigator entry points.
+workspace_picker = "ctrl+w"
+goto = "ctrl+s"
+rename_workspace = "prefix+w"
+
 # tmux windows map to Herdr tabs.
 new_tab = "prefix+c"
+rename_tab = "prefix+t"
 previous_tab = ["prefix+p", "ctrl+shift+left", "ctrl+shift+up"]
 next_tab = ["prefix+n", "ctrl+shift+right", "ctrl+shift+down"]
 switch_tab = "prefix+1..9"
@@ -17,10 +23,12 @@ switch_tab = "prefix+1..9"
 rename_pane = "prefix+/"
 copy_mode = ["prefix+m", "prefix+["]
 clear_pane = "prefix+ctrl+k"
-focus_pane_left = "ctrl+h"
-focus_pane_down = "ctrl+j"
-focus_pane_up = "ctrl+k"
-focus_pane_right = "ctrl+l"
+# Ctrl+h/j/k/l are handled by vim-herdr-navigation below so the same keys
+# cross Neovim split boundaries and Herdr pane boundaries.
+focus_pane_left = ""
+focus_pane_down = ""
+focus_pane_up = ""
+focus_pane_right = ""
 last_pane = ["prefix+.", "prefix+ctrl+\\"]
 split_vertical = "prefix+|"
 split_horizontal = "prefix+minus"
@@ -40,6 +48,63 @@ resize_pane_down = "prefix+shift+j"
 resize_pane_up = "prefix+shift+k"
 resize_pane_right = "prefix+shift+l"
 
+# Vim-style movement while workspace navigation is open. The session
+# navigator opened by ctrl+s already uses j/k natively.
+navigate_workspace_up = "k"
+navigate_workspace_down = "j"
+navigate_pane_left = ""
+navigate_pane_down = ""
+navigate_pane_up = ""
+navigate_pane_right = ""
+
 [theme]
 name = "one-light"
 auto_switch = false
+
+[ui]
+status_indicators = "symbols"
+prompt_new_tab_name = false
+agent_panel_sort = "spaces"
+
+[ui.sidebar.agents]
+row_gap = 0
+rows = [
+  ["state_icon", "machine", "workspace", "agent"],
+  ["terminal_title_stripped"],
+]
+
+[ui.sound]
+enabled = false
+
+[ui.toast]
+delivery = "herdr"
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right"
+description = "navigate right (vim/herdr)"
+
+[[keys.command]]
+key = "cmd+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+description = "toggle reviewr"

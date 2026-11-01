@@ -76,6 +76,7 @@ if status is-interactive
     alias dockerx86='DOCKER_DEFAULT_PLATFORM=linux/amd64 docker'
     alias lazygit='lazygit -ucd ~/.config/lazygit/'
     alias rgn='rg --no-ignore --no-config'
+    alias hc='herdr'
     alias cpptree='cpptree.pl'
     alias nv='nvim'
 

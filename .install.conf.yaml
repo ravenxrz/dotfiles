@@ -37,6 +37,8 @@
     ~/.gtags.conf:
     ~/.config/helix/config.toml: helix/config.toml
     ~/.config/helix/languages.toml: helix/languages.toml
+    ~/.config/herdr/config.toml: herdr/config.toml
+    ~/.config/herdr/plugins/config/persiyanov.reviewr/config.toml: herdr/reviewr.toml
     # ~/.zfunctions/prompt_spaceship_setup: zsh/prompt/spaceship-prompt/spaceship.zsh
 
 - create:
@@ -56,5 +58,10 @@
   -
     command: shell/install-tools.sh
     description: Install shell CLI tools (zoxide)
+    stdout: true
+    stderr: true
+  -
+    command: herdr/install-plugins.sh
+    description: Install Herdr and configured plugins
     stdout: true
     stderr: true

@@ -144,6 +144,9 @@ alias lazygit="lazygit -ucd ~/.config/lazygit/"
 # ripgrep without ignore
 alias rgn="rg --no-ignore --no-config"
 
+# herdr
+alias hc="herdr"
+
 # alias ctree="calltree.pl"
 
 alias cpptree="cpptree.pl"

@@ -1,4 +1,5 @@
 local opts = { noremap = true, silent = true }
+local multiplexer_navigation = require("features.multiplexer_navigation")
 
 -- Shorten function name
 local keymap = vim.keymap.set
@@ -12,10 +13,10 @@ keymap("i", "jk", "<Esc>", opts)
 keymap("n", "j", "gj", opts)
 keymap("n", "k", "gk", opts)
 
-keymap("n", "<C-h>", "<cmd>NvimTmuxNavigateLeft<CR>", opts)
-keymap("n", "<C-j>", "<Cmd>NvimTmuxNavigateDown<CR>", opts)
-keymap("n", "<C-k>", "<Cmd>NvimTmuxNavigateUp<CR>", opts)
-keymap("n", "<C-l>", "<Cmd>NvimTmuxNavigateRight<CR>", opts)
+keymap("n", "<C-h>", function() multiplexer_navigation.navigate("left") end, opts)
+keymap("n", "<C-j>", function() multiplexer_navigation.navigate("down") end, opts)
+keymap("n", "<C-k>", function() multiplexer_navigation.navigate("up") end, opts)
+keymap("n", "<C-l>", function() multiplexer_navigation.navigate("right") end, opts)
 
 -- Navigate line
 keymap("n", "H", "^", opts)
